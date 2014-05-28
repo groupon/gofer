@@ -1,0 +1,59 @@
+{
+  "name": "gofer",
+  "version": "1.0.0",
+  "description": "Service client for ITAs",
+  "main": "lib/gofer.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/groupon/gofer"
+  },
+  "keywords": [
+    "gofer",
+    "service",
+    "http"
+  ],
+  "author": {
+    "name": "Jan Krems",
+    "email": "jan.krems@groupon.com>"
+  },
+  "contributors": [
+    {
+      "name": "Sean McCullough",
+      "email": "mccullough@groupon.com"
+    },
+    {
+      "name": "Sean Massa",
+      "email": "smassa@groupon.com"
+    },
+    {
+      "name": "Kofi Appiah",
+      "email": "kofi@groupon.com"
+    }
+  ],
+  "publishConfig": {
+    "license": {
+      "exclude": [
+        "test"
+      ]
+    }
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "microtime": "~0.5.1",
+    "node-uuid": "~1.4.1",
+    "request": "~2.34.0",
+    "debug": "~0.8.1"
+  },
+  "devDependencies": {
+    "coffee-script-redux": "2.0.0-beta7",
+    "mocha": "~1.18.2",
+    "semver": "~2.1.0",
+    "npub": "0.0.5",
+    "assertive": "~1.4.0",
+    "bondjs": "~1.1.1",
+    "express": "~4.1.1"
+  }
+}
