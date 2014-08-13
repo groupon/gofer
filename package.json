@@ -1,6 +1,6 @@
 {
   "name": "gofer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A general purpose service client library for node.js",
   "main": "lib/gofer.js",
   "scripts": {
@@ -56,4 +56,4 @@
     "bondjs": "~1.1.1",
     "express": "~4.1.1"
   }
-}
+}\n
