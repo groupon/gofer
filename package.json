@@ -1,7 +1,7 @@
 {
   "name": "gofer",
   "version": "1.0.0",
-  "description": "Service client for ITAs",
+  "description": "A general purpose service client library for node.js",
   "main": "lib/gofer.js",
   "scripts": {
     "test": "make test"
