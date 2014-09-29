@@ -44,7 +44,7 @@
     "lodash": "~2.4.1",
     "microtime": "~0.5.1",
     "node-uuid": "~1.4.1",
-    "request": "~2.34.0",
+    "request": "2.40.0",
     "debug": "~0.8.1"
   },
   "devDependencies": {
