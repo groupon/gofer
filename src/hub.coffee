@@ -120,7 +120,7 @@ module.exports = Hub = ->
 
     connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
     completionTimeoutInterval = options.completionTimeout
-    setupConnectTimeout connectTimeoutInterval, completionTimeoutInterval, req, responseData, options
+    setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData
     return req
 
   logPendingRequests = ({requests, maxSockets}) ->
@@ -133,7 +133,7 @@ module.exports = Hub = ->
   # connection to the remote server to be established. It is standard practice
   # for this value to be significantly lower than the "request" timeout when
   # making requests to internal endpoints.
-  setupConnectTimeout = (connectTimeoutInterval, completionTimeoutInterval, request, responseData) ->
+  setupTimeouts = (connectTimeoutInterval, completionTimeoutInterval, request, responseData) ->
     request.on 'request', (req) ->
       req.on 'socket', (socket) ->
         connectTimeout = undefined
