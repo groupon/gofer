@@ -118,7 +118,9 @@ module.exports = Hub = ->
 
       cb apiError, body, response, responseData
 
-    setupConnectTimeout (options.connectTimeout ? Hub.connectTimeout), req, responseData, options
+    connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
+    completionTimeoutInterval = options.completionTimeout
+    setupConnectTimeout connectTimeoutInterval, completionTimeoutInterval, req, responseData, options
     return req
 
   logPendingRequests = ({requests, maxSockets}) ->
@@ -131,7 +133,7 @@ module.exports = Hub = ->
   # connection to the remote server to be established. It is standard practice
   # for this value to be significantly lower than the "request" timeout when
   # making requests to internal endpoints.
-  setupConnectTimeout = (connectTimeoutInterval, request, responseData, options) ->
+  setupConnectTimeout = (connectTimeoutInterval, completionTimeoutInterval, request, responseData) ->
     request.on 'request', (req) ->
       req.on 'socket', (socket) ->
         connectTimeout = undefined
@@ -154,8 +156,7 @@ module.exports = Hub = ->
           clearTimeout connectTimeout
           connectTimeout = null
 
-          {completionTimeout} = options
-          setupCompletionTimeout completionTimeout, req, responseData
+          setupCompletionTimeout completionTimeoutInterval, req, responseData
 
         connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
