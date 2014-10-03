@@ -2,8 +2,6 @@ assert = require 'assertive'
 hub = require('../../hub')()
 serverBuilder = require './_test_server'
 
-clone = (thing) -> JSON.parse JSON.stringify thing
-
 server = app = undefined
 describe 'Basic Integration Test', ->
   before (done) ->
@@ -47,3 +45,75 @@ describe 'Basic Integration Test', ->
       }, (err, body, headers) ->
         assert.equal 'ETIMEDOUT', err?.code
         done()
+
+  describe 'completion timeout', ->
+
+    it 'does not pass an error when timeout is not exceeded', (done) ->
+      hub.fetch {
+        uri: "http://localhost:89001"
+        qs: {__delay: 10}
+        completionTimeout: 20
+      }, (err, body, headers) ->
+        throw err if err
+        assert.expect not err
+        done err
+
+    it 'passes an error when timeout is exceeded', (done) ->
+      hub.fetch {
+        uri: "http://localhost:89001"
+        qs: {__delay: 30}
+        completionTimeout: 20
+      }, (err, body, headers) ->
+        assert.expect err
+        assert.equal 'ETIMEDOUT', err.code
+        done()
+
+  describe 'combined timeouts', ->
+
+    it 'does not pass an error when timeout and completion timeouts are not exceeded', (done) ->
+      hub.fetch {
+        uri: "http://localhost:89001"
+        qs: {__latency: 20, __delay: 20}
+        timeout: 30
+        connectTimeout: 30
+        completionTimeout: 50
+      }, (err, body, headers) ->
+        throw err if err
+        assert.expect not err
+        done err
+
+    it 'passes an error when completion is exceeded', (done) ->
+      hub.fetch {
+        uri: "http://localhost:89001"
+        qs: {__delay: 20}
+        timeout: 30
+        connectTimeout: 30
+        completionTimeout: 10
+      }, (err, body, headers) ->
+        assert.expect err
+        assert.equal 'ETIMEDOUT', err.code
+        done()
+
+    it 'passes an error when connection is exceeded', (done) ->
+      hub.fetch {
+        uri: "http://10.255.255.1"
+        timeout: 10000,
+        connectTimeout: 50
+        completionTimeout: 60000
+      }, (err, body, headers) ->
+        assert.expect err
+        assert.equal 'ECONNECTTIMEDOUT', err.code
+        done()
+
+    it 'passes an error when timeout is exceeded', (done) ->
+      hub.fetch {
+        uri: "http://localhost:89001"
+        qs: {__latency: 20, __delay: 20}
+        timeout: 1
+        connectTimeout: 30
+        completionTimeout: 30
+      }, (err, body, headers) ->
+        assert.expect err
+        assert.equal 'ETIMEDOUT', err.code
+        done()
+

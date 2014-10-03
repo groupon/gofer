@@ -118,7 +118,9 @@ module.exports = Hub = ->
 
       cb apiError, body, response, responseData
 
-    setupConnectTimeout (options.connectTimeout ? Hub.connectTimeout), req, responseData
+    connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
+    completionTimeoutInterval = options.completionTimeout
+    setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData
     return req
 
   logPendingRequests = ({requests, maxSockets}) ->
@@ -131,7 +133,7 @@ module.exports = Hub = ->
   # connection to the remote server to be established. It is standard practice
   # for this value to be significantly lower than the "request" timeout when
   # making requests to internal endpoints.
-  setupConnectTimeout = (connectTimeoutInterval, request, responseData) ->
+  setupTimeouts = (connectTimeoutInterval, completionTimeoutInterval, request, responseData) ->
     request.on 'request', (req) ->
       req.on 'socket', (socket) ->
         connectTimeout = undefined
@@ -154,9 +156,38 @@ module.exports = Hub = ->
           clearTimeout connectTimeout
           connectTimeout = null
 
+          setupCompletionTimeout completionTimeoutInterval, req, responseData
+
         connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
         connectTimeout = setTimeout connectionTimedOut, connectTimeoutInterval
+
+  # This will setup a timer to make sure we don't wait to long for the response
+  # to complete. The semantics are as follows:
+  # connectTimeout + timeout (first byte) + completionTimeout = total timeout
+  setupCompletionTimeout = (completionTimeoutInterval, req, responseData) ->
+    return unless completionTimeoutInterval
+    completionTimeout = undefined
+
+    completionTimedOut = ->
+      req.abort()
+
+      responseData.completionDuration = microtime.nowDouble() - responseData.connectDuration
+
+      err = new Error 'ETIMEDOUT'
+      err.code = 'ETIMEDOUT'
+      err.message = "Response timed out after #{completionTimeoutInterval}ms"
+      err.responseData = responseData
+      req.emit 'error', err
+
+    completionSuccessful = ->
+      responseData.completionDuration = microtime.nowDouble() - responseData.connectDuration
+
+      clearTimeout completionTimeout
+      completionTimeout = null
+
+    req.on 'complete', completionSuccessful
+    completionTimeout = setTimeout completionTimedOut, completionTimeoutInterval
 
   return hub
 
