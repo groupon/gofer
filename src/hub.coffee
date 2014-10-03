@@ -155,7 +155,7 @@ module.exports = Hub = ->
           connectTimeout = null
 
           {completionTimeout} = options
-          setupCompletionTimeout completionTimeout, req, responseData, options
+          setupCompletionTimeout completionTimeout, req, responseData
 
         connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
@@ -164,7 +164,7 @@ module.exports = Hub = ->
   # This will setup a timer to make sure we don't wait to long for the response
   # to complete. The semantics are as follows:
   # connectTimeout + timeout (first byte) + completionTimeout = total timeout
-  setupCompletionTimeout = (completionTimeoutInterval, req, responseData, options) ->
+  setupCompletionTimeout = (completionTimeoutInterval, req, responseData) ->
     return unless completionTimeoutInterval
     completionTimeout = undefined
 
@@ -175,7 +175,7 @@ module.exports = Hub = ->
 
       err = new Error 'ETIMEDOUT'
       err.code = 'ETIMEDOUT'
-      err.message = "Response from #{options.method} #{options.uri} timed out after #{completionTimeoutInterval}ms"
+      err.message = "Response timed out after #{completionTimeoutInterval}ms"
       err.responseData = responseData
       req.emit 'error', err
 
