@@ -37,6 +37,7 @@ Hub = require './hub'
   parseDefaults,
   applyBaseUrl,
   buildUserAgent,
+  replacePathParms,
   merge
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
@@ -129,6 +130,7 @@ module.exports = buildGofer = (serviceName, serviceVersion) ->
     _request: (options, cb) ->
       defaults = @_getDefaults @defaults, options
 
+      options.uri = replacePathParms(options.uri, options.pathParams)
       options.methodName ?= (options.method ? 'get').toLowerCase()
       options.serviceName = serviceName
       options.serviceVersion = serviceVersion

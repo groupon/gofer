@@ -86,7 +86,7 @@ Useful if you know that you'll need custom timeouts for this one call or you wan
 ##### gofer.request(uri: String, options, cb)
 
 * `uri`: A convenient way to specify `options.uri` directly
-* `options`: Anything that is valid [configuration](#configuration)
+* `options`: Anything listed below under [options](#options)
 * `cb`: A callback function that receives the following arguments:
   - `error`: An instance of `Error`
   - `body`: The, in most cases parsed, response body
@@ -171,6 +171,7 @@ In addition to the options mentioned in the [request docs](https://github.com/mi
 * `requestId`: Useful to track request through across services. It will added as an `X-Request-ID` header. See [events and logging](#events-and-logging) below
 * `serviceName`: The name of the service that is talked to, e.g. "github". Used in the user-agent
 * `serviceVersion`: By convention the client version. Used in the user-agent
+* `pathParams`: If your `uri` includes `{tags}` they will be matched by this object. You can use this instead of string manipulation as this object is also logged
 
 In addition the following options are added that are useful for instrumentation but do not affect the actual HTTP request:
 

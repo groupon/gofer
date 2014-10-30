@@ -41,19 +41,20 @@
     }
   },
   "dependencies": {
+    "debug": "~0.8.1",
     "lodash": "~2.4.1",
     "microtime": "~0.5.1",
     "node-uuid": "~1.4.1",
-    "request": "2.40.0",
-    "debug": "~0.8.1"
+    "request": "2.40.0"
   },
   "devDependencies": {
-    "coffee-script-redux": "2.0.0-beta7",
-    "mocha": "~1.18.2",
-    "semver": "~2.1.0",
-    "npub": "0.0.5",
     "assertive": "~1.4.0",
     "bondjs": "~1.1.1",
-    "express": "~4.1.1"
+    "coffee-script-redux": "2.0.0-beta7",
+    "deepmerge": "^0.2.7",
+    "express": "~4.1.1",
+    "mocha": "~1.18.2",
+    "npub": "0.0.5",
+    "semver": "~2.1.0"
   }
 }
