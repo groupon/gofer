@@ -100,7 +100,10 @@ GithubClient.registerEndpoints({
           return request({
             // If `uri` is not passed in as the first argument, it's a
             // required property of options
-            uri: username ? ('/users/' + username + '/repos') : '/user/repos',
+            uri: username ? ('/users/{username}/repos') : '/user/repos',
+            pathParams: {
+              username: username
+            },
             qs: merge({ per_page: 100 }, qs)
           }, extractDataOnly(cb));
         }
