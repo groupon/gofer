@@ -17,3 +17,11 @@ describe 'replacePathParms', ->
 
     uri = replacePathParms "/{country}/deal/{id}", pathParams
     assert.equal "/us/deal/half-off", uri
+
+  it 'values are properly URI encoded', ->
+    pathParams =
+      country: "us"
+      id: "!@#"
+
+    uri = replacePathParms "/{country}/deal/{id}", pathParams
+    assert.equal "/us/deal/!%40%23", uri

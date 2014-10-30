@@ -98,6 +98,6 @@ Url = require 'url'
   return uri unless 'object' == typeof pathParams
 
   for tag, string of pathParams
-    uri = uri.replace "{#{tag}}", string
+    uri = uri.replace "{#{tag}}", encodeURIComponent(string)
 
   return uri
