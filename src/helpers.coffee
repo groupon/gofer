@@ -94,3 +94,10 @@ Url = require 'url'
 
   "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
 
+@replacePathParms = (uri, pathParams) ->
+  return uri unless 'object' == typeof pathParams
+
+  for tag, string of pathParams
+    uri = uri.replace "{#{tag}}", string
+
+  return uri
