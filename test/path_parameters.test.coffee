@@ -4,11 +4,14 @@ assert = require 'assertive'
 
 describe 'replacePathParms', ->
   it 'makes no changes without a pathParams object', ->
-    uri = replacePathParms "/something/{tag}", "else"
-    assert.equal "/something/{tag}", uri
+    uri = replacePathParms "/first/{tag}", "else"
+    assert.equal "/first/{tag}", uri
 
-    uri = replacePathParms "/something/{tag}", null
-    assert.equal "/something/{tag}", uri
+    uri = replacePathParms "/second/{tag}", null
+    assert.equal "/second/{tag}", uri
+
+    uri = replacePathParms "/third/{tag}"
+    assert.equal "/third/{tag}", uri
 
   it 'replaces keys', ->
     pathParams =
@@ -17,6 +20,13 @@ describe 'replacePathParms', ->
 
     uri = replacePathParms "/{country}/deal/{id}", pathParams
     assert.equal "/us/deal/half-off", uri
+
+  it 'replaces duplicate keys', ->
+    pathParams =
+      country: "us"
+
+    uri = replacePathParms "/{country}/deal/{country}", pathParams
+    assert.equal "/us/deal/us", uri
 
   it 'values are properly URI encoded', ->
     pathParams =

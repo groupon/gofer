@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
-{merge, cloneDeep} = require 'lodash'
+{merge, cloneDeep, reduce} = require 'lodash'
 Url = require 'url'
 
 @merge = mergeSafe = (o1, o2) ->
@@ -95,9 +95,16 @@ Url = require 'url'
   "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
 
 @replacePathParms = (uri, pathParams) ->
-  return uri unless 'object' == typeof pathParams
+  return uri if !pathParams or 'object' != typeof pathParams
 
-  for tag, string of pathParams
-    uri = uri.replace "{#{tag}}", encodeURIComponent(string)
+  wrappedPathParams = reduce pathParams, ((acc, value, tag) ->
+    wrappedTag = "{#{tag}}"
+    acc[wrappedTag] = encodeURIComponent(value)
+    acc
+  ), {}
 
-  return uri
+  wrappedTags = Object.keys(wrappedPathParams)
+  regex = new RegExp wrappedTags.join("|"), "g"
+
+  return uri.replace regex, (match) ->
+    wrappedPathParams[match]
