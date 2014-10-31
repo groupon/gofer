@@ -1,18 +1,18 @@
 
 assert = require 'assertive'
 
-buildGofer = require '..'
+Gofer = require '..'
 
 describe 'gofer', ->
-  it 'exports a function', ->
-    assert.hasType Function, buildGofer
+  it 'exports a constructor function', ->
+    assert.hasType Function, Gofer
+
+  it 'takes two arguments', ->
+    assert.equal 2, Gofer.length
 
   describe 'with service name', ->
-    MyApi = buildGofer 'myApi'
+    class MyApi extends Gofer
+      serviceName: 'myApi'
 
-    it 'is a class, taking two arguments', ->
-      assert.hasType Function, MyApi
-      assert.equal 2, MyApi.length
-
-    it 'exposes the service name', ->
-      assert.equal 'myApi', MyApi.serviceName
+    it 'is a Gofer', ->
+      assert.truthy new MyApi() instanceof Gofer

@@ -169,54 +169,18 @@ class Gofer
       data = safeParseJSON body
       cb err ? data.error, data.result, responseData, response
 
+  _mappers: [
+    # Default: apply baseUrl
+    (opts) ->
+      {baseUrl} = opts
+      if baseUrl?
+        delete opts.baseUrl
+        @applyBaseUrl baseUrl, opts
+      else opts
+  ]
+
 Gofer::fetch = Gofer::request
 Gofer::get = Gofer::request
 
-Gofer::_mappers = [
-  # Default: apply baseUrl
-  (opts) ->
-    {baseUrl} = opts
-    if baseUrl?
-      delete opts.baseUrl
-      @applyBaseUrl baseUrl, opts
-    else opts
-]
-
-addOptionMapper = (GoferClass, mapper) ->
-  GoferClass::addOptionMapper mapper
-
-clearOptionMappers = (GoferClass) ->
-  GoferClass::clearOptionMappers()
-
-registerEndpoints = (GoferClass, endpointMap) ->
-  GoferClass::registerEndpoints endpointMap
-
-module.exports = buildGofer = (serviceName, serviceVersion) ->
-  class CustomGofer extends Gofer
-    constructor: (config, hub) ->
-      Gofer.call this, config, hub
-
-    serviceName: serviceName
-    serviceVersion: serviceVersion
-
-  # All these properties are for backwards compatibility only,
-  # at this point inheriting from Gofer should be fine.
-  # Using CustomGofer::registerEndpoints always works.
-  CustomGofer.addOptionMapper = (mapper) ->
-    addOptionMapper CustomGofer, mapper
-
-  CustomGofer.clearOptionMappers = ->
-    clearOptionMappers CustomGofer
-
-  CustomGofer.registerEndpoints = (endpointMap) ->
-    registerEndpoints CustomGofer, endpointMap
-
-  CustomGofer.serviceName = serviceName
-
-  CustomGofer
-
-buildGofer.Gofer = Gofer
-buildGofer.addOptionMapper = addOptionMapper
-buildGofer.clearOptionMappers = clearOptionMappers
-buildGofer.registerEndpoints = registerEndpoints
-buildGofer['default'] = buildGofer # ES6 module compatible
+module.exports = Gofer
+Gofer['default'] = Gofer # ES6 module compatible

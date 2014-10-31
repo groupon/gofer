@@ -2,19 +2,25 @@
 // We use this to safely extend objects without mutating the input values
 var merge = require('deepmerge');
 var _ = require('lodash');
+var util = require('util');
 
-var serviceClientFor = require('../');
+var Gofer = require('../');
 
 // Generate our ServiceClient class
-var GithubClient = serviceClientFor('github');
+function GithubClient() {
+  Gofer.apply(this, arguments);
+}
+util.inherits(GithubClient, Gofer);
+GithubClient.prototype.serviceName = 'github';
+GithubClient.prototype.serviceVersion = require('../package.json').version;
 
 // We need to do our own baseUrl handling to dynamically switch to the web
 // url for the oauth token exchange.
-GithubClient.clearOptionMappers();
+GithubClient.prototype.clearOptionMappers();
 
 // The option mapper is called with the client instance as `this` - which
 // will enable us to call applyBaseUrl at the end.
-GithubClient.addOptionMapper(function(opts) {
+GithubClient.prototype.addOptionMapper(function(opts) {
   // We extract all options we will be handling ourselves and then remove
   // them, making sure nobody gets confused by them
   var
@@ -67,7 +73,7 @@ function extractDataOnly(cb) {
 // will be initialized with a pre-configured function to make requests. The
 // name of the function happens to be `request` because it (apart from some
 // magical injection of parameters) forwards its arguments to request.
-GithubClient.registerEndpoints({
+GithubClient.prototype.registerEndpoints({
   // This is one possible style of "endpoint": a namespace for functions.
   // Usage: `github.accessToken.create('my-code').pipe(process.stdout);`
   accessToken: function(request) {
