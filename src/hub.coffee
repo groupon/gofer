@@ -89,6 +89,7 @@ module.exports = Hub = ->
         fetchDuration: responseData.fetchDuration
         requestId: options?.requestId
         fetchId: fetchId
+        requestOptions: options
 
       if error?
         logLine.syscall = error.syscall
