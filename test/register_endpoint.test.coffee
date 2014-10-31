@@ -1,7 +1,7 @@
 
 assert = require 'assertive'
 
-buildGofer = require '..'
+Gofer = require '..'
 
 describe 'registerEndpoint', ->
   fooEndpoint = null
@@ -18,8 +18,9 @@ describe 'registerEndpoint', ->
       customName: (cb) ->
         request uri: '/?a=b', methodName: 'custom', cb
 
-    MyApi = buildGofer 'myApi'
-    MyApi.registerEndpoints foo: fooEndpoint
+    class MyApi extends Gofer
+      serviceName: 'myApi'
+    MyApi::registerEndpoints foo: fooEndpoint
     myApi = new MyApi()
 
   it 'only creates an endpoint once', ->

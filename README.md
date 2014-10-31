@@ -9,7 +9,7 @@
 npm install --save gofer
 ```
 
-A base library to develop specialized ReST clients with.
+A base class to develop specialized ReST clients with.
 The general design is meant to enforce a certain level of consistency in how the clients are configured and instrumented.
 Uses [request](https://github.com/mikeal/request) to do the actual fetching.
 
@@ -106,7 +106,15 @@ Let's say we need a client for the Github API.
 The first step is to generate a Github client class:
 
 ```js
-var Github = require('gofer')('github');
+var Gofer = require('gofer');
+var util = require('util');
+
+function Github() {
+  Gofer.apply(this, arguments);
+}
+util.inherits(Github, Gofer);
+Github.prototype.serviceName = 'github';
+Github.prototype.serviceVersion = require('./package.json').version;
 ```
 
 The name you choose here determines which section of the configuration it will accept.
@@ -115,7 +123,7 @@ It's also part of the instrumentation as `serviceName`.
 Let's define a simple endpoint to get the emojis from Github:
 
 ```js
-Github.registerEndpoints({
+Github.prototype.registerEndpoints({
   // Every instance of Github will get an `emojis` property. On
   // access it will be initialized with an instrumented version of the
   // `request` function. The `request` function works mostly like mikeal's
@@ -160,9 +168,9 @@ The options we return will be passed on to `request`.
 ```js
 // Since the default option mapper would already try to apply a base url,
 // we need to remove it.
-Github.clearOptionMappers();
+Github.prototype.clearOptionMappers();
 omit = require('lodash').omit;
-Github.addOptionMapper(function(opts) {
+Github.prototype.addOptionMapper(function(opts) {
   // opts contains the already merged options, including global-, service-,
   // and endpoint-defaults. In our example opts.uri will be '/emojis',
   // opts.timeout will be 2000, and opts.clientId... you get the idea.

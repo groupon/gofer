@@ -1,17 +1,8 @@
 
 ## Gofer - API
 
-The module exports one function, `buildGofer`.
+The module exports one class, `Gofer`.
 In addition it exposes `gofer/hub` which exports [`Hub`](#hub).
-
-#### buildGofer(serviceName: String, serviceVersion: String) -> Gofer
-
-Create a new gofer class for a given service.
-`serviceName` is used in multiple places:
-
-* It is the key under which instances of the class will be looking for service-level [configuration](#configuration)
-* It is injected into the fetch options, see [events and logging](#events-and-logging)
-* It is used to build the `User-Agent` header
 
 ### Gofer
 
@@ -20,21 +11,34 @@ Create a new gofer class for a given service.
 * `config`: A config object as described in [configuration](#configuration)
 * `hub`: An instance of [Hub](#hub)
 
-#### Static methods
+This class can be used directly,
+but it's mainly meant to be the base class for individual service clients.
+Child classes should add `serviceName` and `serviceVersion` to their prototype.
+Example:
 
-##### Gofer.addOptionMapper(mapFn)
+```js
+function MyClient() {
+  Gofer.apply(this, arguments);
+}
+MyClient.prototype.serviceName = 'myService';
+MyClient.prototype.serviceVersion = require('package.json').version;
+```
+
+#### Methods modifying the prototype
+
+##### Gofer.prototype.addOptionMapper(mapFn)
 
 Add a new option mapper to *all* instances that are created afterwards. This
 can also be called on an instance which doesn't have a global effect.
 
 * `mapFn`: An option mapper, see [option mappers](#option-mappers)
 
-##### Gofer.clearOptionMappers()
+##### Gofer.prototype.clearOptionMappers()
 
 Clear the option mapper chain for all instances that are created afterwards.
 It can also be called on an instance which does not have a global effect.
 
-##### Gofer.registerEndpoints(endpointMap)
+##### Gofer.prototype.registerEndpoints(endpointMap)
 
 Registers "endpoints". Endpoints are convenience methods for easier
 construction of API calls and can also improve logging/tracing. The following
@@ -188,7 +192,8 @@ There are three levels of configuration:
 * `[serviceName].endpointDefaults[endpointName].*`: Only used for calls using a specific endpoint
 
 ```js
-var buildGofer = require('gofer');
+var Gofer = require('gofer');
+var util = require('util');
 
 var config = {
   "globalDefaults": { "timeout": 100, "connectTimeout": 55 },
@@ -202,8 +207,13 @@ var config = {
   }
 };
 
-var GoferA = buildGofer('a'), GoferB = buildGofer('b');
-GoferB.registerEndpoints({
+function GoferA() { Gofer.apply(this, arguments); }
+util.inherits(GoferA, Gofer);
+
+function GoferB() { Gofer.apply(this, arguments); }
+util.inherits(GoferB, Gofer);
+
+GoferB.prototype.registerEndpoints({
   x: function(request) {
     return function(cb) { return request('/something', cb); }
   }
@@ -222,9 +232,8 @@ The hub is used to make all calls to request and exposes a number of useful even
 The following snippet shows how to share a hub across multiple gofer instances:
 
 ```js
-var buildGofer = require('gofer');
-var GoferA = buildGofer('a'); // client for service "a"
-var GoferB = buildGofer('b'); // client for service "b"
+var GoferA = require('a-gofer'); // client for service "a"
+var GoferB = require('b-gofer'); // client for service "b"
 
 var hub = require('gofer/hub')(); // create a new hub
 var goferA = new GoferA({ /* config */ }, hub);

@@ -3,7 +3,7 @@ assert = require 'assertive'
 http = require 'http'
 Url = require 'url'
 
-buildGofer = require '..'
+Gofer = require '..'
 
 describe 'actually making a request', ->
   myApi = null
@@ -45,8 +45,11 @@ describe 'actually making a request', ->
     failEndpoint = (request) -> (cb) -> request "/invalid", cb
     crashEndpoint = (request) -> (cb) -> request '/crash', cb
 
-    MyApi = buildGofer 'myApi', '1.0.0'
-    MyApi.registerEndpoints {
+    class MyApi extends Gofer
+      serviceName: 'myApi'
+      serviceVersion: '1.0.0'
+
+    MyApi::registerEndpoints {
       zapp: zappEndpoint
       fail: failEndpoint
       query: queryEndpoint

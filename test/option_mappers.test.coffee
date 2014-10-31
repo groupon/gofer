@@ -1,7 +1,7 @@
 
 assert = require 'assertive'
 
-buildGofer = require '..'
+Gofer = require '..'
 
 describe 'option mappers', ->
   fooEndpoint = null
@@ -16,14 +16,15 @@ describe 'option mappers', ->
     fooEndpoint = (request) ->
       bar: (id, cb) -> request "/foo/bars/#{id}", cb
 
-    MyApi = buildGofer 'myApi'
-    MyApi.registerEndpoints foo: fooEndpoint
+    class MyApi extends Gofer
+      serviceName: 'myApi'
+    MyApi::registerEndpoints foo: fooEndpoint
 
-    MyApi.addOptionMapper (opts) ->
+    MyApi::addOptionMapper (opts) ->
       opts.confProp1 = overrides.confProp1
       opts
 
-    MyApi.addOptionMapper (opts) ->
+    MyApi::addOptionMapper (opts) ->
       opts.confProp2 = overrides.confProp2
       opts
 

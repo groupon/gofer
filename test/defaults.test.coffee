@@ -1,7 +1,7 @@
 
 assert = require 'assertive'
 
-buildGofer = require '..'
+Gofer = require '..'
 
 describe 'config defaults', ->
   myApi = null
@@ -24,8 +24,10 @@ describe 'config defaults', ->
     otherEndpoint = (request) ->
       (cb) -> request "/zapp", cb
 
-    MyApi = buildGofer 'myApi'
-    MyApi.registerEndpoints {
+    class MyApi extends Gofer
+      serviceName: 'myApi'
+
+    MyApi::registerEndpoints {
       foo: fooEndpoint
       other: otherEndpoint
     }
