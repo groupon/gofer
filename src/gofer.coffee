@@ -32,7 +32,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Hub = require './hub'
 {
-  registerEndpoint,
   resolveOptional,
   parseDefaults,
   applyBaseUrl,
@@ -42,144 +41,182 @@ Hub = require './hub'
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
 
+class Gofer
+  constructor: (config, @hub) ->
+    { @defaults, @endpointDefaults } = parseDefaults config, @serviceName
+    @hub ?= Hub()
+
+  with: (overrides) ->
+    copy = new @constructor({}, @hub)
+    copy.defaults = merge @defaults, overrides
+
+    # Overides should also hard-override any endpoint default
+    copy.endpointDefaults = {}
+    for endpointName, endpointDefaults of @endpointDefaults
+      copy.endpointDefaults[endpointName] = merge endpointDefaults, overrides
+
+    copy
+
+  clone: -> @with {}
+
+  # For making custom requests
+  request: (uri, options, cb) =>
+    {options, cb} = resolveOptional uri, options, cb
+    @_request options, cb
+
+  # For making custom requests
+  put: (uri, options, cb) ->
+    {options, cb} = resolveOptional uri, options, cb
+    options.method = 'PUT'
+    @_request options, cb
+
+  # For making custom requests
+  del: (uri, options, cb) ->
+    {options, cb} = resolveOptional uri, options, cb
+    options.method = 'DELETE'
+    @_request options, cb
+
+  # For making custom requests
+  head: (uri, options, cb) ->
+    {options, cb} = resolveOptional uri, options, cb
+    options.method = 'HEAD'
+    @_request options, cb
+
+  # For making custom requests
+  post: (uri, options, cb) ->
+    {options, cb} = resolveOptional uri, options, cb
+    options.method = 'POST'
+    @_request options, cb
+
+  # For making custom requests
+  patch: (uri, options, cb) ->
+    {options, cb} = resolveOptional uri, options, cb
+    options.method = 'PATCH'
+    @_request options, cb
+
+  registerEndpoint: (endpointName, endpointFn) ->
+    Object.defineProperty this, endpointName,
+      configurable: true
+      get: ->
+        request = @requestWithDefaults { endpointName }
+        value = endpointFn request
+        Object.defineProperty this, endpointName, {value}
+        value
+
+    return this
+
+  registerEndpoints: (endpointMap) ->
+    @registerEndpoint name, handler for name, handler of endpointMap
+    return this
+
+  # Main integration point to customize the client
+  addOptionMapper: (mapper) ->
+    @_mappers = @_mappers.concat [mapper]
+    this
+
+  clearOptionMappers: -> @_mappers = []
+
+  # Semi-public, should not be needed normally
+  requestWithDefaults: (defaults) ->
+    (uri, options, cb) =>
+      {options, cb} = resolveOptional uri, options, cb
+      options = merge defaults, options
+      @_request options, cb
+
+  _getDefaults: (defaults, options) ->
+    {endpointName} = options
+
+    if endpointName? && @endpointDefaults[endpointName]?
+      defaults = merge defaults, @endpointDefaults[endpointName]
+
+    defaults
+
+  # Helper for request mappers
+  applyBaseUrl: applyBaseUrl
+
+  _applyMappers: (originalOptions) ->
+    @_mappers.reduce(
+      (options, mapper) => mapper.call this, options
+      originalOptions
+    )
+
+  _request: (options, cb) ->
+    defaults = @_getDefaults @defaults, options
+
+    options.uri = replacePathParms(options.uri, options.pathParams)
+    options.methodName ?= (options.method ? 'get').toLowerCase()
+    options.serviceName = @serviceName if @serviceName?
+    options.serviceVersion = @serviceVersion if @serviceVersion?
+
+    try
+      options = @_applyMappers merge(defaults, options)
+    catch err
+      return cb err
+
+    options.headers ?= {}
+    options.headers['User-Agent'] ?= buildUserAgent(options)
+
+    if options.qs? && typeof options.qs == 'object'
+      cleanedQs = {}
+      for key, value of options.qs
+        cleanedQs[key] = value if value?
+      options.qs = cleanedQs
+
+    @hub.fetch options, (err, body, response, responseData) ->
+      parseJSON = options.parseJSON ? isJsonResponse(response, body)
+      return cb err, body, responseData, response unless parseJSON
+
+      data = safeParseJSON body
+      cb err ? data.error, data.result, responseData, response
+
+Gofer::fetch = Gofer::request
+Gofer::get = Gofer::request
+
+Gofer::_mappers = [
+  # Default: apply baseUrl
+  (opts) ->
+    {baseUrl} = opts
+    if baseUrl?
+      delete opts.baseUrl
+      @applyBaseUrl baseUrl, opts
+    else opts
+]
+
+addOptionMapper = (GoferClass, mapper) ->
+  GoferClass::addOptionMapper mapper
+
+clearOptionMappers = (GoferClass) ->
+  GoferClass::clearOptionMappers()
+
+registerEndpoints = (GoferClass, endpointMap) ->
+  GoferClass::registerEndpoints endpointMap
+
 module.exports = buildGofer = (serviceName, serviceVersion) ->
-  class Gofer
-    constructor: (config, @hub) ->
-      { @defaults, @endpointDefaults } = parseDefaults config, serviceName
-      @hub ?= Hub()
+  class CustomGofer extends Gofer
+    constructor: (config, hub) ->
+      Gofer.call this, config, hub
 
-    with: (overrides) ->
-      copy = new Gofer({}, @hub)
-      copy.defaults = merge @defaults, overrides
+    serviceName: serviceName
+    serviceVersion: serviceVersion
 
-      # Overides should also hard-override any endpoint default
-      copy.endpointDefaults = {}
-      for endpointName, endpointDefaults of @endpointDefaults
-        copy.endpointDefaults[endpointName] = merge endpointDefaults, overrides
+  # All these properties are for backwards compatibility only,
+  # at this point inheriting from Gofer should be fine.
+  # Using CustomGofer::registerEndpoints always works.
+  CustomGofer.addOptionMapper = (mapper) ->
+    addOptionMapper CustomGofer, mapper
 
-      copy
+  CustomGofer.clearOptionMappers = ->
+    clearOptionMappers CustomGofer
 
-    clone: -> @with {}
+  CustomGofer.registerEndpoints = (endpointMap) ->
+    registerEndpoints CustomGofer, endpointMap
 
-    # For making custom requests
-    request: (uri, options, cb) =>
-      {options, cb} = resolveOptional uri, options, cb
-      @_request options, cb
+  CustomGofer.serviceName = serviceName
 
-    # For making custom requests
-    put: (uri, options, cb) ->
-      {options, cb} = resolveOptional uri, options, cb
-      options.method = 'PUT'
-      @_request options, cb
+  CustomGofer
 
-    # For making custom requests
-    del: (uri, options, cb) ->
-      {options, cb} = resolveOptional uri, options, cb
-      options.method = 'DELETE'
-      @_request options, cb
-
-    # For making custom requests
-    head: (uri, options, cb) ->
-      {options, cb} = resolveOptional uri, options, cb
-      options.method = 'HEAD'
-      @_request options, cb
-
-    # For making custom requests
-    post: (uri, options, cb) ->
-      {options, cb} = resolveOptional uri, options, cb
-      options.method = 'POST'
-      @_request options, cb
-
-    # For making custom requests
-    patch: (uri, options, cb) ->
-      {options, cb} = resolveOptional uri, options, cb
-      options.method = 'PATCH'
-      @_request options, cb
-
-    # Main integration point to customize the client
-    addOptionMapper: (mapper) ->
-      @_mappers = @_mappers.concat [mapper]
-      this
-
-    clearOptionMappers: -> @_mappers = []
-
-    # Semi-public, should not be needed normally
-    requestWithDefaults: (defaults) ->
-      (uri, options, cb) =>
-        {options, cb} = resolveOptional uri, options, cb
-        options = merge defaults, options
-        @_request options, cb
-
-    _getDefaults: (defaults, options) ->
-      {endpointName} = options
-
-      if endpointName? && @endpointDefaults[endpointName]?
-        defaults = merge defaults, @endpointDefaults[endpointName]
-
-      defaults
-
-    # Helper for request mappers
-    applyBaseUrl: applyBaseUrl
-
-    _applyMappers: (originalOptions) ->
-      @_mappers.reduce(
-        (options, mapper) => mapper.call this, options
-        originalOptions
-      )
-
-    _request: (options, cb) ->
-      defaults = @_getDefaults @defaults, options
-
-      options.uri = replacePathParms(options.uri, options.pathParams)
-      options.methodName ?= (options.method ? 'get').toLowerCase()
-      options.serviceName = serviceName
-      options.serviceVersion = serviceVersion
-
-      try
-        options = @_applyMappers merge(defaults, options)
-      catch err
-        return cb err
-
-      options.headers ?= {}
-      options.headers['User-Agent'] ?= buildUserAgent(options)
-
-      if options.qs? && typeof options.qs == 'object'
-        cleanedQs = {}
-        for key, value of options.qs
-          cleanedQs[key] = value if value?
-        options.qs = cleanedQs
-
-      @hub.fetch options, (err, body, response, responseData) ->
-        parseJSON = options.parseJSON ? isJsonResponse(response, body)
-        return cb err, body, responseData, response unless parseJSON
-
-        data = safeParseJSON body
-        cb err ? data.error, data.result, responseData, response
-
-  Gofer.prototype.fetch = Gofer.prototype.request
-  Gofer.prototype.get = Gofer.prototype.request
-
-  Gofer.prototype._mappers = [
-    # Default: apply baseUrl
-    (opts) ->
-      {baseUrl} = opts
-      if baseUrl?
-        delete opts.baseUrl
-        @applyBaseUrl baseUrl, opts
-      else opts
-  ]
-
-  Gofer.addOptionMapper = (mapper) ->
-    Gofer.prototype.addOptionMapper mapper
-
-  Gofer.clearOptionMappers = ->
-    Gofer.prototype.clearOptionMappers()
-
-  Gofer.registerEndpoints = (endpointMap) ->
-    proto = Gofer.prototype
-    registerEndpoint proto, name, handler for name, handler of endpointMap
-    Gofer
-
-  Gofer.serviceName = serviceName
-
-  Gofer
+buildGofer.Gofer = Gofer
+buildGofer.addOptionMapper = addOptionMapper
+buildGofer.clearOptionMappers = clearOptionMappers
+buildGofer.registerEndpoints = registerEndpoints
+buildGofer['default'] = buildGofer # ES6 module compatible
