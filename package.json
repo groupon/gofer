@@ -34,6 +34,7 @@
     }
   ],
   "publishConfig": {
+    "registry": "https://registry.npmjs.org",
     "license": {
       "exclude": [
         "test"
