@@ -36,15 +36,6 @@ Url = require 'url'
 @merge = mergeSafe = (o1, o2) ->
   merge cloneDeep(o1), o2
 
-@registerEndpoint = (proto, endpointName, endpointFn) ->
-  Object.defineProperty proto, endpointName,
-    configurable: true
-    get: ->
-      request = @requestWithDefaults { endpointName }
-      value = endpointFn request
-      Object.defineProperty this, endpointName, {value}
-      value
-
 @resolveOptional = (uri, options, cb) ->
   if 'function' == typeof options
     cb = options
