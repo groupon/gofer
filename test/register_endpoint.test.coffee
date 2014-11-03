@@ -35,6 +35,7 @@ describe 'registerEndpoint', ->
       assert.equal 'myApi', opts.serviceName
       assert.equal 'get', opts.methodName
       done()
+      return {}
 
     myApi.foo.bar '123'
 
@@ -45,6 +46,7 @@ describe 'registerEndpoint', ->
       assert.equal 'foo', opts.endpointName
       assert.equal 'custom', opts.methodName
       done()
+      return {}
 
     {foo} = myApi
     foo.customName()
@@ -54,6 +56,7 @@ describe 'registerEndpoint', ->
       assert.equal '/foo/bars/123', opts.uri
       assert.equal 'foo', opts.endpointName
       done()
+      return {}
 
     {foo} = myApi
     foo.bar '123'

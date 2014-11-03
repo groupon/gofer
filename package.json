@@ -42,6 +42,7 @@
     }
   },
   "dependencies": {
+    "bluebird": "^2.3.10",
     "debug": "~0.8.1",
     "lodash": "~2.4.1",
     "microtime": "~0.5.1",

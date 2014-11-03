@@ -40,6 +40,7 @@ describe 'config defaults', ->
         assert.equal '/foo/bars/123', opts.uri
         assert.equal 10, opts.connectTimeout
         done()
+        return {}
 
       myApi.foo.bar '123'
 
@@ -49,6 +50,7 @@ describe 'config defaults', ->
         assert.equal '/zapp', opts.uri
         assert.equal 1000, opts.timeout
         done()
+        return {}
 
       myApi.other()
 
@@ -58,6 +60,7 @@ describe 'config defaults', ->
         assert.equal '/foo/bars/23', opts.uri
         assert.equal 21, opts.timeout
         done()
+        return {}
 
       myApi.foo.bar '23'
 
@@ -70,5 +73,6 @@ describe 'config defaults', ->
         assert.equal 71, opts.anotherOption
         assert.equal 'custom', opts.customOption
         done()
+        return {}
 
       myApi.with(timeout: 33, customOption: 'custom').foo.bar '23'

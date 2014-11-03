@@ -38,6 +38,7 @@ Hub = require './hub'
   buildUserAgent,
   merge
 } = require './helpers'
+PromiseProperties = require './promises'
 { safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
 

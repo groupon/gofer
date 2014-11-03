@@ -41,6 +41,7 @@ describe 'option mappers', ->
       client.hub = fetch: (opts, cb) ->
         assert.equal 'http://127.0.0.1/foo/bars/123', opts.uri
         done()
+        return {}
 
       client.foo.bar '123'
 
@@ -49,6 +50,7 @@ describe 'option mappers', ->
       client.hub = fetch: (opts, cb) ->
         assert.equal 'http://127.0.0.1:3344/foo/bars/123', opts.uri
         done()
+        return {}
 
       client.foo.bar '123'
 
@@ -57,6 +59,7 @@ describe 'option mappers', ->
       client.hub = fetch: (opts, cb) ->
         assert.equal 'http://127.0.0.1:3344/foo/bars/123', opts.uri
         done()
+        return {}
 
       client.foo.bar '123'
 
@@ -65,6 +68,7 @@ describe 'option mappers', ->
       client.hub = fetch: (opts, cb) ->
         assert.equal 'http://127.0.0.1:3344/v2/foo/bars/123', opts.uri
         done()
+        return {}
 
       client.foo.bar '123'
 
@@ -73,6 +77,7 @@ describe 'option mappers', ->
       client.hub = fetch: (opts, cb) ->
         assert.equal 'http://127.0.0.1:3344/v2/foo/bars/123', opts.uri
         done()
+        return {}
 
       client.foo.bar '123'
 
@@ -82,6 +87,7 @@ describe 'option mappers', ->
         assert.equal '/foo/bars/123', opts.uri
         assert.equal 'foo', opts.endpointName
         done()
+        return {}
 
       myApi_onlyGlobal.foo.bar '123'
 
@@ -90,5 +96,6 @@ describe 'option mappers', ->
         assert.equal overrides.confProp1, opts.confProp1
         assert.equal overrides.confProp2, opts.confProp2
         done()
+        return {}
 
       myApi_onlyGlobal.foo.bar '123'
