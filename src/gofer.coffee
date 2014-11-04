@@ -143,7 +143,6 @@ class Gofer
   _request: (options, cb) ->
     defaults = @_getDefaults @defaults, options
 
-    options.uri = replacePathParms(options.uri, options.pathParams)
     options.methodName ?= (options.method ? 'get').toLowerCase()
     options.serviceName = @serviceName if @serviceName?
     options.serviceVersion = @serviceVersion if @serviceVersion?
@@ -152,6 +151,8 @@ class Gofer
       options = @_applyMappers merge(defaults, options)
     catch err
       return cb err
+
+    options.uri = replacePathParms(options.uri, options.pathParams)
 
     options.headers ?= {}
     options.headers['User-Agent'] ?= buildUserAgent(options)
