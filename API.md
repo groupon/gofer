@@ -266,9 +266,10 @@ Event data:
   requestId: UUID, // id of the overall transaction
   fetchId: UUID, // id of this specific http call
   uri: String, // the URI requested
-  method: String, // uppercase http verb, PUT/GET/...
+  method: String, // uppercase HTTP verb, PUT/GET/...
   serviceName: String, // Config key ex: github
   endpointName: String, // Function name ex: repos
+  methodName: String, // Defaults to lowercase HTTP verb but configurable per request
   pathParams: Object } // key/value pairs used in {tag} replacement
 ```
 

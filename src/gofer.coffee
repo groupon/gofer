@@ -165,6 +165,7 @@ class Gofer
     extend({
       serviceName: options.serviceName
       endpointName: options.endpointName
+      methodName: options.methodName
       pathParams: options.pathParams
     }, options.logData)
 
