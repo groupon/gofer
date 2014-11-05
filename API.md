@@ -252,6 +252,7 @@ There are a couple of things `gofer` does that are opinionated but may make your
     Heroku has a [nice description](https://devcenter.heroku.com/articles/http-request-id).
 2.  It uses unique `x-fetch-id` headers for each http request.
 3.  All timings are reported in seconds with microtime precision.
+4.  Data added to `options.logData` will be added to `start`, `fetchError`, `success` and `failure` messages.
 
 
 ##### start
@@ -263,7 +264,12 @@ Event data:
 { fetchStart: Float, // time in seconds
   requestOptions: options, // options passed into request
   requestId: UUID, // id of the overall transaction
-  fetchId: UUID } // id of this specific http call
+  fetchId: UUID, // id of this specific http call
+  uri: String, // the URI requested
+  method: String, // uppercase http verb, PUT/GET/...
+  serviceName: String, // Config key ex: github
+  endpointName: String, // Function name ex: repos
+  pathParams: Object } // key/value pairs used in {tag} replacement
 ```
 
 
@@ -300,7 +306,10 @@ Event data:
   connectDuration: Float,
   fetchDuration: Float,
   requestId: UUID,
-  fetchId: UUID }
+  fetchId: UUID,
+  serviceName: String,
+  endpointName: String,
+  pathParams: Object }
 ```
 
 
@@ -312,7 +321,10 @@ Event contains the data from `success` plus:
 ```js
 { statusCode: String, // the error code (e.g. ETIMEDOUT)
   syscall: String, // the syscall that failed (e.g. getaddrinfo)
-  error: error } // the raw error object
+  error: error, // the raw error object
+  serviceName: String,
+  endpointName: String,
+  pathParams: Object }
 ```
 
 
