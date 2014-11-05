@@ -77,7 +77,8 @@ Url = require 'url'
   {protocol, hostname, port} = baseUrl
   {query, search} = uri
 
-  options.uri = Url.format {protocol, hostname, port, pathname, query, search}
+  uri = Url.format {protocol, hostname, port, pathname, query, search}
+  options.uri = replacePathParams(uri, options.pathParams)
   options
 
 @buildUserAgent = (options) ->
@@ -85,7 +86,7 @@ Url = require 'url'
 
   "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
 
-@replacePathParms = (uri, pathParams) ->
+replacePathParams = (uri, pathParams) ->
   return uri unless isObject pathParams
 
   wrappedPathParams = reduce pathParams, ((acc, value, tag) ->

@@ -36,7 +36,6 @@ Hub = require './hub'
   parseDefaults,
   applyBaseUrl,
   buildUserAgent,
-  replacePathParms,
   merge
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
@@ -152,8 +151,6 @@ class Gofer
       options = @_applyMappers merge(defaults, options)
     catch err
       return cb err
-
-    options.uri = replacePathParms(options.uri, options.pathParams)
 
     options.headers ?= {}
     options.headers['User-Agent'] ?= buildUserAgent(options)
