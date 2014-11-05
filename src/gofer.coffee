@@ -40,6 +40,7 @@ Hub = require './hub'
   merge
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
+{extend} = require 'lodash'
 
 class Gofer
   constructor: (config, @hub) ->
@@ -162,6 +163,13 @@ class Gofer
       for key, value of options.qs
         cleanedQs[key] = value if value?
       options.qs = cleanedQs
+
+    options.logData ?= {}
+    extend(options.logData, {
+      serviceName: options.serviceName
+      endpointName: options.endpointName
+      pathParams: options.pathParams
+    })
 
     @hub.fetch options, (err, body, response, responseData) ->
       parseJSON = options.parseJSON ? isJsonResponse(response, body)
