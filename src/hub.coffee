@@ -65,11 +65,15 @@ module.exports = Hub = ->
     responseData =
       fetchStart: fetchStart
       requestOptions: options
-      requestId: options?.requestId
+      requestId: options.requestId
       fetchId: fetchId
 
     debug '-> %s', options.method, options.uri
-    hub.emit 'start', responseData
+    baseLog = extend({
+      uri: options.uri
+      method: options.method
+    }, options.logData)
+    hub.emit 'start', extend(baseLog, responseData)
 
     req = request options, (error, response, body) ->
       responseData.fetchEnd = microtime.nowDouble()
@@ -81,14 +85,15 @@ module.exports = Hub = ->
 
       uri = formatUri(responseData.requestOptions.uri)
 
-      logLine =
+      logLine = extend({
         statusCode: response?.statusCode
         uri: uri
         method: options.method
         connectDuration: responseData.connectDuration
         fetchDuration: responseData.fetchDuration
-        requestId: options?.requestId
+        requestId: options.requestId
         fetchId: fetchId
+      }, options.logData)
 
       if error?
         logLine.syscall = error.syscall

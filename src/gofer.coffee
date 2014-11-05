@@ -36,10 +36,10 @@ Hub = require './hub'
   parseDefaults,
   applyBaseUrl,
   buildUserAgent,
-  replacePathParms,
   merge
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
+{extend} = require 'lodash'
 
 class Gofer
   constructor: (config, @hub) ->
@@ -143,7 +143,6 @@ class Gofer
   _request: (options, cb) ->
     defaults = @_getDefaults @defaults, options
 
-    options.uri = replacePathParms(options.uri, options.pathParams)
     options.methodName ?= (options.method ? 'get').toLowerCase()
     options.serviceName = @serviceName if @serviceName?
     options.serviceVersion = @serviceVersion if @serviceVersion?
@@ -161,6 +160,14 @@ class Gofer
       for key, value of options.qs
         cleanedQs[key] = value if value?
       options.qs = cleanedQs
+
+    options.logData ?= {}
+    extend({
+      serviceName: options.serviceName
+      endpointName: options.endpointName
+      methodName: options.methodName
+      pathParams: options.pathParams
+    }, options.logData)
 
     @hub.fetch options, (err, body, response, responseData) ->
       parseJSON = options.parseJSON ? isJsonResponse(response, body)

@@ -1,37 +1,57 @@
 assert = require 'assertive'
 
-{replacePathParms} = require '../lib/helpers'
+{applyBaseUrl} = require '../lib/helpers'
 
-describe 'replacePathParms', ->
+describe 'applyBaseUrl', ->
   it 'makes no changes without a pathParams object', ->
-    uri = replacePathParms "/first/{tag}", "else"
-    assert.equal "/first/{tag}", uri
+    baseUrl = "http://127.0.0.1/v2"
 
-    uri = replacePathParms "/second/{tag}", null
-    assert.equal "/second/{tag}", uri
+    options =
+      uri: "/first/{tag}"
+      pathParams: "else"
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/v2/first/{tag}", uri
 
-    uri = replacePathParms "/third/{tag}"
-    assert.equal "/third/{tag}", uri
+    options =
+      uri: "/second/{tag}"
+      pathParams: null
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/v2/second/{tag}", uri
+
+    options =
+      uri: "/third/{tag}"
+      pathParams: undefined
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/v2/third/{tag}", uri
 
   it 'replaces keys', ->
-    pathParams =
-      country: "us"
-      id: "half-off"
+    baseUrl = "http://127.0.0.1/{country}/v2"
+    options =
+      uri: "/deal/{id}"
+      pathParams:
+        country: "us"
+        id: "half-off"
 
-    uri = replacePathParms "/{country}/deal/{id}", pathParams
-    assert.equal "/us/deal/half-off", uri
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/us/v2/deal/half-off", uri
 
   it 'replaces duplicate keys', ->
-    pathParams =
-      country: "us"
+    baseUrl = "http://127.0.0.1/{country}/v2"
+    options =
+      uri: "/deal/{country}"
+      pathParams:
+        country: "us"
 
-    uri = replacePathParms "/{country}/deal/{country}", pathParams
-    assert.equal "/us/deal/us", uri
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/us/v2/deal/us", uri
 
   it 'values are properly URI encoded', ->
-    pathParams =
-      country: "us"
-      id: "!@#"
+    baseUrl = "http://127.0.0.1/{country}/v2"
+    options =
+      uri: "/deal/{id}"
+      pathParams:
+        country: "us"
+        id: "!@#"
 
-    uri = replacePathParms "/{country}/deal/{id}", pathParams
-    assert.equal "/us/deal/!%40%23", uri
+    {uri} = applyBaseUrl baseUrl, options
+    assert.equal "http://127.0.0.1/us/v2/deal/!%40%23", uri
