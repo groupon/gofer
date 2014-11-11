@@ -122,6 +122,7 @@ Possible values include:
 * `EPIPE`: Writing to the request failed
 * `ECONNREFUSED`: The remote host refused the connection, e.g. because nothing was listening on the port
 * `ENOTFOUND`: The hostname failed to resolve
+* `ECONNRESET`: The remote host dropped the connection. E.g. you are talking to another node based service and a process died.
 
 ##### gofer.applyBaseUrl(baseUrl: String, options)
 
