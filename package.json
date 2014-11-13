@@ -37,6 +37,7 @@
     "registry": "https://registry.npmjs.org",
     "license": {
       "exclude": [
+        "lib",
         "test"
       ]
     }
@@ -49,7 +50,7 @@
   "devDependencies": {
     "assertive": "~1.4.0",
     "bondjs": "~1.1.1",
-    "coffee-script-redux": "2.0.0-beta7",
+    "coffee-script": "^1.8.0",
     "deepmerge": "^0.2.7",
     "express": "~4.1.1",
     "mocha": "~1.18.2",
