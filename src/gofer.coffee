@@ -30,7 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
-Hub = require './hub'
+Hub = require 'gofer-hub'
 {
   resolveOptional,
   parseDefaults,
@@ -38,7 +38,6 @@ Hub = require './hub'
   buildUserAgent,
   merge
 } = require './helpers'
-PromiseProperties = require './promises'
 { safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
 
@@ -170,12 +169,7 @@ class Gofer
       pathParams: options.pathParams
     }, options.logData)
 
-    @hub.fetch options, (err, body, response, responseData) ->
-      parseJSON = options.parseJSON ? isJsonResponse(response, body)
-      return cb err, body, responseData, response unless parseJSON
-
-      data = safeParseJSON body
-      cb err ? data.error, data.result, responseData, response
+    @hub.fetch options, cb
 
   _mappers: [
     # Default: apply baseUrl

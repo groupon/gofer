@@ -1,3 +1,4 @@
 --reporter spec
 --compilers test.coffee:coffee-script-redux/register
 --recursive
+--timeout 100

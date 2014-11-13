@@ -66,7 +66,7 @@ describe 'actually making a request', ->
 
   it 'passes through errors', (done) ->
     req = myApi.fail (err, data, response, responseData) ->
-      OUT_OF_RANGE = 'API Request returned a response outside the status code range (code: 404, range: [200, 299])'
+      OUT_OF_RANGE = 'API Request returned a response outside the status code range (code: 404, range: [200..299])'
       assert.equal OUT_OF_RANGE, err?.message
       assert.equal 'not found', data?.message
       done()
@@ -87,18 +87,28 @@ describe 'actually making a request', ->
     httpMethod = verb.toUpperCase()
     httpMethod = 'DELETE' if verb == 'del'
 
-    it "offers a convenience way to do a #{httpMethod}-request", (done) ->
-      req = myApi[verb] '/zapp', (err, reqMirror) ->
-        assert.equal undefined, err?.stack
-        assert.equal '/v1/zapp', req.uri.pathname
-        assert.equal httpMethod, req.method
-        assert.equal undefined, req.endpointName
-        assert.equal 'myApi', req.serviceName
-        assert.equal httpMethod.toLowerCase(), req.methodName
-        done()
+    describe "convenience method for #{httpMethod}", ->
+      before (done) ->
+        myApi[verb] {
+          uri: '/{id}'
+          pathParams: { id: 'zapp' }
+        }, (error, @reqMirror, @response, @stats) =>
+          done error
+
+      it 'exposes basic requestOptions in the stats', ->
+        assert.equal '/v1/zapp', @stats.requestOptions.pathname
+        assert.equal httpMethod, @stats.method
+
+      xit 'adds serviceName/endpointName/methodName/pathParams', ->
+        assert.equal undefined, @stats.endpointName
+        assert.equal 'myApi', @stats.serviceName
+        assert.equal httpMethod.toLowerCase(), @stats.methodName
+        assert.deepEqual { id: 'zapp' }, @stats.pathParams
 
   it 'makes a request', (done) ->
-    req = myApi.zapp (err, reqMirror) ->
+    req = myApi.with({
+      headers: { 'x-sneaky': 'sneaky header' }
+    }).zapp (err, reqMirror) ->
       assert.equal undefined, err?.stack
       assert.equal '/v1/zapp', reqMirror.url
       assert.hasType String, reqMirror.headers['x-fetch-id']
@@ -109,5 +119,3 @@ describe 'actually making a request', ->
       assert.include 'myApp/mySha', userAgent
 
       done()
-
-    req.headers['x-sneaky'] = 'sneaky header'

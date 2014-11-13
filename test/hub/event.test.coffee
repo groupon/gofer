@@ -89,8 +89,7 @@ describe 'Events', ->
         assert.hasType Object, failureSpy.calledArgs[failureSpy.called-1][0]
         logLine = failureSpy.calledArgs[failureSpy.called-1][0]
         assert.equal 500, logLine.statusCode
-        assert.equal 200, logLine.minStatusCode
-        assert.equal 299, logLine.maxStatusCode
+        assert.equal '200..299', logLine.statusCodeRange
         assert.equal "http://localhost:89001/error", logLine.uri
         assert.equal "GET", logLine.method
         assert.equal 'abcde', logLine.requestId
@@ -119,8 +118,7 @@ describe 'Events', ->
         assert.hasType Object, failureSpy.calledArgs[failureSpy.called-1][0]
         logLine = failureSpy.calledArgs[failureSpy.called-1][0]
         assert.equal 201, logLine.statusCode
-        assert.equal 250, logLine.minStatusCode
-        assert.equal 499, logLine.maxStatusCode
+        assert.equal '250..499', logLine.statusCodeRange
         assert.equal "http://localhost:89001/?__status=201", logLine.uri
         assert.equal "GET", logLine.method
         assert.equal 'abcde', logLine.requestId
@@ -141,6 +139,7 @@ describe 'Events', ->
       hub.fetch {
         uri: "http://10.255.255.1"
         requestId: 'abcde'
+        connectTimeout: 10
       },
       (err, body, headers) ->
         done()

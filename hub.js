@@ -1,1 +1,1 @@
-module.exports = require('./lib/hub');
+module.exports = require('gofer-hub');

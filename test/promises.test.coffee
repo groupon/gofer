@@ -68,9 +68,9 @@ describe 'Making requests w/ promises', ->
 
   it 'passes through errors', (done) ->
     verifyError = (err) ->
-      OUT_OF_RANGE = 'API Request returned a response outside the status code range (code: 404, range: [200, 299])'
+      OUT_OF_RANGE = 'API Request returned a response outside the status code range (code: 404, range: [200..299])'
       assert.equal OUT_OF_RANGE, err?.message
-      assert.equal 'not found', data?.message
+      assert.equal 'not found', err.body.message
 
     myApi.fail().response
       .catch(verifyError)
@@ -81,7 +81,7 @@ describe 'Making requests w/ promises', ->
       assert.hasType String, body
       assert.equal '{"url":', body.substr(0, 7)
 
-    myApi.with(encoding: 'utf8').zapp().rawBody
+    myApi.with(encoding: 'utf8').zapp().getRawBody()
       .then(verifyBody)
       .nodeify(done)
 
@@ -95,10 +95,8 @@ describe 'Making requests w/ promises', ->
       assert.include 'myApi/1.0.0', userAgent
       assert.include 'myApp/mySha', userAgent
 
-    req = myApi.zapp()
+    req = myApi.with({
+      headers: { 'x-sneaky': 'sneaky header' }
+    }).zapp()
 
-    req.headers['x-sneaky'] = 'sneaky header'
-
-    req.parsedBody
-      .then(verifyBody)
-      .nodeify(done)
+    req.then(verifyBody).nodeify(done)
