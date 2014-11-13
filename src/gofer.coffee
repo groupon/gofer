@@ -38,7 +38,6 @@ Hub = require 'gofer-hub'
   buildUserAgent,
   merge
 } = require './helpers'
-{ safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
 
 class Gofer

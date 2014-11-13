@@ -42,12 +42,9 @@
     }
   },
   "dependencies": {
-    "bluebird": "^2.3.10",
     "debug": "~0.8.1",
-    "lodash": "~2.4.1",
-    "microtime": "~0.5.1",
-    "node-uuid": "~1.4.1",
-    "request": "2.40.0"
+    "gofer-hub": "git://github.com/jkrems/gofer-hub",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "assertive": "~1.4.0",
