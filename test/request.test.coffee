@@ -36,7 +36,7 @@ describe 'actually making a request', ->
       try server.close()
     done()
 
-  beforeEach ->
+  before ->
     zappEndpoint = (request) -> (cb) -> request "/zapp", cb
     queryEndpoint = (request) -> (cb) -> request "/zapp?p=1", cb
     undefEndpoint = (request) -> (cb) ->
@@ -99,7 +99,7 @@ describe 'actually making a request', ->
         assert.equal '/v1/zapp', @stats.requestOptions.pathname
         assert.equal httpMethod, @stats.method
 
-      xit 'adds serviceName/endpointName/methodName/pathParams', ->
+      it 'adds serviceName/endpointName/methodName/pathParams', ->
         assert.equal undefined, @stats.endpointName
         assert.equal 'myApi', @stats.serviceName
         assert.equal httpMethod.toLowerCase(), @stats.methodName

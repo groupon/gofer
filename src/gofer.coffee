@@ -160,13 +160,12 @@ class Gofer
         cleanedQs[key] = value if value?
       options.qs = cleanedQs
 
-    options.logData ?= {}
-    extend({
+    options.logData = extend({
       serviceName: options.serviceName
       endpointName: options.endpointName
       methodName: options.methodName
       pathParams: options.pathParams
-    }, options.logData)
+    }, options.logData ? {})
 
     @hub.fetch options, cb
 
