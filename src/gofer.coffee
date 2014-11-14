@@ -162,12 +162,12 @@ class Gofer
       options.qs = cleanedQs
 
     options.logData ?= {}
-    extend({
+    extend(options.logData, {
       serviceName: options.serviceName
       endpointName: options.endpointName
       methodName: options.methodName
       pathParams: options.pathParams
-    }, options.logData)
+    })
 
     @hub.fetch options, (err, body, response, responseData) ->
       parseJSON = options.parseJSON ? isJsonResponse(response, body)
