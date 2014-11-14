@@ -35,9 +35,9 @@ Hub = require './hub'
   resolveOptional,
   parseDefaults,
   applyBaseUrl,
-  buildUserAgent,
-  merge
+  buildUserAgent
 } = require './helpers'
+merge = require 'deepmerge'
 { safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
 

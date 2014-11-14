@@ -30,11 +30,8 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
-{merge, isObject, cloneDeep, reduce} = require 'lodash'
+{merge, isObject, reduce} = require 'lodash'
 Url = require 'url'
-
-@merge = mergeSafe = (o1, o2) ->
-  merge cloneDeep(o1), o2
 
 @resolveOptional = (uri, options, cb) ->
   if 'function' == typeof options
@@ -56,7 +53,7 @@ Url = require 'url'
   globalDefaults = rawConfig.globalDefaults ? {}
   serviceDefaults = rawConfig[serviceName] ? {}
 
-  defaults = mergeSafe globalDefaults, serviceDefaults
+  defaults = merge {}, globalDefaults, serviceDefaults
 
   endpointDefaults = defaults.endpointDefaults ? {}
   delete defaults.endpointDefaults

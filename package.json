@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "debug": "~0.8.1",
+    "deepmerge": "^0.2.7",
     "lodash": "~2.4.1",
     "microtime": "~0.5.1",
     "node-uuid": "~1.4.1",
