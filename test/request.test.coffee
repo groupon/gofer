@@ -92,7 +92,7 @@ describe 'actually making a request', ->
         myApi[verb] {
           uri: '/{id}'
           pathParams: { id: 'zapp' }
-        }, (error, @reqMirror, @response, @stats) =>
+        }, (error, @reqMirror, @stats, @response) =>
           done error
 
       it 'exposes basic requestOptions in the stats', ->
