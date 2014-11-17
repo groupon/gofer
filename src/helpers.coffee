@@ -30,11 +30,12 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
-{merge, isObject, cloneDeep, reduce} = require 'lodash'
+{merge, isObject, reduce} = require 'lodash'
 Url = require 'url'
 
 @merge = mergeSafe = (o1, o2) ->
-  merge cloneDeep(o1), o2
+  # the {} makes sure not to overwrite the values in o1
+  merge {}, o1, o2
 
 @resolveOptional = (uri, options, cb) ->
   if 'function' == typeof options
