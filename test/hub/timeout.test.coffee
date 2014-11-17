@@ -32,15 +32,15 @@ describe 'Basic Integration Test', ->
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
         uri: "http://localhost:89001"
-        qs: {__latency: 10}
-        timeout: 20
+        qs: {__latency: 20}
+        timeout: 40
       }, (err, body, headers) ->
         done err
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
         uri: "http://localhost:89001"
-        qs: {__latency: 30}
+        qs: {__latency: 40}
         timeout: 20
       }, (err, body, headers) ->
         assert.equal 'ETIMEDOUT', err?.code
@@ -51,17 +51,14 @@ describe 'Basic Integration Test', ->
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
         uri: "http://localhost:89001"
-        qs: {__delay: 10}
-        completionTimeout: 20
-      }, (err, body, headers) ->
-        throw err if err
-        assert.expect not err
-        done err
+        qs: {__delay: 20}
+        completionTimeout: 40
+      }, done
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
         uri: "http://localhost:89001"
-        qs: {__delay: 30}
+        qs: {__delay: 40}
         completionTimeout: 20
       }, (err, body, headers) ->
         assert.expect err
@@ -74,21 +71,18 @@ describe 'Basic Integration Test', ->
       hub.fetch {
         uri: "http://localhost:89001"
         qs: {__latency: 20, __delay: 20}
-        timeout: 30
-        connectTimeout: 30
-        completionTimeout: 50
-      }, (err, body, headers) ->
-        throw err if err
-        assert.expect not err
-        done err
+        timeout: 40
+        connectTimeout: 40
+        completionTimeout: 60
+      }, done
 
     it 'passes an error when completion is exceeded', (done) ->
       hub.fetch {
         uri: "http://localhost:89001"
-        qs: {__delay: 20}
-        timeout: 30
-        connectTimeout: 30
-        completionTimeout: 10
+        qs: {__delay: 40}
+        timeout: 60
+        connectTimeout: 60
+        completionTimeout: 20
       }, (err, body, headers) ->
         assert.expect err
         assert.equal 'ETIMEDOUT', err.code
@@ -116,4 +110,3 @@ describe 'Basic Integration Test', ->
         assert.expect err
         assert.equal 'ETIMEDOUT', err.code
         done()
-

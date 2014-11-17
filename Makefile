@@ -1,8 +1,4 @@
 APP_NAME=gofer
-SRC = $(shell find src -name "*.coffee" -type f | sort)
-LIB = $(SRC:src/%.coffee=lib/%.js)
-
-COFFEE=node_modules/.bin/coffee --js
 
 # ## Usage
 usage :
@@ -33,15 +29,12 @@ clean:
 setup:
 	npm install
 
-build: $(LIB)
+build:
+	@./node_modules/.bin/coffee -cbo lib src
 	@./node_modules/.bin/npub prep lib
 
 prepublish:
 	./node_modules/.bin/npub prep
-
-lib/%.js: src/%.coffee
-	dirname "$@" | xargs mkdir -p
-	$(COFFEE) <"$<" >"$@"
 
 test: build
 	NODE_ENV=test node_modules/.bin/mocha

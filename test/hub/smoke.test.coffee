@@ -20,5 +20,5 @@ describe 'Basic Integration Test', ->
       },
       (err, body, headers) ->
         assert.falsey err
-        assert.equal "ok", body
+        assert.equal "ok", body.toString()
         done()
