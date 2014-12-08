@@ -1,6 +1,6 @@
 {
   "name": "gofer",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "A general purpose service client library for node.js",
   "main": "lib/gofer.js",
   "scripts": {
