@@ -34,17 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 http = require 'http'
 https = require 'https'
 request = require 'request'
+HRDuration = require 'hrduration'
 uuid = require 'node-uuid'
 {extend, map} = require 'lodash'
 debug = require('debug') 'gofer:hub'
-
-NANO_PER_SECOND = 1e9
-createTimeTracker = ->
-  start = process.hrtime()
-
-  return ->
-    delta = process.hrtime(start)
-    return delta[0] + delta[1] / NANO_PER_SECOND
 
 # Default timeout intervals
 module.exports = Hub = ->
@@ -52,7 +45,7 @@ module.exports = Hub = ->
   hub = new EventEmitter
 
   hub.fetch = (options, cb) ->
-    timer = createTimeTracker()
+    {getSeconds} = HRDuration()
 
     fetchId = generateUUID()
 
@@ -82,7 +75,7 @@ module.exports = Hub = ->
     hub.emit 'start', extend(baseLog, responseData)
 
     req = request options, (error, response, body) ->
-      responseData.fetchDuration = timer()
+      responseData.fetchDuration = getSeconds()
 
       # Reset responseData.requestOptions.uri in case the request library modified it
       # (eg, if requestOptions had a qs key)
@@ -130,7 +123,7 @@ module.exports = Hub = ->
 
     connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
     completionTimeoutInterval = options.completionTimeout
-    setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData, timer
+    setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData, getSeconds
     return req
 
   logPendingRequests = ({requests, maxSockets}) ->
@@ -143,14 +136,14 @@ module.exports = Hub = ->
   # connection to the remote server to be established. It is standard practice
   # for this value to be significantly lower than the "request" timeout when
   # making requests to internal endpoints.
-  setupTimeouts = (connectTimeoutInterval, completionTimeoutInterval, request, responseData, timer) ->
+  setupTimeouts = (connectTimeoutInterval, completionTimeoutInterval, request, responseData, getSeconds) ->
     request.on 'request', (req) ->
       req.on 'socket', (socket) ->
         connectTimeout = undefined
         connectionTimedOut = ->
           req.abort()
 
-          responseData.connectDuration = timer()
+          responseData.connectDuration = getSeconds()
 
           err = new Error 'ECONNECTTIMEDOUT'
           err.code = 'ECONNECTTIMEDOUT'
@@ -160,13 +153,13 @@ module.exports = Hub = ->
           req.emit 'error', err
 
         connectionSuccessful = ->
-          responseData.connectDuration = timer()
+          responseData.connectDuration = getSeconds()
           hub.emit 'connect', responseData
 
           clearTimeout connectTimeout
           connectTimeout = null
 
-          setupCompletionTimeout completionTimeoutInterval, req, responseData, timer
+          setupCompletionTimeout completionTimeoutInterval, req, responseData, getSeconds
 
         connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
@@ -175,14 +168,14 @@ module.exports = Hub = ->
   # This will setup a timer to make sure we don't wait to long for the response
   # to complete. The semantics are as follows:
   # connectTimeout + timeout (first byte) + completionTimeout = total timeout
-  setupCompletionTimeout = (completionTimeoutInterval, req, responseData, timer) ->
+  setupCompletionTimeout = (completionTimeoutInterval, req, responseData, getSeconds) ->
     return unless completionTimeoutInterval
     completionTimeout = undefined
 
     completionTimedOut = ->
       req.abort()
 
-      responseData.completionDuration = timer() - responseData.connectDuration
+      responseData.completionDuration = getSeconds() - responseData.connectDuration
 
       err = new Error 'ETIMEDOUT'
       err.code = 'ETIMEDOUT'
@@ -191,7 +184,7 @@ module.exports = Hub = ->
       req.emit 'error', err
 
     completionSuccessful = ->
-      responseData.completionDuration = timer() - responseData.connectDuration
+      responseData.completionDuration = getSeconds() - responseData.connectDuration
 
       clearTimeout completionTimeout
       completionTimeout = null
