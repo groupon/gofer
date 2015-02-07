@@ -196,7 +196,7 @@ github.emojis(function(err, emojiList, stats, response) {
   if (err) throw err;
   console.log('It took %d seconds', stats.fetchDuration);
   console.log('Status code: %d', response.statusCode);
-  console.log('Returned %d emojis', Object.keys(data).length);
+  console.log('Returned %d emojis', Object.keys(emojiList).length);
 });
 ```
 
