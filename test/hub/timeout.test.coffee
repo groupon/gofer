@@ -6,7 +6,9 @@ server = app = undefined
 describe 'Basic Integration Test', ->
   before (done) ->
     {server} = serverBuilder()
-    server.listen 89001, done
+    server.listen 0, =>
+      {@port} = server.address()
+      done()
 
   after (done) ->
     server.close done
@@ -31,7 +33,7 @@ describe 'Basic Integration Test', ->
 
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__latency: 10}
         timeout: 20
       }, (err, body, headers) ->
@@ -39,7 +41,7 @@ describe 'Basic Integration Test', ->
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__latency: 30}
         timeout: 20
       }, (err, body, headers) ->
@@ -50,7 +52,7 @@ describe 'Basic Integration Test', ->
 
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__delay: 10}
         completionTimeout: 20
       }, (err, body, headers) ->
@@ -60,7 +62,7 @@ describe 'Basic Integration Test', ->
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__delay: 30}
         completionTimeout: 20
       }, (err, body, headers) ->
@@ -72,7 +74,7 @@ describe 'Basic Integration Test', ->
 
     it 'does not pass an error when timeout and completion timeouts are not exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__latency: 20, __delay: 20}
         timeout: 30
         connectTimeout: 30
@@ -84,7 +86,7 @@ describe 'Basic Integration Test', ->
 
     it 'passes an error when completion is exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__delay: 20}
         timeout: 30
         connectTimeout: 30
@@ -107,7 +109,7 @@ describe 'Basic Integration Test', ->
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         qs: {__latency: 20, __delay: 20}
         timeout: 1
         connectTimeout: 30

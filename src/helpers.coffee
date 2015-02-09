@@ -91,8 +91,10 @@ replacePathParams = (uri, pathParams) ->
   return uri unless isObject pathParams
 
   wrappedPathParams = reduce pathParams, ((acc, value, tag) ->
+    encoded = encodeURIComponent value
     wrappedTag = "{#{tag}}"
-    acc[wrappedTag] = encodeURIComponent(value)
+    encodedWrapped = "%7B#{tag}%7D"
+    acc[wrappedTag] = acc[encodedWrapped] = encoded
     acc
   ), {}
 

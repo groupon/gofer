@@ -9,7 +9,9 @@ server = app = undefined
 describe 'Events', ->
   before (done) ->
     {server} = serverBuilder()
-    server.listen 89001, done
+    server.listen 0, =>
+      {@port} = server.address()
+      done()
 
   socketQueueSpy = bond()
   errorSpy = bond()
@@ -24,7 +26,7 @@ describe 'Events', ->
       hub.on 'success', successSpy
 
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         requestId: 'abcde'
       },
       (err, body, headers) ->
@@ -35,7 +37,7 @@ describe 'Events', ->
       assert.hasType Object, successSpy.calledArgs[successSpy.called-1][0]
       logLine = successSpy.calledArgs[successSpy.called-1][0]
       assert.equal 200, logLine.statusCode
-      assert.equal "http://localhost:89001/", logLine.uri
+      assert.equal "http://127.0.0.1:#{@port}/", logLine.uri
       assert.equal "GET", logLine.method
       assert.equal 'abcde', logLine.requestId
       assert.truthy 'did not define connect duration', logLine.connectDuration
@@ -49,7 +51,7 @@ describe 'Events', ->
       hub.on 'success', successSpy
 
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
         requestId: 'abcde'
         method: 'post'
       },
@@ -61,7 +63,7 @@ describe 'Events', ->
       assert.equal typeof successSpy.calledArgs[successSpy.called-1][0], 'object'
       logLine = successSpy.calledArgs[successSpy.called-1][0]
       assert.equal 201, logLine.statusCode
-      assert.equal "http://localhost:89001/", logLine.uri
+      assert.equal "http://127.0.0.1:#{@port}/", logLine.uri
       assert.equal "POST", logLine.method
       assert.equal 'abcde', logLine.requestId
       assert.truthy 'did not define connect duration', logLine.connectDuration
@@ -78,7 +80,7 @@ describe 'Events', ->
         hub.on 'failure', failureSpy
 
         hub.fetch {
-          uri: "http://localhost:89001/error"
+          uri: "http://127.0.0.1:#{@port}/error"
           requestId: 'abcde'
         },
         (err, body, headers) ->
@@ -91,7 +93,7 @@ describe 'Events', ->
         assert.equal 500, logLine.statusCode
         assert.equal 200, logLine.minStatusCode
         assert.equal 299, logLine.maxStatusCode
-        assert.equal "http://localhost:89001/error", logLine.uri
+        assert.equal "http://127.0.0.1:#{@port}/error", logLine.uri
         assert.equal "GET", logLine.method
         assert.equal 'abcde', logLine.requestId
         assert.truthy 'did not define connect duration', logLine.connectDuration
@@ -105,7 +107,7 @@ describe 'Events', ->
         hub.on 'failure', failureSpy
 
         hub.fetch {
-          uri: "http://localhost:89001"
+          uri: "http://127.0.0.1:#{@port}"
           qs: {__status: 201}
           requestId: 'abcde'
           minStatusCode: 250
@@ -121,7 +123,7 @@ describe 'Events', ->
         assert.equal 201, logLine.statusCode
         assert.equal 250, logLine.minStatusCode
         assert.equal 499, logLine.maxStatusCode
-        assert.equal "http://localhost:89001/?__status=201", logLine.uri
+        assert.equal "http://127.0.0.1:#{@port}/?__status=201", logLine.uri
         assert.equal "GET", logLine.method
         assert.equal 'abcde', logLine.requestId
         assert.truthy 'did not define connect duration', logLine.connectDuration?
