@@ -1,3 +1,8 @@
+2.1.5
+-----
+* Run tests on iojs - @jkrems #22
+* Example in README file updated - @renatomoya #21
+
 2.1.4
 -----
 * Removing microtime in favor of a native solution - @abloom #20
