@@ -8,7 +8,9 @@ server = app = undefined
 describe 'Basic Integration Test', ->
   before (done) ->
     {server} = serverBuilder()
-    server.listen 89001, done
+    server.listen 0, =>
+      {@port} = server.address()
+      done()
 
   after (done) ->
     server.close done
@@ -16,7 +18,7 @@ describe 'Basic Integration Test', ->
   describe 'making a request', ->
     it "fires the callback", (done) ->
       hub.fetch {
-        uri: "http://localhost:89001"
+        uri: "http://127.0.0.1:#{@port}"
       },
       (err, body, headers) ->
         assert.falsey err
