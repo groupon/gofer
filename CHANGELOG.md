@@ -1,3 +1,7 @@
+2.2.0
+-----
+* Added `gofer/proxy` - @danmconrad #24
+
 2.1.5
 -----
 * Run tests on iojs - @jkrems #22
