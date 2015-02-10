@@ -49,4 +49,4 @@ describe 'proxy', ->
 
   it 'pipes the proxy request to the original request and response', ->
     assert.equal 'proxyReq', pipeArgs[0][0]
-    assert.deepEqual res, pipeArgs[1g][0]
+    assert.deepEqual res, pipeArgs[1][0]
