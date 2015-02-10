@@ -1,13 +1,21 @@
 assert = require 'assertive'
-bond = require 'bondjs'
 proxy = require '../lib/proxy'
 
 describe 'proxy', ->
+  requestArgs = []
+
   client =
-    request: bond().return 'proxyReq'
+    request: ->
+      requestArgs.push arguments
+      'proxyReq'
+
+  pipeArgs = []
+  pipe = ->
+    pipeArgs.push arguments
+    this
 
   req =
-    pipe: bond()
+    pipe: pipe
     url: 'www.something.com/some-url?search=show-me-the-request'
     method: 'some-method'
     headers:
@@ -15,17 +23,15 @@ describe 'proxy', ->
       host: 'host-header'
       other: 'other-header'
 
-  req.pipe.return req
-
   res = {}
 
-  next = bond()
+  next = ->
 
   before ->
     proxy client, req, res, next
 
   it 'makes a request with the client', ->
-    assert.expect client.request.called
+    assert.expect requestArgs.length
 
   it 'uses the correct parameters', ->
     expectedRequestArgs =
@@ -39,8 +45,8 @@ describe 'proxy', ->
       minStatusCode: 200
       maxStatusCode: 399
 
-    assert.deepEqual expectedRequestArgs, client.request.calledArgs[0][0]
+    assert.deepEqual expectedRequestArgs, requestArgs[0][0]
 
   it 'pipes the proxy request to the original request and response', ->
-    assert.equal 'proxyReq', req.pipe.calledArgs[0][0]
-    assert.deepEqual res, req.pipe.calledArgs[1][0]
+    assert.equal 'proxyReq', pipeArgs[0][0]
+    assert.deepEqual res, pipeArgs[1g][0]
