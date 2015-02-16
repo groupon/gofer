@@ -85,6 +85,12 @@ Url = require 'url'
 @buildUserAgent = (options) ->
   {serviceVersion, serviceName, appSha, appName, fqdn} = options
 
+  serviceVersion ?= "serviceVersion"
+  serviceName ?= "serviceName"
+  appName ?= "appName"
+  appSha ?= "appSha"
+  fqdn ?= "fqdn"
+
   "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
 
 replacePathParams = (uri, pathParams) ->
