@@ -33,6 +33,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {merge, isObject, reduce} = require 'lodash'
 Url = require 'url'
 
+cleanProperty = (obj, value, key) ->
+  obj[key] = value if value?
+  return obj
+
+@cleanObject = (obj) ->
+  return obj unless typeof obj == 'object'
+  reduce obj, cleanProperty, {}
+
 @merge = mergeSafe = (o1, o2) ->
   # the {} makes sure not to overwrite the values in o1
   merge {}, o1, o2

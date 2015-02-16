@@ -42,6 +42,9 @@ describe 'actually making a request', ->
     undefEndpoint = (request) -> (cb) ->
       qs = { a: undefined, b: null, c: 'non-null' }
       request "/zapp", { qs }, cb
+    undefHeadersEndpoint = (request) -> (cb) ->
+      headers = { a: undefined, b: null, c: 'non-null' }
+      request "/zapp", { headers }, cb
     failEndpoint = (request) -> (cb) -> request "/invalid", cb
     crashEndpoint = (request) -> (cb) -> request '/crash', cb
 
@@ -54,6 +57,7 @@ describe 'actually making a request', ->
       fail: failEndpoint
       query: queryEndpoint
       undef: undefEndpoint
+      undefHeaders: undefHeadersEndpoint
       crash: crashEndpoint
     }
 
@@ -81,6 +85,14 @@ describe 'actually making a request', ->
     req = myApi.undef (err, reqMirror) ->
       assert.equal undefined, err?.stack
       assert.equal '/v1/zapp?c=non-null', reqMirror.url
+      done()
+
+  it 'does not send undefined/null headers', (done) ->
+    req = myApi.undefHeaders (err, reqMirror) ->
+      assert.equal undefined, err?.stack
+      assert.equal undefined, reqMirror.headers.a
+      assert.equal undefined, reqMirror.headers.b
+      assert.equal 'non-null', reqMirror.headers.c
       done()
 
   ['put','post','patch','del','head','get'].forEach (verb) ->

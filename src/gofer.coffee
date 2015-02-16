@@ -36,7 +36,8 @@ Hub = require './hub'
   parseDefaults,
   applyBaseUrl,
   buildUserAgent,
-  merge
+  merge,
+  cleanObject
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
@@ -155,11 +156,11 @@ class Gofer
     options.headers ?= {}
     options.headers['User-Agent'] ?= buildUserAgent(options)
 
-    if options.qs? && typeof options.qs == 'object'
-      cleanedQs = {}
-      for key, value of options.qs
-        cleanedQs[key] = value if value?
-      options.qs = cleanedQs
+    if options.qs?
+      options.qs = cleanObject options.qs
+
+    if options.headers?
+      options.headers = cleanObject options.headers
 
     options.logData ?= {}
     extend(options.logData, {
