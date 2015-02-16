@@ -34,7 +34,7 @@ describe 'Helpers', ->
   describe "buildUserAgent", ->
     it 'has defaults', ->
       ua = buildUserAgent({})
-      assert.equal "serviceName/serviceVersion; appName/appSha; fqdn", ua
+      assert.equal "[no serviceName]/[no serviceVersion]; [no appName]/[no appSha]; [no fqdn]", ua
 
     it 'it includes 5 fields', ->
       ua = buildUserAgent

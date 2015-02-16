@@ -85,11 +85,11 @@ Url = require 'url'
 @buildUserAgent = (options) ->
   {serviceVersion, serviceName, appSha, appName, fqdn} = options
 
-  serviceVersion ?= "serviceVersion"
-  serviceName ?= "serviceName"
-  appName ?= "appName"
-  appSha ?= "appSha"
-  fqdn ?= "fqdn"
+  serviceVersion ?= "[no serviceVersion]"
+  serviceName ?= "[no serviceName]"
+  appName ?= "[no appName]"
+  appSha ?= "[no appSha]"
+  fqdn ?= "[no fqdn]"
 
   "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
 
