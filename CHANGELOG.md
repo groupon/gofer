@@ -1,3 +1,8 @@
+2.2.1
+-----
+* Build a default user agent to help track down misconfigured clients - @abloom #25
+* Do not send headers that are null/undefined - @jkrems #23
+
 2.2.0
 -----
 * Added `gofer/proxy` - @danmconrad #24
