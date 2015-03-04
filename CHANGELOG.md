@@ -1,3 +1,8 @@
+2.3.0
+-----
+* Migrate to latest deps and rebuild - @jkrems #28
+* Support using the result as a promise - @jkrems #27
+
 2.2.1
 -----
 * Build a default user agent to help track down misconfigured clients - @abloom #25
