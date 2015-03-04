@@ -38,13 +38,17 @@ HRDuration = require 'hrduration'
 uuid = require 'node-uuid'
 {extend, map} = require 'lodash'
 debug = require('debug') 'gofer:hub'
+DefaultPromise = global.Promise ? require 'bluebird'
+
+{ safeParseJSON, isJsonResponse } = require './json'
+promiseHelpers = require './promise'
 
 # Default timeout intervals
 module.exports = Hub = ->
-
   hub = new EventEmitter
+  hub.Promise = DefaultPromise
 
-  hub.fetch = (options, cb) ->
+  hub.fetch = (options, done) ->
     {getSeconds} = HRDuration()
 
     fetchId = generateUUID()
@@ -74,7 +78,10 @@ module.exports = Hub = ->
     }, options.logData)
     hub.emit 'start', extend(baseLog, responseData)
 
-    req = request options, (error, response, body) ->
+    handleResult = (error, response, body) ->
+      parseJSON = options.parseJSON ? isJsonResponse(response, body)
+      {error, result: body} = safeParseJSON body if parseJSON
+
       responseData.fetchDuration = getSeconds()
 
       # Reset responseData.requestOptions.uri in case the request library modified it
@@ -99,7 +106,7 @@ module.exports = Hub = ->
         logLine.error = error
         debug '<- %s', error.code, uri
         hub.emit 'fetchError', logLine
-        return cb error, body
+        return sendResult error, body
 
       apiError = null
       minStatusCode = options.minStatusCode or 200
@@ -119,12 +126,23 @@ module.exports = Hub = ->
         debug '<- %s', response.statusCode, uri
         hub.emit 'failure', logLine
 
-      cb apiError, body, response, responseData
+      sendResult apiError, body, response, responseData
+
+    sendResult = (error, data, response, responseData) ->
+      req.emit 'goferResult', error, data, response, responseData
+
+    req = request options, handleResult
 
     connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
     completionTimeoutInterval = options.completionTimeout
     setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData, getSeconds
-    return req
+
+    if typeof done == 'function'
+      req.on 'goferResult', done
+
+    req.Promise = hub.Promise
+
+    return Object.defineProperties req, promiseHelpers
 
   logPendingRequests = ({requests, maxSockets}) ->
     return unless Object.keys(requests).length > 0

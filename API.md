@@ -97,7 +97,23 @@ Useful if you know that you'll need custom timeouts for this one call or you wan
   - `meta`: Stats about the request
   - `response`: The response object with headers and statusCode
 
-The return value is the same as the one of `request`.
+The return value is generally the same as the one of `request`.
+In addition to what `request` offers, it has the following methods:
+
+* `asPromise()`: Converts the callback arguments to a promise.
+  The promise resolves to an array with `[ body, response, meta ]`.
+* `getBody()`: A promise of the, potentially parsed, body.
+* `getResponse()`: A promise of the response object.
+* `then(onResolved, onRejected)`: This function exists for convenience only.
+  It makes it possible to use the result as a thenable
+  that can be passed into `Promise.resolve`, `Promise.all`, etc..
+  By default it will resolve to the parsed body, matching `getBody()`.
+  Please note that while it has a `then` method,
+  it's not a real, spec-compliant promise.
+  E.g. calling `then` on the next tick of the event loop might lead to unexpected results.
+  If it's not possible to pass it into one of the proper Promise methods
+  in the same tick the request was created,
+  it's safer to call `getBody()` explicitly.
 
 If an HTTP status code outside of the accepted range is returned,
 the error object will have the following properties:

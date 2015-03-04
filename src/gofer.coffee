@@ -39,7 +39,6 @@ Hub = require './hub'
   merge,
   cleanObject
 } = require './helpers'
-{ safeParseJSON, isJsonResponse } = require './json'
 {extend} = require 'lodash'
 
 class Gofer
@@ -170,12 +169,12 @@ class Gofer
       pathParams: options.pathParams
     })
 
-    @hub.fetch options, (err, body, response, responseData) ->
-      parseJSON = options.parseJSON ? isJsonResponse(response, body)
-      return cb err, body, responseData, response unless parseJSON
-
-      data = safeParseJSON body
-      cb err ? data.error, data.result, responseData, response
+    if typeof cb == 'function'
+      @hub.fetch options, (err, body, response, responseData) ->
+        # TODO: remove flipping of response and responseData with next major
+        cb err, body, responseData, response
+    else
+      @hub.fetch options
 
   _mappers: [
     # Default: apply baseUrl
