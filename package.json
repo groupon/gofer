@@ -4,8 +4,9 @@
   "description": "A general purpose service client library for node.js",
   "main": "lib/gofer.js",
   "scripts": {
-    "prepublish": "rm -rf lib && make build",
-    "pretest": "make build",
+    "build": "npub prep && coffee -cbo lib src",
+    "prepublish": "rm -rf lib && npm run build",
+    "pretest": "npm run build",
     "test": "mocha",
     "posttest": "npub verify"
   },
@@ -18,6 +19,7 @@
     "service",
     "http"
   ],
+  "license": "BSD-2-Clause",
   "author": {
     "name": "Jan Krems",
     "email": "jan.krems@groupon.com>"
@@ -45,21 +47,20 @@
     }
   },
   "dependencies": {
-    "bluebird": "~2.9.13",
-    "debug": "~0.8.1",
+    "bluebird": "^2.9.13",
+    "debug": "^2.1.2",
     "hrduration": "^1.0.0",
-    "lodash": "~2.4.1",
-    "node-uuid": "~1.4.1",
+    "lodash": "^3.0.0",
+    "node-uuid": "^1.4.1",
     "request": "2.40.0"
   },
   "devDependencies": {
-    "assertive": "~1.4.0",
-    "bondjs": "~1.1.1",
-    "coffee-script-redux": "2.0.0-beta7",
+    "assertive": "^1.4.0",
+    "bondjs": "^1.1.1",
+    "coffee-script": "1.9.0",
     "deepmerge": "^0.2.7",
-    "express": "~4.1.1",
-    "mocha": "~1.18.2",
-    "npub": "~0.5.1",
-    "semver": "~2.1.0"
+    "express": "^4.1.1",
+    "mocha": "^2.1.0",
+    "npub": "^2.0.0"
   }
 }
