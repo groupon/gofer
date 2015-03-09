@@ -93,13 +93,13 @@ cleanProperty = (obj, value, key) ->
 @buildUserAgent = (options) ->
   {serviceVersion, serviceName, appSha, appName, fqdn} = options
 
-  serviceVersion ?= "[no serviceVersion]"
-  serviceName ?= "[no serviceName]"
-  appName ?= "[no appName]"
-  appSha ?= "[no appSha]"
-  fqdn ?= "[no fqdn]"
+  serviceVersion ?= "noServiceVersion"
+  serviceName ?= "noServiceName"
+  appName ?= "noAppName"
+  appSha ?= "noAppSha"
+  fqdn ?= "noFQDN"
 
-  "#{serviceName}/#{serviceVersion}; #{appName}/#{appSha}; #{fqdn}"
+  "#{serviceName}/#{serviceVersion} (#{appName}/#{appSha}; #{fqdn})"
 
 replacePathParams = (uri, pathParams) ->
   return uri unless isObject pathParams

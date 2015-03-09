@@ -34,7 +34,7 @@ describe 'Helpers', ->
   describe "buildUserAgent", ->
     it 'has defaults', ->
       ua = buildUserAgent({})
-      assert.equal "[no serviceName]/[no serviceVersion]; [no appName]/[no appSha]; [no fqdn]", ua
+      assert.equal "noServiceName/noServiceVersion (noAppName/noAppSha; noFQDN)", ua
 
     it 'it includes 5 fields', ->
       ua = buildUserAgent
@@ -44,5 +44,5 @@ describe 'Helpers', ->
         appSha: '12345'
         fqdn: 'my.host'
 
-      assert.equal "test-service/1.0; my-app/12345; my.host", ua
+      assert.equal "test-service/1.0 (my-app/12345; my.host)", ua
 
