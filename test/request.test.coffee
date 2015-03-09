@@ -1,4 +1,3 @@
-
 assert = require 'assertive'
 http = require 'http'
 Url = require 'url'
@@ -117,8 +116,7 @@ describe 'actually making a request', ->
       assert.equal 'sneaky header', reqMirror.headers['x-sneaky']
 
       userAgent = reqMirror.headers['user-agent']
-      assert.include 'myApi/1.0.0', userAgent
-      assert.include 'myApp/mySha', userAgent
+      assert.equal 'myApi/1.0.0 (myApp/mySha; noFQDN)', userAgent
 
       done()
 
