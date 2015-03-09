@@ -1,3 +1,7 @@
+2.3.1
+-----
+* Make sure the default User-Agent matches the spec - @khoomeister #31
+
 2.3.0
 -----
 * Migrate to latest deps and rebuild - @jkrems #28
