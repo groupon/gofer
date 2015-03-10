@@ -1,3 +1,7 @@
+2.3.2
+-----
+* Make sure to be compatible with older hubs - @jkrems #32
+
 2.3.1
 -----
 * Make sure the default User-Agent matches the spec - @khoomeister #31
