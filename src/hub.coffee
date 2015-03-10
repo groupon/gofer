@@ -80,7 +80,7 @@ module.exports = Hub = ->
 
     handleResult = (error, response, body) ->
       parseJSON = options.parseJSON ? isJsonResponse(response, body)
-      {error, result: body} = safeParseJSON body if parseJSON
+      {error, body} = safeParseJSON body, response if parseJSON
 
       responseData.fetchDuration = getSeconds()
 

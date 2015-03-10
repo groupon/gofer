@@ -30,21 +30,25 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
-@safeParseJSON = (str) ->
+GOFER_PARSED = 'GOFER_PARSED_RESPONSE'
+
+@safeParseJSON = (str, res) ->
+  res[GOFER_PARSED] = true
+
   data = error: null
   try
-    data.result =
+    data.body =
       if 'string' == typeof str
         JSON.parse str
       else
         str ? ''
   catch err
     data.error  = err
-    data.result = str
+    data.body = str
   data
 
 jsonHeader = (res) ->
-  contentType = res?.headers?['content-type']
+  contentType = res.headers['content-type']
   return false unless contentType?
   contentType.indexOf('application/json') == 0
 
@@ -52,4 +56,6 @@ nonEmpty = (body) ->
   body?.length > 0
 
 @isJsonResponse = (res, body) ->
+  return false unless res?.headers
+  return false if res[GOFER_PARSED]
   jsonHeader(res) && nonEmpty(body)

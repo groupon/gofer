@@ -30,6 +30,8 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
+{extend} = require 'lodash'
+
 Hub = require './hub'
 {
   resolveOptional,
@@ -39,7 +41,7 @@ Hub = require './hub'
   merge,
   cleanObject
 } = require './helpers'
-{extend} = require 'lodash'
+{ safeParseJSON, isJsonResponse } = require './json'
 
 class Gofer
   constructor: (config, @hub) ->
@@ -170,9 +172,11 @@ class Gofer
     })
 
     if typeof cb == 'function'
-      @hub.fetch options, (err, body, response, responseData) ->
+      @hub.fetch options, (error, body, response, responseData) ->
+        parseJSON = options.parseJSON ? isJsonResponse(response, body)
+        {error, body} = safeParseJSON body, response if parseJSON
         # TODO: remove flipping of response and responseData with next major
-        cb err, body, responseData, response
+        cb error, body, responseData, response
     else
       @hub.fetch options
 
