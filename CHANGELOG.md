@@ -1,3 +1,7 @@
+2.3.3
+-----
+* Add an early error if timeouts aren't numbers - @jkrems #33
+
 2.3.2
 -----
 * Make sure to be compatible with older hubs - @jkrems #32
