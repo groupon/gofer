@@ -33,6 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {EventEmitter} = require 'events'
 http = require 'http'
 https = require 'https'
+util = require 'util'
+
 request = require 'request'
 HRDuration = require 'hrduration'
 uuid = require 'node-uuid'
@@ -42,6 +44,15 @@ DefaultPromise = global.Promise ? require 'bluebird'
 
 { safeParseJSON, isJsonResponse } = require './json'
 promiseHelpers = require './promise'
+
+checkTimeout = (timeout) ->
+  if typeof timeout != 'number'
+    # This prevents confusing late errors in io.js which don't have a helpful stack
+    throw new Error util.format(
+      'Invalid timeout: %j, not a number', timeout
+    )
+
+  timeout
 
 # Default timeout intervals
 module.exports = Hub = ->
@@ -53,7 +64,8 @@ module.exports = Hub = ->
 
     fetchId = generateUUID()
 
-    options.timeout ?= Hub.requestTimeout
+    options.timeout = checkTimeout options.timeout ? Hub.requestTimeout
+    connectTimeoutInterval = checkTimeout options.connectTimeout ? Hub.connectTimeout
 
     options.headers ?= {}
     options.method = if options.method?
@@ -133,7 +145,6 @@ module.exports = Hub = ->
 
     req = request options, handleResult
 
-    connectTimeoutInterval = options.connectTimeout ? Hub.connectTimeout
     completionTimeoutInterval = options.completionTimeout
     setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData, getSeconds
 
