@@ -94,6 +94,12 @@ describe 'actually making a request', ->
       assert.equal 'non-null', reqMirror.headers.c
       done()
 
+  it 'fails early when an invalid timeout value is passed', ->
+    err = assert.throws -> myApi.fetch { timeout: '100', uri: '/' }
+    assert.equal 'Invalid timeout: "100", not a number', err.message
+    err = assert.throws -> myApi.fetch { connectTimeout: false, uri: '/' }
+    assert.equal 'Invalid timeout: false, not a number', err.message
+
   ['put','post','patch','del','head','get'].forEach (verb) ->
     httpMethod = verb.toUpperCase()
     httpMethod = 'DELETE' if verb == 'del'
