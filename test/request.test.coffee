@@ -4,6 +4,28 @@ Url = require 'url'
 
 Gofer = require '..'
 
+class MyApi extends Gofer
+  serviceName: 'myApi'
+  serviceVersion: '1.0.0'
+
+MyApi::registerEndpoints {
+  zapp: (request) -> (cb) -> request '/zapp', cb
+
+  fail: (request) -> (cb) -> request '/invalid', cb
+
+  query: (request) -> (cb) -> request '/zapp?p=1', cb
+
+  undef: (request) -> (cb) ->
+    qs = { a: undefined, b: null, c: 'non-null' }
+    request '/zapp', { qs }, cb
+
+  undefHeaders: (request) -> (cb) ->
+    headers = { a: undefined, b: null, c: 'non-null' }
+    request '/zapp', { headers }, cb
+
+  crash: (request) -> (cb) -> request '/crash', cb
+}
+
 describe 'actually making a request', ->
   myApi = null
   server = null
@@ -36,30 +58,6 @@ describe 'actually making a request', ->
     done()
 
   beforeEach ->
-    zappEndpoint = (request) -> (cb) -> request "/zapp", cb
-    queryEndpoint = (request) -> (cb) -> request "/zapp?p=1", cb
-    undefEndpoint = (request) -> (cb) ->
-      qs = { a: undefined, b: null, c: 'non-null' }
-      request "/zapp", { qs }, cb
-    undefHeadersEndpoint = (request) -> (cb) ->
-      headers = { a: undefined, b: null, c: 'non-null' }
-      request "/zapp", { headers }, cb
-    failEndpoint = (request) -> (cb) -> request "/invalid", cb
-    crashEndpoint = (request) -> (cb) -> request '/crash', cb
-
-    class MyApi extends Gofer
-      serviceName: 'myApi'
-      serviceVersion: '1.0.0'
-
-    MyApi::registerEndpoints {
-      zapp: zappEndpoint
-      fail: failEndpoint
-      query: queryEndpoint
-      undef: undefEndpoint
-      undefHeaders: undefHeadersEndpoint
-      crash: crashEndpoint
-    }
-
     myApi = new MyApi defaultConfig
 
   it 'reacts properly to low-level errors', (done) ->
@@ -72,6 +70,25 @@ describe 'actually making a request', ->
       OUT_OF_RANGE = 'API Request returned a response outside the status code range (code: 404, range: [200, 299])'
       assert.equal OUT_OF_RANGE, err?.message
       assert.equal 'not found', data?.message
+      done()
+
+  it 'passes through errors with old hub', (done) ->
+    api = new MyApi defaultConfig
+    expectedErr = new Error 'Original fetch error'
+    expectedMeta = { some: 'stats' }
+    expectedResponse =
+      statusCode: 404
+      headers: { 'content-type': 'application/json' }
+    # simulate pre-2.3.0 hub
+    api.hub = {
+      fetch: (options, cb) ->
+        cb expectedErr, '{"raw":"json"}', expectedResponse, expectedMeta
+    }
+    api.fail (err, data, meta, response) ->
+      assert.deepEqual { raw: 'json' }, data
+      assert.equal expectedMeta, meta
+      assert.equal expectedResponse, response
+      assert.equal expectedErr, err
       done()
 
   it 'does not swallow query parameters', (done) ->

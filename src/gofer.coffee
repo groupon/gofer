@@ -174,7 +174,8 @@ class Gofer
     if typeof cb == 'function'
       @hub.fetch options, (error, body, response, responseData) ->
         parseJSON = options.parseJSON ? isJsonResponse(response, body)
-        {error, body} = safeParseJSON body, response if parseJSON
+        {parseError, body} = safeParseJSON body, response if parseJSON
+        error ?= parseError
         # TODO: remove flipping of response and responseData with next major
         cb error, body, responseData, response
     else
