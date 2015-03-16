@@ -1,3 +1,8 @@
+2.3.4
+-----
+* Preserve errors for error responses - @jkrems
+  https://github.com/groupon/gofer/pull/35
+
 2.3.3
 -----
 * Add an early error if timeouts aren't numbers - @jkrems #33
