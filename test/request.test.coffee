@@ -13,6 +13,8 @@ MyApi::registerEndpoints {
 
   fail: (request) -> (cb) -> request '/invalid', cb
 
+  failJSON: (request) -> (cb) -> request '/fail-json', cb
+
   query: (request) -> (cb) -> request '/zapp?p=1', cb
 
   undef: (request) -> (cb) ->
@@ -43,6 +45,9 @@ describe 'actually making a request', ->
         res.end JSON.stringify {url, method, headers}
       else if url == '/v1/crash'
         res.socket.destroy()
+      else if url == '/v1/fail-json'
+        res.writeHead 200, 'Content-Type': 'application/json'
+        res.end '{some-invalid-json}'
       else
         res.writeHead 404, 'Content-Type': 'application/json'
         res.end JSON.stringify { message: 'not found' }
@@ -116,6 +121,12 @@ describe 'actually making a request', ->
     assert.equal 'Invalid timeout: "100", not a number', err.message
     err = assert.throws -> myApi.fetch { connectTimeout: false, uri: '/' }
     assert.equal 'Invalid timeout: false, not a number', err.message
+
+  it 'passes back JSON parsing error & original string', (done) ->
+    req = myApi.failJSON (err, reqMirror) ->
+      assert.equal true, err instanceof SyntaxError
+      assert.equal '{some-invalid-json}', reqMirror
+      done()
 
   ['put','post','patch','del','head','get'].forEach (verb) ->
     httpMethod = verb.toUpperCase()

@@ -33,9 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 GOFER_PARSED = 'GOFER_PARSED_RESPONSE'
 
 @safeParseJSON = (str, res) ->
+  return {} unless res?
   res[GOFER_PARSED] = true
 
-  data = error: null
+  data = parseError: null
   try
     data.body =
       if 'string' == typeof str
@@ -43,7 +44,7 @@ GOFER_PARSED = 'GOFER_PARSED_RESPONSE'
       else
         str ? ''
   catch err
-    data.error  = err
+    data.parseError  = err
     data.body = str
   data
 

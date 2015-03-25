@@ -75,7 +75,7 @@ describe 'Basic Integration Test', ->
     it 'does not pass an error when timeout and completion timeouts are not exceeded', (done) ->
       hub.fetch {
         uri: "http://127.0.0.1:#{@port}"
-        qs: {__latency: 20, __delay: 20}
+        qs: {__latency: 10, __delay: 10}
         timeout: 30
         connectTimeout: 30
         completionTimeout: 50
