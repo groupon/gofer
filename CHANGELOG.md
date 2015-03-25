@@ -1,3 +1,7 @@
+2.3.5
+-----
+* fix silenced JSON parsing errors - @chkhoo #36
+
 2.3.4
 -----
 * Preserve errors for error responses - @jkrems
