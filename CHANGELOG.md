@@ -1,3 +1,7 @@
+2.3.6
+-----
+* fix JSON.stringify bad error object - @chkhoo #38
+
 2.3.5
 -----
 * fix silenced JSON parsing errors - @chkhoo #36
