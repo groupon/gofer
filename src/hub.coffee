@@ -114,9 +114,10 @@ module.exports = Hub = ->
       }, options.logData)
 
       if error?
+        logLine.code = error.code
+        logLine.message = error.message
         logLine.syscall = error.syscall
         logLine.statusCode = error.code
-        logLine.error = error
         debug '<- %s', error.code, uri
         hub.emit 'fetchError', logLine
         return sendResult error, body

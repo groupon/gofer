@@ -151,7 +151,7 @@ describe 'Events', ->
       assert.equal 0, successSpy.called
       assert.truthy fetchErrorSpy.called
       assert.hasType Object, fetchErrorSpy.calledArgs[fetchErrorSpy.called-1][0]
-      assert.equal 'ECONNECTTIMEDOUT', fetchErrorSpy.calledArgs[fetchErrorSpy.called-1][0].error.code
+      assert.equal 'ECONNECTTIMEDOUT', fetchErrorSpy.calledArgs[fetchErrorSpy.called-1][0].code
       logLine = fetchErrorSpy.calledArgs[fetchErrorSpy.called-1][0]
       assert.equal "http://10.255.255.1/", logLine.uri
       assert.equal "GET", logLine.method
@@ -159,6 +159,6 @@ describe 'Events', ->
       assert.truthy 'did not define connect duration', logLine.connectDuration?
       assert.truthy 'did not define fetch duration', logLine.fetchDuration?
       assert.truthy 'did not define fetch id', logLine.fetchId?
-      assert.equal 'ECONNECTTIMEDOUT', logLine.error?.code
+      assert.equal 'ECONNECTTIMEDOUT', logLine.code
 
 
