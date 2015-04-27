@@ -1,3 +1,7 @@
+2.3.7
+-----
+* dont send result immediately in case request is a synchronous call - @chkhoo #39
+
 2.3.6
 -----
 * fix JSON.stringify bad error object - @chkhoo #38
