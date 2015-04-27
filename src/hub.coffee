@@ -120,7 +120,8 @@ module.exports = Hub = ->
         logLine.statusCode = error.code
         debug '<- %s', error.code, uri
         hub.emit 'fetchError', logLine
-        return sendResult error, body
+        process.nextTick -> sendResult error, body
+        return
 
       apiError = null
       minStatusCode = options.minStatusCode or 200
