@@ -242,6 +242,34 @@ b.request('/something'); // will use timeout: 99, connectTimeout: 70
 b.x(); // will use timeout: 23, connectTimeout: 70
 ```
 
+### Proxy
+
+Sometimes it can be convenient to have routes in an app
+that just proxy to some external service,
+e.g. to consume that data from client-side code without touching CORS.
+Gofer comes with a proxy helper.
+Example of using it in an express app:
+
+```js
+var proxy = require('gofer/proxy')
+app.use('/my-service', function(req, res, next) {
+  // Assuming `myServiceClient instanceof Gofer`
+  proxy(myServiceClient, req, res, next);
+});
+```
+
+Gofer will automatically omit the `callback` query parameter
+that is often used to implement JSONP in APIs.
+
+**Warning:** A route like this can present a serious attack vector.
+There are often better alternatives
+like adding well-chosen CORS headers to the service
+or adding higher-level functionality (aggregation / transformation)
+to your app instead of exposing raw responses from upstream services.
+If there's no way around proxying,
+it's a good idea to explicitly whitelist the exact methods and urls
+that are expected to be hit.
+
 ### Hub
 
 Every `gofer` instance has a reference to a "hub".
