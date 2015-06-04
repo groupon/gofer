@@ -53,7 +53,7 @@
     "hrduration": "^1.0.0",
     "lodash": "^3.0.0",
     "node-uuid": "^1.4.1",
-    "request": "2.40.0"
+    "request": "2.57.0"
   },
   "devDependencies": {
     "assertive": "^1.4.0",
