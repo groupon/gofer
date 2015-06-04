@@ -1,3 +1,10 @@
+2.4.0
+-----
+* Bumped request version to 2.57.0 - @knoma
+  https://github.com/groupon/gofer/pull/41
+* Add documentation for gofer/proxy - @jkrems
+  https://github.com/groupon/gofer/pull/40
+
 2.3.7
 -----
 * dont send result immediately in case request is a synchronous call - @chkhoo #39
