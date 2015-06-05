@@ -171,6 +171,11 @@ class Gofer
       pathParams: options.pathParams
     })
 
+    # In case an option mapper didn't clean up after itself.
+    # In a future version we should investigate offically switching
+    # to request's baseUrl option.
+    delete options.baseUrl if options.baseUrl
+
     if typeof cb == 'function'
       @hub.fetch options, (error, body, response, responseData) ->
         parseJSON = options.parseJSON ? isJsonResponse(response, body)
