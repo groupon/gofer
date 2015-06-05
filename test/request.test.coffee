@@ -155,3 +155,20 @@ describe 'actually making a request', ->
       done()
 
     req.headers['x-sneaky'] = 'sneaky header'
+
+  it 'is not bothered by a weird baseUrl option', (done) ->
+    options =
+      uri: '/zapp'
+      baseUrl:
+        real: defaultConfig.myApi.baseUrl
+        fake: 'http://invalid.url'
+
+    myApi.clearOptionMappers()
+    myApi.addOptionMapper (opts) ->
+      # oops, forgot to delete opts.baseUrl
+      @applyBaseUrl opts.baseUrl.real, opts
+
+    req = myApi.fetch options, (err, reqMirror) ->
+      assert.equal undefined, err?.stack
+      assert.equal '/v1/zapp', reqMirror.url
+      done()
