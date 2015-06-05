@@ -1,3 +1,8 @@
+2.4.1
+-----
+* Never pass baseUrl to request - @jkrems
+  https://github.com/groupon/gofer/pull/42
+
 2.4.0
 -----
 * Bumped request version to 2.57.0 - @knoma
