@@ -43,6 +43,8 @@ Hub = require './hub'
 } = require './helpers'
 { safeParseJSON, isJsonResponse } = require './json'
 
+GOOD_FORM_ENCODED = 'application/x-www-form-urlencoded; charset=utf-8'
+
 class Gofer
   constructor: (config, @hub) ->
     { @defaults, @endpointDefaults } = parseDefaults config, @serviceName
@@ -176,15 +178,31 @@ class Gofer
     # to request's baseUrl option.
     delete options.baseUrl if options.baseUrl
 
+    {form} = options
+    delete options.form
+
     if typeof cb == 'function'
-      @hub.fetch options, (error, body, response, responseData) ->
+      req = @hub.fetch options, (error, body, response, responseData) ->
         parseJSON = options.parseJSON ? isJsonResponse(response, body)
         {parseError, body} = safeParseJSON body, response if parseJSON
         error ?= parseError
         # TODO: remove flipping of response and responseData with next major
         cb error, body, responseData, response
     else
-      @hub.fetch options
+      req = @hub.fetch options
+
+    # Don't use request's form option directly.
+    # It writes utf-8 encoded data but doesn't include a charset,
+    # potentially messing up how the data will be decoded on the other end.
+    #
+    # See:
+    # https://github.com/request/request/issues/1644
+    if form?
+      req.form form
+      if options.forceFormEncoding != false
+        req.setHeader 'Content-Type', GOOD_FORM_ENCODED
+
+    return req
 
   _mappers: [
     # Default: apply baseUrl
