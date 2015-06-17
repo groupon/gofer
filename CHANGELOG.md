@@ -1,3 +1,8 @@
+2.4.2
+-----
+* Force charset for x-www-form-urlencoded by default - @jkrems
+  https://github.com/groupon/gofer/pull/43
+
 2.4.1
 -----
 * Never pass baseUrl to request - @jkrems
