@@ -1,6 +1,7 @@
 assert = require 'assertive'
 http = require 'http'
 Url = require 'url'
+qs = require 'querystring'
 
 Gofer = require '..'
 
@@ -39,10 +40,15 @@ describe 'actually making a request', ->
     myApi: {}
 
   before (done) ->
-    server = http.createServer ({url, method, headers}, res) ->
+    server = http.createServer (req, res) ->
+      {url, method, headers} = req
       if Url.parse(url).pathname == '/v1/zapp'
         res.writeHead 200, 'Content-Type': 'application/json'
-        res.end JSON.stringify {url, method, headers}
+        chunks = []
+        req.on 'data', (chunk) -> chunks.push chunk
+        req.on 'end', ->
+          body = Buffer.concat(chunks).toString 'utf8'
+          res.end JSON.stringify {url, method, headers, body}
       else if url == '/v1/crash'
         res.socket.destroy()
       else if url == '/v1/fail-json'
@@ -127,6 +133,47 @@ describe 'actually making a request', ->
       assert.equal true, err instanceof SyntaxError
       assert.equal '{some-invalid-json}', reqMirror
       done()
+
+  describe.only 'special characters', ->
+    it 'are supported in form payloads', (done) ->
+      req = myApi.fetch {
+        uri: '/zapp'
+        method: 'POST'
+        form: { x: '💩' }
+      }, (err, reqMirror) ->
+        return done(err) if err?
+        body = qs.parse reqMirror.body
+        assert.equal '💩', body.x
+        assert.equal '''
+          application/x-www-form-urlencoded; charset=utf-8
+        ''', reqMirror.headers['content-type']
+        done()
+
+    it 'allows yolo-mode for form charsets', (done) ->
+      req = myApi.fetch {
+        uri: '/zapp'
+        method: 'POST'
+        forceFormEncoding: false
+        form: { x: '💩' }
+      }, (err, reqMirror) ->
+        return done(err) if err?
+        body = qs.parse reqMirror.body
+        assert.equal '💩', body.x
+        assert.equal '''
+          application/x-www-form-urlencoded
+        ''', reqMirror.headers['content-type']
+        done()
+
+    it 'are supported in json payloads', (done) ->
+      req = myApi.fetch {
+        uri: '/zapp'
+        method: 'POST'
+        json: { x: '💩' }
+      }, (err, reqMirror) ->
+        return done(err) if err?
+        body = JSON.parse reqMirror.body
+        assert.equal '💩', body.x
+        done()
 
   ['put','post','patch','del','head','get'].forEach (verb) ->
     httpMethod = verb.toUpperCase()
