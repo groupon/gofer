@@ -1,3 +1,8 @@
+2.4.3
+-----
+* Keep form.options in options b/c request - @jkrems
+  https://github.com/groupon/gofer/pull/44
+
 2.4.2
 -----
 * Force charset for x-www-form-urlencoded by default - @jkrems
