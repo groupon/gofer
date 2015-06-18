@@ -178,9 +178,6 @@ class Gofer
     # to request's baseUrl option.
     delete options.baseUrl if options.baseUrl
 
-    {form} = options
-    delete options.form
-
     if typeof cb == 'function'
       req = @hub.fetch options, (error, body, response, responseData) ->
         parseJSON = options.parseJSON ? isJsonResponse(response, body)
@@ -191,16 +188,15 @@ class Gofer
     else
       req = @hub.fetch options
 
-    # Don't use request's form option directly.
-    # It writes utf-8 encoded data but doesn't include a charset,
-    # potentially messing up how the data will be decoded on the other end.
+    # Fix up the content-type header to match request 2.40's behavior,
+    # shielding gofer users from the new behavior.[1]
+    # Some services don't properly default to decoding form-encoded data as utf8,
+    # instead using a "non-utf8 character encoding" (whatever that means).
     #
-    # See:
-    # https://github.com/request/request/issues/1644
-    if form?
-      req.form form
-      if options.forceFormEncoding != false
-        req.setHeader 'Content-Type', GOOD_FORM_ENCODED
+    # [1] https://github.com/request/request/pull/1159
+    #     https://github.com/request/request/issues/1644
+    if options.form && options.forceFormEncoding != false
+      req.setHeader 'Content-Type', GOOD_FORM_ENCODED
 
     return req
 
