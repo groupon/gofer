@@ -1,7 +1,7 @@
 assert = require 'assertive'
 http = require 'http'
 Url = require 'url'
-qs = require 'querystring'
+{parse: parseQS} = require 'querystring'
 
 Gofer = require '..'
 
@@ -134,7 +134,7 @@ describe 'actually making a request', ->
       assert.equal '{some-invalid-json}', reqMirror
       done()
 
-  describe.only 'special characters', ->
+  describe 'special characters', ->
     it 'are supported in form payloads', (done) ->
       req = myApi.fetch {
         uri: '/zapp'
@@ -142,7 +142,7 @@ describe 'actually making a request', ->
         form: { x: '💩' }
       }, (err, reqMirror) ->
         return done(err) if err?
-        body = qs.parse reqMirror.body
+        body = parseQS reqMirror.body
         assert.equal '💩', body.x
         assert.equal '''
           application/x-www-form-urlencoded; charset=utf-8
@@ -157,7 +157,7 @@ describe 'actually making a request', ->
         form: { x: '💩' }
       }, (err, reqMirror) ->
         return done(err) if err?
-        body = qs.parse reqMirror.body
+        body = parseQS reqMirror.body
         assert.equal '💩', body.x
         assert.equal '''
           application/x-www-form-urlencoded
