@@ -31,7 +31,7 @@ describe 'proxy', ->
     proxy client, req, res, next
 
   it 'makes a request with the client', ->
-    assert.expect requestArgs.length
+    assert.expect requestArgs.length >= 1
 
   it 'uses the correct parameters', ->
     expectedRequestArgs =
