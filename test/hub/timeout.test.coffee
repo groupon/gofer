@@ -1,17 +1,24 @@
 assert = require 'assertive'
+
 hub = require('../../hub')()
+
 serverBuilder = require './_test_server'
 
-server = app = undefined
+checkRequestOptions = (err) ->
+  assert.expect 'Includes responseData.requestOptions', err.responseData?.requestOptions?
+  assert.notInclude '''
+    But requestOptions is not enumerable / included in JSON
+  ''', 'requestOptions', Object.keys(err.responseData)
+
 describe 'Basic Integration Test', ->
   before (done) ->
-    {server} = serverBuilder()
-    server.listen 0, =>
-      {@port} = server.address()
+    {@server} = serverBuilder()
+    @server.listen 0, =>
+      {@port} = @server.address()
       done()
 
   after (done) ->
-    server.close done
+    @server.close done
 
   describe 'connect timeout', ->
 
@@ -26,7 +33,7 @@ describe 'Basic Integration Test', ->
       },
       (err, body, headers) ->
         assert.equal 'ECONNECTTIMEDOUT', err?.code
-
+        checkRequestOptions err
         done()
 
   describe 'response timeout', ->
@@ -46,6 +53,7 @@ describe 'Basic Integration Test', ->
         timeout: 20
       }, (err, body, headers) ->
         assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
         done()
 
   describe 'completion timeout', ->
@@ -56,8 +64,6 @@ describe 'Basic Integration Test', ->
         qs: {__delay: 10}
         completionTimeout: 20
       }, (err, body, headers) ->
-        throw err if err
-        assert.expect not err
         done err
 
     it 'passes an error when timeout is exceeded', (done) ->
@@ -66,8 +72,8 @@ describe 'Basic Integration Test', ->
         qs: {__delay: 30}
         completionTimeout: 20
       }, (err, body, headers) ->
-        assert.expect err
-        assert.equal 'ETIMEDOUT', err.code
+        assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
         done()
 
   describe 'combined timeouts', ->
@@ -80,8 +86,6 @@ describe 'Basic Integration Test', ->
         connectTimeout: 30
         completionTimeout: 50
       }, (err, body, headers) ->
-        throw err if err
-        assert.expect not err
         done err
 
     it 'passes an error when completion is exceeded', (done) ->
@@ -92,8 +96,8 @@ describe 'Basic Integration Test', ->
         connectTimeout: 30
         completionTimeout: 10
       }, (err, body, headers) ->
-        assert.expect err
-        assert.equal 'ETIMEDOUT', err.code
+        assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
         done()
 
     it 'passes an error when connection is exceeded', (done) ->
@@ -103,8 +107,8 @@ describe 'Basic Integration Test', ->
         connectTimeout: 50
         completionTimeout: 60000
       }, (err, body, headers) ->
-        assert.expect err
-        assert.equal 'ECONNECTTIMEDOUT', err.code
+        assert.equal 'ECONNECTTIMEDOUT', err?.code
+        checkRequestOptions err
         done()
 
     it 'passes an error when timeout is exceeded', (done) ->
@@ -115,7 +119,6 @@ describe 'Basic Integration Test', ->
         connectTimeout: 30
         completionTimeout: 30
       }, (err, body, headers) ->
-        assert.expect err
-        assert.equal 'ETIMEDOUT', err.code
+        assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
         done()
-

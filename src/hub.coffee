@@ -78,10 +78,10 @@ module.exports = Hub = ->
     logPendingRequests http.globalAgent
     logPendingRequests https.globalAgent
 
-    responseData =
-      requestOptions: options
+    responseData = Object.defineProperty {
       requestId: options.requestId
       fetchId: fetchId
+    }, 'requestOptions', value: options
 
     debug '-> %s', options.method, options.uri
     baseLog = extend({
@@ -97,11 +97,11 @@ module.exports = Hub = ->
 
       responseData.fetchDuration = getSeconds()
 
-      # Reset responseData.requestOptions.uri in case the request library modified it
+      # Reset options.uri in case the request library modified it
       # (eg, if requestOptions had a qs key)
-      responseData.requestOptions.uri = this.uri
+      options.uri = this.uri
 
-      uri = formatUri(responseData.requestOptions.uri)
+      uri = formatUri(options.uri)
 
       logLine = extend({
         statusCode: response?.statusCode
@@ -120,6 +120,7 @@ module.exports = Hub = ->
         logLine.statusCode = error.code
         debug '<- %s', error.code, uri
         hub.emit 'fetchError', logLine
+        error.responseData ?= responseData
         process.nextTick -> sendResult error, body
         return
 
@@ -138,6 +139,7 @@ module.exports = Hub = ->
         apiError.statusCode = response.statusCode
         apiError.minStatusCode = logLine.minStatusCode = minStatusCode
         apiError.maxStatusCode = logLine.maxStatusCode = maxStatusCode
+        apiError.responseData ?= responseData
         debug '<- %s', response.statusCode, uri
         hub.emit 'failure', logLine
 
