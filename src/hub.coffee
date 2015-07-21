@@ -78,17 +78,20 @@ module.exports = Hub = ->
     logPendingRequests http.globalAgent
     logPendingRequests https.globalAgent
 
-    responseData = Object.defineProperty {
+    responseData =
       requestId: options.requestId
       fetchId: fetchId
-    }, 'requestOptions', value: options
 
-    debug '-> %s', options.method, options.uri
     baseLog = extend({
       uri: options.uri
       method: options.method
-    }, options.logData)
-    hub.emit 'start', extend(baseLog, responseData)
+    }, options.logData, responseData)
+
+    Object.defineProperty responseData, 'requestOptions', value: options
+    Object.defineProperty baseLog, 'requestOptions', value: options
+
+    debug '-> %s', options.method, options.uri
+    hub.emit 'start', baseLog
 
     handleResult = (error, response, body) ->
       parseJSON = options.parseJSON ? isJsonResponse(response, body)
