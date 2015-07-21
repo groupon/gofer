@@ -1,3 +1,8 @@
+2.4.4
+-----
+* Consistent and safe err.responseData - @jkrems
+  https://github.com/groupon/gofer/pull/45
+
 2.4.3
 -----
 * Keep form.options in options b/c request - @jkrems
