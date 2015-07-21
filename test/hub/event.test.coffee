@@ -19,6 +19,26 @@ describe 'Events', ->
   after (done) ->
     server.close done
 
+  describe 'start event', ->
+    startSpy = undefined
+    before (done) ->
+      startSpy = bond()
+      hub.on 'start', startSpy
+
+      hub.fetch {
+        uri: "http://127.0.0.1:#{@port}/"
+        requestId: 'abcde'
+      }, done
+
+    it 'fires with a log line that contains the requestOptions', ->
+      assert.truthy startSpy.called
+      [logLine] = startSpy.calledArgs[startSpy.called-1]
+      assert.hasType Object, logLine
+      assert.equal "http://127.0.0.1:#{@port}/", logLine.uri
+      assert.equal "GET", logLine.method
+      assert.notInclude 'requestOptions is not enumerable', 'requestOptions', Object.keys(logLine)
+      assert.hasType 'requestOptions is included', Object, logLine.requestOptions
+
   describe 'success event', ->
     successSpy = undefined
     before (done) ->
