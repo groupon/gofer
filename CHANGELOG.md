@@ -1,3 +1,8 @@
+2.4.5
+-----
+* Include requestOptions in start event - @jkrems
+  https://github.com/groupon/gofer/pull/46
+
 2.4.4
 -----
 * Consistent and safe err.responseData - @jkrems
