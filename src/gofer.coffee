@@ -47,8 +47,16 @@ GOOD_FORM_ENCODED = 'application/x-www-form-urlencoded; charset=utf-8'
 
 class Gofer
   constructor: (config, @hub) ->
-    { @defaults, @endpointDefaults } = parseDefaults config, @serviceName
+    @_rawConfig = config
+    @_defaults = @_endpointDefaults = null
     @hub ?= Hub()
+
+  _initDefaults: ->
+    {
+      defaults: @_defaults
+      endpointDefaults: @_endpointDefaults
+    } = parseDefaults @_rawConfig, @serviceName
+    @_rawConfig = null
 
   with: (overrides) ->
     copy = new @constructor({}, @hub)
@@ -212,6 +220,24 @@ class Gofer
 
 Gofer::fetch = Gofer::request
 Gofer::get = Gofer::request
+
+Object.defineProperties Gofer.prototype, {
+  defaults:
+    enumerable: true
+    get: ->
+      @_initDefaults() unless @_defaults
+      @_defaults
+    set: (defaults) ->
+      @_defaults = defaults
+
+  endpointDefaults:
+    enumerable: true
+    get: ->
+      @_initDefaults() unless @_endpointDefaults
+      @_endpointDefaults
+    set: (endpointDefaults) ->
+      @_endpointDefaults = endpointDefaults
+}
 
 module.exports = Gofer
 Gofer['default'] = Gofer # ES6 module compatible
