@@ -213,5 +213,22 @@ class Gofer
 Gofer::fetch = Gofer::request
 Gofer::get = Gofer::request
 
+Gofer.Endpoint = Endpoint = (obj, endpointName, { value: innerFn }) ->
+  if typeof innerFn != 'function'
+    throw new TypeError '@Endpoint expects a function property'
+
+  enumerable: false
+  configurable: true
+  writeable: true
+  get: ->
+    return innerFn if obj == this
+    request = @requestWithDefaults { endpointName }
+    value = innerFn.bind this, request
+    Object.defineProperty this, endpointName, {
+      enumerable: false
+      value
+    }
+    value
+
 module.exports = Gofer
 Gofer['default'] = Gofer # ES6 module compatible
