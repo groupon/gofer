@@ -52,7 +52,7 @@ Whatever the function returns will be available as a property on instances of th
 Reasonable variants are a function or a nested objects with functions.
 
 ```js
-MyService.registerEndpoints({
+MyService.prototype.registerEndpoints({
   simple: function(request) {
     return function(cb) {
       return request('/some-path', cb);
