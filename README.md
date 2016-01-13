@@ -3,7 +3,7 @@
 > A gofer, go-fer or gopher /ˈɡoʊfər/ is an employee who specializes in delivery of special items to their superior(s).
 > The special items may be anything from a cup of coffee to a tailored suit or a car.
 > 
-> — <cite>[Wikipedia: Gofer](http://en.wikipedia.org/wiki/Gofer)</cite>
+> — <cite>[Wikipedia: Gofer](https://en.wikipedia.org/wiki/Gofer)</cite>
 
 ```
 npm install --save gofer
@@ -11,7 +11,7 @@ npm install --save gofer
 
 A base class to develop specialized ReST clients with.
 The general design is meant to enforce a certain level of consistency in how the clients are configured and instrumented.
-Uses [request](https://github.com/mikeal/request) to do the actual fetching.
+Uses [request](https://github.com/request/request) to do the actual fetching.
 
 **[API docs](/API.md)** •
 **[Walkthrough](#walkthrough)**
@@ -72,7 +72,7 @@ client.protectedResource('some-id', function(err, data) {});
 `client.hub` exposes the following events:
 
 * `start`: A service call is attempted
-* `socketQueueing`: Waiting for a socket. See [`http.globalAgent.maxSockets`](http://nodejs.org/api/http.html#http_agent_maxsockets)
+* `socketQueueing`: Waiting for a socket. See [`http.globalAgent.maxSockets`](https://nodejs.org/api/http.html#http_agent_maxsockets)
 * `connect`: Connected to the remote host, transfer may start
 * `fetchError`: A transport error occured (e.g. timeouts)
 * `failure`: An invalid status code was returned
