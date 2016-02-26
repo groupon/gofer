@@ -58,4 +58,5 @@ module.exports = (client, req, res, next) ->
   properReturnValue = proxyReq?
 
   if properReturnValue
+    proxyReq.on 'error', next
     req.pipe(proxyReq).pipe(res)
