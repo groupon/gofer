@@ -1,3 +1,10 @@
+2.4.6
+-----
+* Update README URLs based on HTTP redirects - @ReadmeCritic
+  https://github.com/groupon/gofer/pull/52
+* Update API.md - @g-patel
+  https://github.com/groupon/gofer/pull/51
+
 2.4.5
 -----
 * Include requestOptions in start event - @jkrems
