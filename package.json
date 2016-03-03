@@ -2,27 +2,51 @@
   "name": "gofer",
   "version": "2.4.6",
   "description": "A general purpose service client library for node.js",
+  "license": "BSD-3-Clause",
   "main": "lib/gofer.js",
-  "scripts": {
-    "build": "npub prep && coffee -cbo lib src",
-    "prepublish": "rm -rf lib && npm run build",
-    "pretest": "npm run build",
-    "test": "mocha",
-    "posttest": "npub verify"
-  },
+  "homepage": "https://github.com/groupon/gofer",
   "repository": {
     "type": "git",
-    "url": "git://github.com/groupon/gofer"
+    "url": "git+ssh://git@github.com/groupon/gofer"
   },
-  "keywords": [
-    "gofer",
-    "service",
-    "http"
-  ],
-  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/groupon/gofer/issues"
+  },
+  "scripts": {
+    "build": "rm -rf lib && coffee --no-header -cbo lib src",
+    "pretest": "npm run build",
+    "test": "mocha",
+    "posttest": "nlm verify",
+    "watch": "coffee --no-header -wcbo lib src & nodemon -w lib -w test -e coffee,js,json -x \"mocha\""
+  },
+  "nlm": {
+    "license": {
+      "files": [
+        "src"
+      ]
+    }
+  },
+  "dependencies": {
+    "bluebird": "^2.9.13",
+    "debug": "^2.1.2",
+    "hrduration": "^1.0.0",
+    "lodash": "^3.0.0",
+    "node-uuid": "^1.4.1",
+    "request": "2.57.0"
+  },
+  "devDependencies": {
+    "assertive": "^2.0.0",
+    "bondjs": "^1.1.1",
+    "coffee-script": "^1.10.0",
+    "deepmerge": "^0.2.7",
+    "express": "^4.1.1",
+    "mocha": "^2.0.0",
+    "nlm": "^2.0.0",
+    "nodemon": "^1.0.0"
+  },
   "author": {
-    "name": "Jan Krems",
-    "email": "jan.krems@groupon.com>"
+    "name": "Groupon",
+    "email": "opensource@groupon.com"
   },
   "contributors": [
     {
@@ -38,30 +62,16 @@
       "email": "kofi@groupon.com"
     }
   ],
+  "keywords": [
+    "gofer",
+    "service",
+    "http"
+  ],
+  "files": [
+    "*.js",
+    "lib"
+  ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "license": {
-      "exclude": [
-        "lib",
-        "test"
-      ]
-    }
-  },
-  "dependencies": {
-    "bluebird": "^2.9.13",
-    "debug": "^2.1.2",
-    "hrduration": "^1.0.0",
-    "lodash": "^3.0.0",
-    "node-uuid": "^1.4.1",
-    "request": "2.57.0"
-  },
-  "devDependencies": {
-    "assertive": "^2.0.0",
-    "bondjs": "^1.1.1",
-    "coffee-script": "1.9.0",
-    "deepmerge": "^0.2.7",
-    "express": "^4.1.1",
-    "mocha": "^2.1.0",
-    "npub": "^2.0.0"
+    "registry": "https://registry.npmjs.org"
   }
 }

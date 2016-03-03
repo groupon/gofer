@@ -1,3 +1,2 @@
---reporter spec
 --compilers test.coffee:coffee-script/register
 --recursive
