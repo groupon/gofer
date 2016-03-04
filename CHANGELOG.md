@@ -1,3 +1,9 @@
+### 2.4.7
+
+* Switch to nlm for publishing - **[@jkrems](https://github.com/jkrems)** [#54](https://github.com/groupon/gofer/pull/54)
+  - [`f64ea27`](https://github.com/groupon/gofer/commit/f64ea27fcf89d8e3321f52fbfd60b7581839cf83) **chore:** Use nlm
+
+
 2.4.6
 -----
 * Update README URLs based on HTTP redirects - @ReadmeCritic
