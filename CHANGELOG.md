@@ -1,3 +1,9 @@
+### 2.4.8
+
+* Apply latest nlm generator - **[@i-tier-bot](https://github.com/i-tier-bot)** [#55](https://github.com/groupon/gofer/pull/55)
+  - [`de40928`](https://github.com/groupon/gofer/commit/de40928d7de1bc5508671c8ac771c42f93c99ee2) **chore:** Apply latest nlm generator
+
+
 ### 2.4.7
 
 * Switch to nlm for publishing - **[@jkrems](https://github.com/jkrems)** [#54](https://github.com/groupon/gofer/pull/54)
