@@ -22,6 +22,8 @@ describe 'proxy', ->
       some: 'some-headers'
       host: 'host-header'
       other: 'other-header'
+    body:
+      'dummy content'
 
   res = {}
 
@@ -42,6 +44,7 @@ describe 'proxy', ->
       uri: 'www.something.com/some-url'
       qs:
         search: 'show-me-the-request'
+      body: 'dummy content'
       minStatusCode: 200
       maxStatusCode: 399
 
