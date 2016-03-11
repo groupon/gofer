@@ -41,6 +41,7 @@ module.exports = (client, req, res, next) ->
     headers: omit req.headers, ['host']
     uri: pathname
     qs: omit query, [ 'callback' ]
+    body: req.body
     # Make sure we don't polute logs with errors that aren't errors
     # Browsers like to send If-Not-Modified-Since etc.
     minStatusCode: 200
