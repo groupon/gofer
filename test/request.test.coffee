@@ -23,7 +23,7 @@ MyApi::registerEndpoints {
     request '/zapp', { qs }, cb
 
   undefHeaders: (request) -> (cb) ->
-    headers = { a: undefined, b: null, c: 'non-null' }
+    headers = { a: undefined, b: null, c: 'non\tnull' }
     request '/zapp', { headers }, cb
 
   crash: (request) -> (cb) -> request '/crash', cb
@@ -119,7 +119,12 @@ describe 'actually making a request', ->
       assert.equal undefined, err?.stack
       assert.equal undefined, reqMirror.headers.a
       assert.equal undefined, reqMirror.headers.b
-      assert.equal 'non-null', reqMirror.headers.c
+      done()
+
+  it 'allows \t inside of headers', (done) ->
+    req = myApi.undefHeaders (err, reqMirror) ->
+      assert.equal undefined, err?.stack
+      assert.equal 'non\tnull', reqMirror.headers.c
       done()
 
   it 'fails early when an invalid timeout value is passed', ->

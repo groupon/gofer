@@ -38,7 +38,7 @@ util = require 'util'
 request = require 'request'
 HRDuration = require 'hrduration'
 uuid = require 'node-uuid'
-{extend, map} = require 'lodash'
+{extend, map, mapValues} = require 'lodash'
 debug = require('debug') 'gofer:hub'
 DefaultPromise = global.Promise ? require 'bluebird'
 
@@ -53,6 +53,14 @@ checkTimeout = (timeout) ->
     )
 
   timeout
+
+# Invalid header chars cause uncatchable errors in node 4.x+ thanks to request
+removeInvalidHeaderChars = (header) ->
+  # Ported from checkInvalidHeaderChar in node's lib/_http_common.js
+  # RegExp equivalent of:
+  # ch != 9 && (ch <= 31 || ch > 255 || ch == 127)
+  # Where `ch` is a character code (e.g. `str.charCodeAt(idx)`)
+  "#{header}".replace /(?:\x7F|[^\x09\x20-\xFF])+/g, ''
 
 # Default timeout intervals
 module.exports = Hub = ->
@@ -74,6 +82,7 @@ module.exports = Hub = ->
       'GET'
     hubHeaders = generateHeaders options.requestId, fetchId
     extend options.headers, hubHeaders
+    options.headers = mapValues options.headers, removeInvalidHeaderChars
 
     logPendingRequests http.globalAgent
     logPendingRequests https.globalAgent
