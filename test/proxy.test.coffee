@@ -27,8 +27,11 @@ describe 'proxy', ->
 
   next = ->
 
+  cbArgs = []
+  cb = -> cbArgs.push arguments
+
   before ->
-    proxy client, req, res, next
+    proxy client, req, res, next, cb
 
   it 'makes a request with the client', ->
     assert.expect requestArgs.length >= 1
@@ -50,3 +53,6 @@ describe 'proxy', ->
   it 'pipes the proxy request to the original request and response', ->
     assert.equal 'proxyReq', pipeArgs[0][0]
     assert.deepEqual res, pipeArgs[1][0]
+
+  it 'executes the callback function with the proxy request', ->
+    assert.equal 'proxyReq', cbArgs[0][0]

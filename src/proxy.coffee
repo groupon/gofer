@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 {omit} = require 'lodash'
 Url = require 'url'
 
-module.exports = (client, req, res, next) ->
+module.exports = (client, req, res, next, cb) ->
   {pathname, query} = Url.parse req.url, true
 
   options =
@@ -58,4 +58,5 @@ module.exports = (client, req, res, next) ->
   properReturnValue = proxyReq?
 
   if properReturnValue
+    cb(proxyReq) if cb?
     req.pipe(proxyReq).pipe(res)
