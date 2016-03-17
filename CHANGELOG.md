@@ -1,3 +1,9 @@
+### 2.4.9
+
+* Filter out bad header chars for node v4 - **[@jkrems](https://github.com/jkrems)** [#58](https://github.com/groupon/gofer/pull/58)
+  - [`a22523a`](https://github.com/groupon/gofer/commit/a22523a3e197e70b43e3365b89c7ca59ba8d5c72) **fix:** Filter out bad header chars for node v4
+
+
 ### 2.4.8
 
 * Apply latest nlm generator - **[@i-tier-bot](https://github.com/i-tier-bot)** [#55](https://github.com/groupon/gofer/pull/55)
