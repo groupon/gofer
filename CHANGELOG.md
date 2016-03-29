@@ -1,3 +1,9 @@
+### 2.4.10
+
+* Properly forward errors - **[@jkrems](https://github.com/jkrems)** [#53](https://github.com/groupon/gofer/pull/53)
+  - [`5b5289e`](https://github.com/groupon/gofer/commit/5b5289eba138292271509b56930ba7463ff3c483) **fix:** Properly forward errors
+
+
 ### 2.4.9
 
 * Filter out bad header chars for node v4 - **[@jkrems](https://github.com/jkrems)** [#58](https://github.com/groupon/gofer/pull/58)
