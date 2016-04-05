@@ -1,10 +1,10 @@
 'use strict';
 var assert = require('assertive');
 
-var gofer = require('../');
+var Gofer = require('../');
 
 describe('gofer', function () {
-  it('is empty', function () {
-    assert.deepEqual({}, gofer);
+  it('exports a `fetch` function', function () {
+    assert.hasType(Function, Gofer.fetch);
   });
 });

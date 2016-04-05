@@ -24,7 +24,10 @@
       ]
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "bluebird": "^3.3.3",
+    "qs": "^6.1.0"
+  },
   "devDependencies": {
     "assertive": "^2.0.0",
     "eslint": "^1.0.0",
