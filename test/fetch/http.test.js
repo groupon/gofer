@@ -3,48 +3,10 @@ var assert = require('assertive');
 
 var fetch = require('../..').fetch;
 
-function withMockService() {
-  var http = require('http');
-  var options = {};
-  var server;
+var withMockService = require('../mock-service');
 
-  function sendEcho(req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({
-      method: req.method,
-      url: req.url,
-      headers: req.headers,
-    }));
-  }
-
-  function handleRequest(req, res) {
-    if (/^\/echo/.test(req.url)) {
-      sendEcho(req, res);
-      return;
-    }
-    res.end('ok');
-  }
-
-  before(function (done) {
-    server = http.createServer(handleRequest);
-    server.on('error', done);
-    server.listen(function () {
-      options.baseUrl = 'http://127.0.0.1:' + server.address().port;
-      done();
-    });
-  });
-
-  after(function () {
-    if (server) {
-      try {
-        server.close();
-      } catch (e) {
-        // Ignore cleanup error
-      }
-    }
-  });
-
-  return options;
+function unexpected() {
+  throw new Error('Should not happen');
 }
 
 describe('fetch: the basics', function () {
@@ -69,6 +31,15 @@ describe('fetch: the basics', function () {
       .json().then(function (echo) {
         assert.equal('GET', echo.method);
         assert.equal('/echo', echo.url);
+      });
+  });
+
+  it('exposes the response body on status code error object', function () {
+    return fetch('/json/404', options)
+      .json().then(unexpected, function (error) {
+        assert.truthy(error.body);
+        // The response body constains a request mirror just like /echo
+        assert.equal('GET', error.body.method);
       });
   });
 
