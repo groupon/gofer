@@ -74,7 +74,7 @@ The difference is that by basing all client libraries on this one,
 you gain consistency and unified configuration.
 Creating a client for a new service often takes just a couple of lines.
 
-#### Why not use `request`?
+#### Why not use [`request`](https://github.com/request/request)?
 
 `request` is a great swiss army knive for making API calls.
 This makes it an awesome first pick if you're looking for a quick way to talk to a wide variety of 3rd party services.
@@ -111,15 +111,14 @@ Let's define a simple endpoint to get the emojis from Github:
 Github.prototype.registerEndpoints({
   // Every instance of Github will get an `emojis` property. On
   // access it will be initialized with an instrumented version of the
-  // `request` function. The `request` function works mostly like mikeal's
-  // `request`, though properties like `request.put` won't work.
-  emojis: function(request) {
+  // `fetch` function. The `fetch` function works similar to WHATWG/fetch.
+  emojis: function(fetch) {
     // the value returned here will be what users see in `new Github().emojis`
     return function(cb) {
-      // request(uri: string, options: object?, callback: function?)
-      return request('/emojis', {}, cb);
+      // fetch(uri: string, options: object?, callback: function?)
+      return fetch('/emojis', {}, cb);
     };
-  }
+  },
 });
 ```
 
@@ -131,7 +130,7 @@ var config = {
   globalDefaults: {
     // these apply to all gofers
     connectTimeout: 30,
-    timeout: 100
+    timeout: 100,
   },
   github: {
     // these apply for every call made with Github
@@ -140,15 +139,15 @@ var config = {
       // these only apply for calls to the emojis endpoint
       emojis: {
         connectTimeout: 100,
-        timeout: 2000
-      }
-    }
-  }
+        timeout: 2000,
+      },
+    },
+  },
 };
 ```
 
 To make our client a little nicer to use we'll add an [option mapper](/API.md#option-mappers) that defaults `baseUrl` to the public Github API.
-The options we return will be passed on to `request`.
+The options we return will be passed on to `fetch`.
 
 ```js
 var _ = require('lodash');
