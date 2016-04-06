@@ -74,4 +74,44 @@ describe('fetch: the basics', function () {
     });
     assert.equal('baseUrl may not contain a query string', error.message);
   });
+
+  describe('legacy / callback mode', function () {
+    var returnValue;
+    var error;
+    var data;
+    var response;
+
+    before(function (done) {
+      returnValue = fetch('/echo', options, function (_error, _data, _response) {
+        error = _error;
+        data = _data;
+        response = _response;
+        done(error);
+      });
+    });
+
+    it('returns undefined', function () {
+      assert.equal(undefined, returnValue);
+    });
+
+    it('returns the parsed body as data', function () {
+      assert.truthy(data);
+      assert.equal('GET', data.method);
+    });
+
+    it('includes the response object', function () {
+      assert.truthy(response);
+      assert.equal(200, response.statusCode);
+    });
+
+    it('includes the parsed body on 404s', function (done) {
+      fetch('/json/404', options, function (notFoundError, body) {
+        assert.truthy(notFoundError);
+        assert.truthy(body);
+        assert.equal('/json/404', body.url);
+        assert.deepEqual(notFoundError.body, body);
+        done();
+      });
+    });
+  });
 });
