@@ -163,6 +163,17 @@ Finally we can instantiate and make the call:
 
 ```js
 var github = new Github(config);
+
+// The `fetch`-style:
+github.emojis()
+  .then(function (res) {
+    return res.json();
+  })
+  .done(function (emojiList) {
+    console.log('Returned %d emojis', Object.keys(emojiList).length);
+  });
+
+// Using the added convenience of req.json()
 github.emojis().json()
   .done(function (emojiList) {
     console.log('Returned %d emojis', Object.keys(emojiList).length);
