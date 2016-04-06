@@ -23,9 +23,6 @@ Option mappers are called in the order they are
 registered in and can potentially do *anything* they want.
 This can range from applying defaults over resolving custom api options to injecting access tokens.
 
-By default only one option mapper is added which applies a base url if it's
-configured.
-
 
 #### Defaults merging
 
