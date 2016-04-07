@@ -2,8 +2,8 @@
 
 The module has two exports:
 
-* `fetch`, a function for fetching HTTP resources.
-* `Gofer`, a base class for service clients.
+* [`fetch`](#fetchurl-options-callback), a function for fetching HTTP resources.
+* [`Gofer`](#gofer), a base class for service clients.
 
 ## `fetch(url, options, callback)`
 
