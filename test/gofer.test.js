@@ -14,6 +14,10 @@ describe('gofer', function () {
     assert.hasType(Function, Gofer.fetch);
   });
 
+  it('exposes Gofer as exports.default', function () {
+    assert.equal(Gofer, Gofer.default);
+  });
+
   describe('direct usage', function () {
     var gofer;
     before('create Gofer instance', function () {
