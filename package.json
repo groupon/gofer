@@ -4,6 +4,9 @@
   "description": "A general purpose service client library",
   "license": "BSD-3-Clause",
   "main": "lib/gofer.js",
+  "browser": {
+    "./lib/fetch.js": "./lib/fetch.browser.js"
+  },
   "homepage": "https://github.com/groupon/gofer",
   "repository": {
     "type": "git",

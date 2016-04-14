@@ -1,0 +1,10 @@
+{
+  "name": "gofer.examples.browser",
+  "version": "0.0.0",
+  "browser": "browser.js",
+  "dependencies": {
+    "browserify": "^13.0.0",
+    "gofer": "../..",
+    "whatwg-fetch": "^0.11.0"
+  }
+}
