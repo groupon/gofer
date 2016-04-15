@@ -23,17 +23,6 @@ describe('gofer', function () {
     it('can fetch something', function () {
       return gofer.get('/echo');
     });
-
-    if (typeof document === 'object') {
-      it.skip('(callback interface not supported in browser builds)');
-      return;
-    }
-    it('exposes the legacy mode interface', function (done) {
-      gofer.get('/echo', {}, function (error, body) {
-        assert.truthy(body);
-        done(error);
-      });
-    });
   });
 
   describe('sub-class', function () {

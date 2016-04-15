@@ -1,6 +1,4 @@
 'use strict';
-var util = require('util');
-
 var assert = require('assertive');
 
 var Gofer = require('../');
@@ -18,12 +16,12 @@ var CONFIG = {
 function GoferA(config) {
   Gofer.call(this, config, 'a');
 }
-util.inherits(GoferA, Gofer);
+GoferA.prototype = Object.create(Gofer.prototype);
 
 function GoferB(config) {
   Gofer.call(this, config, 'b');
 }
-util.inherits(GoferB, Gofer);
+GoferB.prototype = Object.create(Gofer.prototype);
 
 describe('config handling', function () {
   var a;

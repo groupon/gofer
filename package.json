@@ -35,7 +35,7 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "assertive": "^2.0.0",
+    "assertive": "^2.1.0",
     "eslint": "^1.0.0",
     "eslint-config-groupon": "^2.0.0",
     "mocha": "^2.0.0",

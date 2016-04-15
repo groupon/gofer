@@ -1,13 +1,9 @@
 'use strict';
 var assert = require('assertive');
 
-var fetch = require('../..').fetch;
+var fetch = require('../').fetch;
 
-var options = require('../mock-service');
-
-function unexpected() {
-  throw new Error('Should not happen');
-}
+var options = require('./mock-service');
 
 describe('fetch: the basics', function () {
   it('can load using just a url string', function () {
@@ -33,8 +29,11 @@ describe('fetch: the basics', function () {
   });
 
   it('exposes the response body on status code error object', function () {
-    return fetch('/json/404', options)
-      .json().then(unexpected, function (error) {
+    if (typeof document !== 'undefined') {
+      return this.skip();
+    }
+    return assert.rejects(fetch('/json/404', options).json())
+      .then(function (error) {
         assert.truthy(error.body);
         // The response body constains a request mirror just like /echo
         assert.equal('GET', error.body.method);
@@ -71,45 +70,5 @@ describe('fetch: the basics', function () {
       fetch('/text/path', { baseUrl: options.baseUrl + '?x=1' });
     });
     assert.equal('baseUrl may not contain a query string', error.message);
-  });
-
-  describe('legacy / callback mode', function () {
-    var returnValue;
-    var error;
-    var data;
-    var response;
-
-    before(function (done) {
-      returnValue = fetch('/echo', options, function (_error, _data, _response) {
-        error = _error;
-        data = _data;
-        response = _response;
-        done(error);
-      });
-    });
-
-    it('returns undefined', function () {
-      assert.equal(undefined, returnValue);
-    });
-
-    it('returns the parsed body as data', function () {
-      assert.truthy(data);
-      assert.equal('GET', data.method);
-    });
-
-    it('includes the response object', function () {
-      assert.truthy(response);
-      assert.equal(200, response.statusCode);
-    });
-
-    it('includes the parsed body on 404s', function (done) {
-      fetch('/json/404', options, function (notFoundError, body) {
-        assert.truthy(notFoundError);
-        assert.truthy(body);
-        assert.equal('/json/404', body.url);
-        assert.deepEqual(notFoundError.body, body);
-        done();
-      });
-    });
   });
 });
