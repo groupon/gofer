@@ -52,6 +52,45 @@ describe('legacy / callback mode', function () {
     });
   });
 
+  describe('registerEndpoints', function () {
+    function EchoClient(config) {
+      Gofer.call(this, config, 'echo');
+    }
+    EchoClient.prototype = Object.create(Gofer.prototype, {
+      constructor: { value: EchoClient },
+    });
+
+    EchoClient.prototype.registerEndpoints({
+      echo: function (withDefaults) {
+        return function (qs, callback) {
+          return withDefaults('/echo', { qs: qs }, callback);
+        };
+      },
+    });
+
+    var client = new EchoClient({
+      echo: { baseUrl: options.baseUrl },
+    });
+
+    it('can be used as a promise', function () {
+      return client.echo({ a: 42 })
+        .then(function (response) {
+          assert.equal(200, response.statusCode);
+        });
+    });
+
+    it('turns into errback-style when callback is provided', function (done) {
+      var result = client.echo({ a: 42 }, function (error, data, response) {
+        if (error) return done(error);
+        assert.equal('Does *not* return a promise',
+          undefined, result);
+        assert.equal(200, response.statusCode);
+        assert.equal('GET', data.method);
+        done();
+      });
+    });
+  });
+
   describe('using new Gofer().*', function () {
     var gofer;
     before('create Gofer instance', function () {
