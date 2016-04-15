@@ -28,10 +28,11 @@ function handleRequest(req, res) {
   }
 
   var pathname = parseUrl(req.url).pathname;
-  switch (pathname) {
-    case '/echo':
-      return sendEcho(req, res);
+  if (/^\/echo/.test(pathname)) {
+    return sendEcho(req, res);
+  }
 
+  switch (pathname) {
     case '/json/404':
       return send404(req, res);
 

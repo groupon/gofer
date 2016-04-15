@@ -48,6 +48,16 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('can replace path params', function () {
+    return fetch('/{foo}/other/{foo}/{bar}', {
+      baseUrl: options.baseUrl + '/echo/{foo}',
+      pathParams: { foo: 'abc', bar: 'xyz' },
+    }).json()
+      .then(function (echo) {
+        assert.equal('/echo/abc/abc/other/abc/xyz', echo.url);
+      });
+  });
+
   it('throws when the url is not a string', function () {
     assert.equal(
       'url has to be a string',
