@@ -29,9 +29,6 @@ describe('fetch: the basics', function () {
   });
 
   it('exposes the response body on status code error object', function () {
-    if (typeof document !== 'undefined') {
-      return this.skip();
-    }
     return assert.rejects(fetch('/json/404', options).json())
       .then(function (error) {
         assert.truthy(error.body);
