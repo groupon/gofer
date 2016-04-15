@@ -1,15 +1,11 @@
 'use strict';
-var util = require('util');
-
 var assert = require('assertive');
 
 var Gofer = require('../');
 
-var withMockService = require('./mock-service');
+var options = require('./mock-service');
 
 describe('gofer', function () {
-  var options = withMockService();
-
   it('exports a `fetch` function', function () {
     assert.hasType(Function, Gofer.fetch);
   });
@@ -40,7 +36,7 @@ describe('gofer', function () {
     function SubGofer(config) {
       Gofer.call(this, config, 'sub', '1.2.3', 'my-sub-client');
     }
-    util.inherits(SubGofer, Gofer);
+    SubGofer.prototype = Object.create(Gofer.prototype);
 
     var sub;
     before('create SubGofer instance', function () {

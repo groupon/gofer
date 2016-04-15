@@ -3,15 +3,13 @@ var assert = require('assertive');
 
 var fetch = require('../..').fetch;
 
-var withMockService = require('../mock-service');
+var options = require('../mock-service');
 
 function unexpected() {
   throw new Error('Should not happen');
 }
 
 describe('fetch: the basics', function () {
-  var options = withMockService();
-
   it('can load using just a url string', function () {
     return fetch(options.baseUrl)
       .then(function (res) {
