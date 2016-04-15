@@ -24,6 +24,10 @@ describe('gofer', function () {
       return gofer.get('/echo');
     });
 
+    if (typeof document === 'object') {
+      it.skip('(callback interface not supported in browser builds)');
+      return;
+    }
     it('exposes the legacy mode interface', function (done) {
       gofer.get('/echo', {}, function (error, body) {
         assert.truthy(body);
@@ -46,7 +50,9 @@ describe('gofer', function () {
     it('can fetch something', function () {
       return sub.get('/echo').json()
         .then(function (echo) {
-          assert.include('my-sub-client/1.2.3', echo.headers['user-agent']);
+          var expectedUserAgent = typeof navigator !== 'undefined' ?
+            navigator.userAgent : 'my-sub-client/1.2.3';
+          assert.include(expectedUserAgent, echo.headers['user-agent']);
         });
     });
   });

@@ -23,6 +23,10 @@ function send404(req, res) {
 }
 
 function handleRequest(req, res) {
+  if (req.headers.origin) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  }
+
   var pathname = parseUrl(req.url).pathname;
   switch (pathname) {
     case '/echo':
@@ -36,22 +40,31 @@ function handleRequest(req, res) {
   }
 }
 
-before(function (done) {
-  server = http.createServer(handleRequest);
-  server.on('error', done);
-  server.listen(MOCK_SERVICE_PORT, function () {
-    done();
+if (typeof before === 'function') {
+  before(function (done) {
+    server = http.createServer(handleRequest);
+    server.on('error', done);
+    server.listen(MOCK_SERVICE_PORT, function () {
+      done();
+    });
   });
-});
 
-after(function () {
-  if (server) {
-    try {
-      server.close();
-    } catch (e) {
-      // Ignore cleanup error
+  after(function () {
+    if (server) {
+      try {
+        server.close();
+      } catch (e) {
+        // Ignore cleanup error
+      }
     }
-  }
-});
+  });
+}
+if (process.mainModule === module) {
+  server = http.createServer(handleRequest);
+  server.listen(MOCK_SERVICE_PORT, function () {
+    /* eslint no-console: 0 */
+    console.log('Listening on %s\n', options.baseUrl);
+  });
+}
 
 module.exports = options;
