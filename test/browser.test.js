@@ -10,7 +10,7 @@
  * 3. Open `tmp/test.html` in your browser
  *
  * ```
- * mochify --watch --consolify tmp/test.html --reporter spec ./node_modules/promise/polyfill ./node_modules/whatwg-fetch ./test-browser/**\/*.test.js
+ * mochify --watch --consolify tmp/test.html --reporter spec ./node_modules/promise/polyfill ./node_modules/whatwg-fetch ./test/**\/*.test.js
  * ```
  */
 
