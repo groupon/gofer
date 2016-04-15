@@ -1,5 +1,6 @@
 'use strict';
 var assert = require('assertive');
+var Bluebird = require('bluebird');
 
 var fetch = require('../').fetch;
 
@@ -77,5 +78,23 @@ describe('fetch: the basics', function () {
       fetch('/text/path', { baseUrl: options.baseUrl + '?x=1' });
     });
     assert.equal('baseUrl may not contain a query string', error.message);
+  });
+
+  it('exposes a promise to a response body stream', function () {
+    function concat(stream) {
+      return new Bluebird(function (resolve, reject) {
+        stream.on('error', reject);
+        var chunks = [];
+        stream.on('data', function (chunk) { chunks.push(chunk); });
+        stream.on('end', function () { resolve(Buffer.concat(chunks)); });
+      });
+    }
+
+    return fetch('/test/path', options)
+      .then(function (res) { return res.stream(); })
+      .then(concat)
+      .then(function (body) {
+        assert.equal('ok', '' + body);
+      });
   });
 });
