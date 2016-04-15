@@ -23,6 +23,9 @@ function send404(req, res) {
 }
 
 function handleRequest(req, res) {
+  // A random header that happens to be a "simple response header".
+  // See: https://www.w3.org/TR/cors/#simple-response-header
+  res.setHeader('Content-Language', 'has%20stuff');
   if (req.headers.origin) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   }

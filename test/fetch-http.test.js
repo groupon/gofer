@@ -81,6 +81,10 @@ describe('fetch: the basics', function () {
   });
 
   it('exposes a promise to a response body stream', function () {
+    if (typeof document !== 'undefined') {
+      // Streams in the browser and streams in node are two different things.
+      return this.skip();
+    }
     function concat(stream) {
       return new Bluebird(function (resolve, reject) {
         stream.on('error', reject);
@@ -95,6 +99,15 @@ describe('fetch: the basics', function () {
       .then(concat)
       .then(function (body) {
         assert.equal('ok', '' + body);
+      });
+  });
+
+  it('returns response headers', function () {
+    // this is a silly test in node but is relevant to browser usage
+    return fetch('/test/path', options)
+      .then(function (res) {
+        // Testing content-language b/c it's a "simple response header"
+        assert.equal('has%20stuff', res.headers['content-language']);
       });
   });
 });
