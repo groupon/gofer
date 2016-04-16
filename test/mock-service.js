@@ -9,12 +9,19 @@ var MOCK_SERVICE_PORT = +(options.baseUrl.match(/:(\d+)/)[1]);
 var server;
 
 function sendEcho(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({
-    method: req.method,
-    url: req.url,
-    headers: req.headers,
-  }));
+  var chunks = [];
+  req.on('data', function onChunk(chunk) {
+    chunks.push(chunk);
+  });
+  req.on('end', function onEnd() {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({
+      method: req.method,
+      url: req.url,
+      headers: req.headers,
+      body: Buffer.concat(chunks).toString(),
+    }));
+  });
 }
 
 function send404(req, res) {
@@ -28,6 +35,7 @@ function handleRequest(req, res) {
   res.setHeader('Content-Language', 'has%20stuff');
   if (req.headers.origin) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH');
   }
 
   var pathname = parseUrl(req.url).pathname;
