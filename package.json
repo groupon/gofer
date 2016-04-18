@@ -38,6 +38,7 @@
     "assertive": "^2.1.0",
     "eslint": "^1.0.0",
     "eslint-config-groupon": "^2.0.0",
+    "form-data": "^1.0.0-rc4",
     "mocha": "^2.0.0",
     "mochify": "^2.17.0",
     "nlm": "^2.0.0",
