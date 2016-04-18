@@ -127,6 +127,26 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('sets basic auth header from string', function () {
+    return fetch('/echo', { baseUrl: options.baseUrl, auth: 'user:p4ssword' })
+      .json()
+      .then(function (echo) {
+        assert.equal('Basic dXNlcjpwNHNzd29yZA==', echo.headers.authorization);
+      });
+  });
+
+  it('sets basic auth header from object', function () {
+    var authObject = {
+      username: 'user',
+      password: 'p4ssword',
+    };
+    return fetch('/echo', { baseUrl: options.baseUrl, auth: authObject })
+      .json()
+      .then(function (echo) {
+        assert.equal('Basic dXNlcjpwNHNzd29yZA==', echo.headers.authorization);
+      });
+  });
+
   it('returns response headers', function () {
     // this is a silly test in node but is relevant to browser usage
     return fetch('/test/path', options)
