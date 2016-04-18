@@ -15,6 +15,20 @@ import { fetch } from 'gofer';
 
 ### Options
 
+* `method`: The HTTP verb, e.g. 'GET' or 'POST'.
+* `headers`: A plain object with header names and values. E.g. `{'content-type': 'text/x-cats'}`.
+* `auth`: Either a string of the form `username:password` or an object with `username` and `password` properties that will be used to generate a [basic authorization header](https://en.wikipedia.org/wiki/Basic_access_authentication).
+* `baseUrl`: Prefix for the `url` parameter. `fetch('/echo', { baseUrl: 'https://my-api.com/v2' })` will load https://my-api.com/v2/echo.
+* `pathParams`: Values for placeholders in the url path. E.g. `{ foo: 'bar' }` will replace all occurrences of `{foo}` in the url path with `'bar'`.
+* `qs`: Additional query parameters that will be serialized using the [`qs` library](https://www.npmjs.com/package/qs).
+* `body`: Content of the request body, either as a string, a Buffer, or a readable stream.
+* `json`: Content of the request body to be sent as a JSON encoded value.
+* `form`: Content of the request body to be sent using `x-www-form-urlencoded`. The serialization is handled by the [`qs` library](https://www.npmjs.com/package/qs).
+* All [TLS socket options](https://nodejs.org/api/tls.html#tls_new_tls_tlssocket_socket_options) for https requests.
+* `maxSockets`: Maximum number of parallel requests to the same domain. `gofer` will never use the global http(s) agent but will instead keep agents per client class.
+* `timeout`: Response- and socket read timeout in milliseconds.
+* `connectTimeout`: Timeout in milliseconds for the time between acquiring a socket and establishing a connection to the remote host. This should generally be relatively low.
+
 ## `Gofer`
 
 This class can be used directly

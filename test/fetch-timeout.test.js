@@ -56,4 +56,16 @@ describe('fetch: timeouts', function () {
         assert.equal('ETIMEDOUT', error.code);
       });
   });
+
+  it('connection timed out', function () {
+    if (typeof document !== 'undefined') {
+      // This isn't reliable in browser because there is no connection timeout.
+      this.skip();
+    }
+    this.timeout(200);
+    return assert.rejects(fetch('http://10.255.255.1', { connectTimeout: 100 }))
+      .then(function (error) {
+        assert.equal('ECONNECTTIMEDOUT', error.code);
+      });
+  });
 });
