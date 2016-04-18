@@ -10,17 +10,44 @@ var server;
 
 function sendEcho(req, res) {
   var chunks = [];
-  req.on('data', function onChunk(chunk) {
-    chunks.push(chunk);
-  });
-  req.on('end', function onEnd() {
-    res.setHeader('Content-Type', 'application/json');
+  var query = parseUrl(req.url, true).query;
+
+  var latency = query.__latency ? +query.__latency : 0;
+  var hang = query.__hang ? +query.__hang : 0;
+
+  function sendBody() {
     res.end(JSON.stringify({
       method: req.method,
       url: req.url,
       headers: req.headers,
       body: Buffer.concat(chunks).toString(),
     }));
+  }
+
+  function sendHeader() {
+    res.writeHead(res.statusCode, {
+      'Content-Type': 'application/json',
+    });
+    // See:
+    // https://michaelheap.com/force-flush-headers-using-the-http-module-for-nodejs/
+    res.socket.write(res._header);
+    res._headerSent = true;
+    if (hang) {
+      setTimeout(sendBody, hang);
+    } else {
+      sendBody();
+    }
+  }
+
+  req.on('data', function onChunk(chunk) {
+    chunks.push(chunk);
+  });
+  req.on('end', function onEnd() {
+    if (latency) {
+      setTimeout(sendHeader, latency);
+    } else {
+      sendHeader();
+    }
   });
 }
 

@@ -2,6 +2,10 @@
 var assert = require('assertive');
 var Bluebird = require('bluebird');
 
+// This is important because PhantomJS has a non-writeable
+// error.stack property and the resulting warnings make the tests fail...
+Bluebird.config({ warnings: false });
+
 var fetch = require('../').fetch;
 
 var options = require('./mock-service');
