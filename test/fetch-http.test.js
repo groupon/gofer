@@ -110,6 +110,18 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('allows passing headers', function () {
+    return fetch('/echo', {
+      baseUrl: options.baseUrl,
+      method: 'POST',
+      headers: { 'Content-Type': 'text/x-pizza' },
+      body: '🍕🍕🍕',
+    }).json()
+      .then(function (echo) {
+        assert.equal('text/x-pizza', echo.headers['content-type']);
+      });
+  });
+
   it('allows passing in nested query string params', function () {
     var withQuery = {
       baseUrl: options.baseUrl,
