@@ -34,6 +34,34 @@ describe('fetch: sending a body', function () {
       });
   });
 
+  it('can send a node ReadableStream', function () {
+    if (typeof document !== 'undefined') {
+      return this.skip();
+    }
+    var Readable = require('stream').Readable;
+
+    var stream = new Readable();
+    var characters = ['I', '💖', '🍕'];
+    stream._read = function _read() {
+      setTimeout(function doPush() {
+        stream.push(characters.shift() || null);
+      }, 5);
+    };
+
+    var withStreamBody = {
+      baseUrl: defaultOptions.baseUrl,
+      method: 'PUT',
+      body: stream,
+    };
+    return client.echo(withStreamBody)
+      .then(function (echo) {
+        assert.equal('PUT', echo.method);
+        // it should chunk the response
+        assert.equal(undefined, echo.headers['content-length']);
+        assert.equal('I💖🍕', echo.body);
+      });
+  });
+
   it('can send a JSON body', function () {
     var withJsonBody = {
       baseUrl: defaultOptions.baseUrl,
@@ -75,6 +103,4 @@ describe('fetch: sending a body', function () {
           echo.body);
       });
   });
-
-  it('can send a node ReadableStream');
 });
