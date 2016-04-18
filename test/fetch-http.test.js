@@ -102,6 +102,31 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('allows controlling the http method', function () {
+    return fetch('/echo', { baseUrl: options.baseUrl, method: 'POST' })
+      .json()
+      .then(function (echo) {
+        assert.equal('POST', echo.method);
+      });
+  });
+
+  it('allows passing in nested query string params', function () {
+    var withQuery = {
+      baseUrl: options.baseUrl,
+      qs: {
+        nested: { key: 'value' },
+        arr: [{ x: 3 }, { x: 4 }],
+      },
+    };
+    return fetch('/echo', withQuery)
+      .json()
+      .then(function (echo) {
+        assert.equal(
+          encodeURI('/echo?nested[key]=value&arr[0][x]=3&arr[1][x]=4'),
+          echo.url);
+      });
+  });
+
   it('returns response headers', function () {
     // this is a silly test in node but is relevant to browser usage
     return fetch('/test/path', options)

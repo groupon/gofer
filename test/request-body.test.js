@@ -34,5 +34,47 @@ describe('fetch: sending a body', function () {
       });
   });
 
+  it('can send a JSON body', function () {
+    var withJsonBody = {
+      baseUrl: defaultOptions.baseUrl,
+      method: 'PUT',
+      json: {
+        utf8: 'I💖🍕',
+        arr: [3, 4],
+      },
+    };
+    return client.echo(withJsonBody)
+      .then(function (echo) {
+        assert.equal(
+          'application/json;charset=UTF-8',
+          echo.headers['content-type']);
+        assert.equal(
+          '{"utf8":"I💖🍕","arr":[3,4]}',
+          echo.body);
+      });
+  });
+
+  it('can send a form body', function () {
+    var withFormBody = {
+      baseUrl: defaultOptions.baseUrl,
+      method: 'PUT',
+      form: {
+        nested: { utf8: 'I💖🍕' },
+        arr: [3, 4],
+      },
+    };
+    return client.echo(withFormBody)
+      .then(function (echo) {
+        assert.equal(
+          'application/x-www-form-urlencoded;charset=UTF-8',
+          echo.headers['content-type']);
+        assert.equal(
+          encodeURIComponent('nested[utf8]') + '=' + encodeURIComponent('I💖🍕') + '&' +
+          encodeURIComponent('arr[0]') + '=3&' +
+          encodeURIComponent('arr[1]') + '=4',
+          echo.body);
+      });
+  });
+
   it('can send a node ReadableStream');
 });
