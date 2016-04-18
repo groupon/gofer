@@ -63,6 +63,31 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('fails when a {pathParam} is not provided', function () {
+    var error = assert.throws(function () {
+      fetch('/{foo}', options);
+    });
+    assert.equal('Missing value for path param foo', error.message);
+  });
+
+  it('fails when a {pathParam} in the baseUrl is not provided', function () {
+    // The baseUrl will be parsed which turns '{' into '%7B' etc.
+    var error = assert.throws(function () {
+      fetch('/', { baseUrl: options.baseUrl + '/{foo}' });
+    });
+    assert.equal('Missing value for path param foo', error.message);
+  });
+
+  it('does not fail when a pathParam is not used', function () {
+    return fetch('/echo', {
+      baseUrl: options.baseUrl,
+      pathParams: { foo: 'abc', bar: 'xyz' },
+    }).json()
+      .then(function (echo) {
+        assert.equal('/echo', echo.url);
+      });
+  });
+
   it('throws when the url is not a string', function () {
     assert.equal(
       'url has to be a string',
