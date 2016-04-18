@@ -1,12 +1,16 @@
 'use strict';
+var fs = require('fs');
 var http = require('http');
+var https = require('https');
 var parseUrl = require('url').parse;
 
 var options = require('./mock-service.browser');
 
 var MOCK_SERVICE_PORT = +(options.baseUrl.match(/:(\d+)/)[1]);
+var MOCK_SERVICE_PORT_TLS = +(options.baseUrlTls.match(/:(\d+)/)[1]);
 
 var server;
+var serverTls;
 
 function sendEcho(req, res) {
   var chunks = [];
@@ -80,14 +84,27 @@ function handleRequest(req, res) {
   }
 }
 
+function bootupServers(done) {
+  var serversListening = 0;
+  function onListen() {
+    ++serversListening;
+    if (serversListening === 2) done();
+  }
+  server = http.createServer(handleRequest);
+  server.on('error', done);
+  server.listen(MOCK_SERVICE_PORT, onListen);
+  var certOptions = {
+    key: fs.readFileSync('test/certs/server/my-server.key.pem'),
+    ca: [fs.readFileSync('test/certs/server/my-root-ca.crt.pem')],
+    cert: fs.readFileSync('test/certs/server/my-server.crt.pem'),
+  };
+  serverTls = https.createServer(certOptions, handleRequest);
+  serverTls.on('error', done);
+  serverTls.listen(MOCK_SERVICE_PORT_TLS, onListen);
+}
+
 if (typeof before === 'function') {
-  before(function (done) {
-    server = http.createServer(handleRequest);
-    server.on('error', done);
-    server.listen(MOCK_SERVICE_PORT, function () {
-      done();
-    });
-  });
+  before(bootupServers);
 
   after(function () {
     if (server) {
@@ -97,13 +114,21 @@ if (typeof before === 'function') {
         // Ignore cleanup error
       }
     }
+    if (serverTls) {
+      try {
+        serverTls.close();
+      } catch (e) {
+        // Ignore cleanup error
+      }
+    }
   });
 }
 if (process.mainModule === module) {
-  server = http.createServer(handleRequest);
-  server.listen(MOCK_SERVICE_PORT, function () {
-    /* eslint no-console: 0 */
-    console.log('Listening on %s\n', options.baseUrl);
+  bootupServers(function (error) {
+    if (error) throw error;
+    /* eslint no-console:0 */
+    console.log('Listening on %s', options.baseUrl);
+    console.log('HTTPS on %s', options.baseUrlTls);
   });
 }
 
