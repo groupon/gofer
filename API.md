@@ -200,6 +200,8 @@ If a `cb` is provided, it will return `undefined.`
 If an HTTP status code outside of the accepted range is returned,
 the error will be a `StatusCodeError` with the following properties:
 
+* `method`: The request method.
+* `url`: The full URL that was requested.
 * `headers`: The headers of the response.
 * `body`: The, in most cases parsed, response body.
 * `statusCode`: The actual HTTP status code.

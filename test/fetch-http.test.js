@@ -42,6 +42,18 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('exposes the full URL and HTTP method on status code error object', function () {
+    return assert.rejects(fetch('/json/404', {
+      baseUrl: options.baseUrl,
+      method: 'PUT',
+      qs: { x: 42 },
+    }).json())
+      .then(function (error) {
+        assert.equal(options.baseUrl + '/json/404?x=42', error.url);
+        assert.equal('PUT', error.method);
+      });
+  });
+
   it('can add query string arguments', function () {
     return fetch('/echo?y=url&z=bar', {
       baseUrl: options.baseUrl,
