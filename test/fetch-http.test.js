@@ -18,6 +18,13 @@ describe('fetch: the basics', function () {
       });
   });
 
+  it('exposes the url on the response', function () {
+    return fetch(options.baseUrl + '/echo/foo/bar', { qs: { x: 42 } })
+      .then(function (res) {
+        assert.equal(options.baseUrl + '/echo/foo/bar?x=42', res.url);
+      });
+  });
+
   it('can load using path and baseUrl option', function () {
     return fetch('/text/path', { baseUrl: options.baseUrl })
       .then(function (res) {
