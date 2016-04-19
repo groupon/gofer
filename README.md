@@ -6,7 +6,7 @@
 > — <cite>[Wikipedia: Gofer](https://en.wikipedia.org/wiki/Gofer)</cite>
 
 ```
-npm install --save gofer
+npm install --save gofer@beta
 ```
 
 A base class for HTTP clients.
@@ -14,6 +14,9 @@ Usable in node, browsers, and react-native.
 The design is meant to enforce a certain level of consistency in how the clients are configured and instrumented.
 
 Use in browsers might require a `fetch` polyfill.
+
+If you used `gofer` 2.x before,
+you might want to read about [all the changes in 3.x](/BREAKING-v3.md).
 
 **[API docs](/API.md)** •
 **[Walkthrough](#walkthrough)**
