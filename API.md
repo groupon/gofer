@@ -36,21 +36,21 @@ but it's mainly meant to be the base class for individual service clients.
 Example:
 
 ```js
-var util = require('util');
 var Gofer = require('gofer');
 var pkg = require('./package.json');
 
 function MyClient() {
   Gofer.apply(this, config, 'myService', pkg.version, pkg.name);
 }
-util.inherits(MyClient, Gofer);
+MyClient.prototype = Object.create(Gofer.prototype);
+MyClient.prototype.constructor = MyClient;
 ```
 
 Using `class` syntax:
 
 ```js
 import Gofer from 'gofer';
-import { name, version } from './package.json';
+import { version, name } from './package.json';
 
 class MyClient extends Gofer {
   constructor(config) {
@@ -107,9 +107,119 @@ b.fetch('/something'); // will use timeout: 99, connectTimeout: 70
 b.x(); // will use timeout: 23, connectTimeout: 70
 ```
 
+#### Option mappers
+
+All service-specific behavior is implemented using option mappers.
+Whenever an request is made, either via an endpoint or directly via `gofer.fetch`,
+the options go through the following steps:
+
+1. The endpoint defaults are applied if the request was made through an endpoint.
+3. `options.serviceName` and `options.serviceVersion` is added.
+4. `options.methodName` and `options.endpointName` is added. The former defaults to the http verb but can be set to a custom value (e.g. `addFriend`). The latter is only set if the request was made through an endpoint method.
+5. The service-specific and global defaults are applied.
+6. For every registered option mapper `m` the `options` are set to `m(options) || options`.
+7. A `User-Agent` header is added if not present already.
+8. `null` and `undefined` values are removed from `qs` and `headers`. If you want to pass empty values, you should use an empty string.
+
+Step 6 implies that every option mapper is a function that takes one argument `options` and returns transformed options or a falsy value.
+Inside of the mapper `this` refers to the `gofer` instance.
+The example contains an option mapper that handles access tokens and a default base url.
+
 ### Methods modifying the prototype
 
+#### `Gofer.prototype.addOptionMapper(mapFn)`
+
+Add a new option mapper to *all* instances using the prototype.
+This can also be called on an instance which doesn't have a global effect.
+
+* `mapFn`: An option mapper, see [option mappers](#option-mappers)
+
+#### `Client.prototype.registerEndpoints`
+
+Registers "endpoints".
+Endpoints are convenience methods for easier construction of API calls
+and can also improve logging/tracing.
+The following conditions are to be met by `endpointMap`:
+
+1. It maps a string identifier that is a valid property name to a function.
+2. The function takes one argument which is `fetch`.
+3. `fetch` works like `gofer.fetch` only that it's aware of [endpoint defaults](#configuration).
+
+Whatever the function returns will be available as a property on instances of the class.
+Common variants are a function or a nested objects with functions.
+
+```js
+MyService.prototype.registerEndpoints({
+  simple: function(fetch) {
+    return function(cb) {
+      return fetch('/some-path', cb);
+    };
+  },
+  complex: function(fetch) {
+    return {
+      foo: function(qs, cb) {
+        return fetch('/foo', { qs: qs }, cb);
+      },
+      bar: function(entity, cb) {
+        return fetch('/bar', { json: entity, method: 'PUT' }, cb);
+      }
+    }
+  }
+});
+var my = new MyService();
+my.simple(); // returns a Promise
+my.complex.foo({ limit: 1 }); // returns a Promise
+my.complex.bar({ name: 'Jordan', friends: 231 }, function(err, body) {});
+```
+
 ### Instance methods
+
+#### `gofer.clone()`
+
+Creates a new instance with the exact same settings and referring to the same `hub`.
+
+#### `gofer.with(overrideConfig)`
+
+Returns a copy with `overrideConfig` merged
+into both the endpoint- and the service-level defaults.
+Useful if you know that you'll need custom timeouts for this one call
+or you want to add an accessToken.
+
+#### gofer.fetch(url: String, options, cb)
+
+* `url`: The url to fetch. May be relative to `options.baseUrl`.
+* `options`: Anything listed below under [options](#options)
+* `cb`: A callback function that receives the following arguments:
+  - `error`: An instance of `Error` or `undefined`/`null`.
+  - `body`: The (generally parsed) response body.
+  - `response`: The response object with headers and statusCode.
+
+Unless a `cb` is provided, the function will return a `Promise`.
+If a `cb` is provided, it will return `undefined.`
+
+If an HTTP status code outside of the accepted range is returned,
+the error will be a `StatusCodeError` with the following properties:
+
+* `headers`: The headers of the response.
+* `body`: The, in most cases parsed, response body.
+* `statusCode`: The actual HTTP status code.
+* `minStatusCode`: The lower bound of accepted status codes.
+* `maxStatusCode`: The upper bound of accepted status codes.
+
+The accepted range of status codes is part of the [configuration](#configuration).
+It defaults to accepting 2xx codes only.
+
+If there's an error that prevents any response from being returned,
+you can look for `code` to find out what happened.
+Possible values include:
+
+* `ECONNECTTIMEDOUT`: It took longer than `options.connectTimeout` allowed to establish a connection.
+* `ETIMEDOUT`: Request took longer than `options.timeout` allowed.
+* `ESOCKETTIMEDOUT`: Same as `ETIMEDOUT` but signifies that headers were received.
+* `EPIPE`: Writing to the request failed.
+* `ECONNREFUSED`: The remote host refused the connection, e.g. because nothing was listening on the port.
+* `ENOTFOUND`: The hostname failed to resolve.
+* `ECONNRESET`: The remote host dropped the connection. E.g. you are talking to another node based service and a process died.
 
 ### Instance properties
 

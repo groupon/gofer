@@ -9,8 +9,11 @@
 npm install --save gofer
 ```
 
-A base class to develop specialized HTTP clients with.
-The general design is meant to enforce a certain level of consistency in how the clients are configured and instrumented.
+A base class for HTTP clients.
+Usable in node, browsers, and react-native.
+The design is meant to enforce a certain level of consistency in how the clients are configured and instrumented.
+
+Use in browsers might require a `fetch` polyfill.
 
 **[API docs](/API.md)** •
 **[Walkthrough](#walkthrough)**
@@ -89,14 +92,14 @@ The first step is to generate a Github client class:
 
 ```js
 var Gofer = require('gofer');
-var util = require('util');
 
 var pkg = require('./package.json')
 
 function Github(config) {
   Gofer.call(this, config, 'github', pkg.version, pkg.name);
 }
-util.inherits(Github, Gofer);
+Github.prototype = Object.create(Gofer.prototype);
+Github.prototype.constructor = Github;
 ```
 
 The name you choose here ("github") determines which section of the configuration it will accept.
@@ -147,11 +150,11 @@ To make our client a little nicer to use we'll add an [option mapper](/API.md#op
 The options we return will be passed on to `fetch`.
 
 ```js
-var _ = require('lodash');
+var assign = require('lodash/assign');
 Github.prototype.addOptionMapper(function(opts) {
   // opts contains the already merged options, including global-, service-,
   // and endpoint-defaults. In our example opts.timeout will be 2000, etc.
-  return _.assign({ baseUrl: 'https://api.github.com' }, opts);
+  return assign({ baseUrl: 'https://api.github.com' }, opts);
 });
 ```
 
