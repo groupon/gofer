@@ -1,3 +1,9 @@
+### 3.0.1
+
+* Add v3 breaking notes - **[@jkrems](https://github.com/jkrems)** [#59](https://github.com/groupon/gofer/pull/59)
+  - [`284c90a`](https://github.com/groupon/gofer/commit/284c90aa2675709a8dfc7f768cade7d74054ba59) **docs:** Add v3 breaking notes
+
+
 ### 3.0.0
 
 * [`547db3b`](https://github.com/groupon/gofer/commit/547db3bb318c777d3e3e37ab13e24fdf9187d532) **feat:** Initial version of fetch
