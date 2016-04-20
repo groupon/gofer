@@ -1,3 +1,9 @@
+### 3.1.0
+
+* Echo back the url in res.url - **[@jkrems](https://github.com/jkrems)** [#60](https://github.com/groupon/gofer/pull/60)
+  - [`bbb0e6d`](https://github.com/groupon/gofer/commit/bbb0e6d7c0ad5c9909c7cdeb467d088ed2bec8ff) **feat:** Echo back the url in res.url
+
+
 ### 3.0.1
 
 * Add v3 breaking notes - **[@jkrems](https://github.com/jkrems)** [#59](https://github.com/groupon/gofer/pull/59)
