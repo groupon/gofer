@@ -158,6 +158,22 @@ describe('fetch: the basics', function () {
       });
   });
 
+  describe('host header', function () {
+    it('sends a valid host header', function () {
+      return fetch(options.baseUrl + '/echo').json()
+        .then(function (echo) {
+          assert.equal('localhost:3066', echo.headers.host);
+        });
+    });
+
+    it('sends a valid host header with baseUrl', function () {
+      return fetch('/echo', { baseUrl: options.baseUrl }).json()
+        .then(function (echo) {
+          assert.equal('localhost:3066', echo.headers.host);
+        });
+    });
+  });
+
   it('allows passing headers', function () {
     return fetch('/echo', {
       baseUrl: options.baseUrl,
