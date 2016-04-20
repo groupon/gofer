@@ -1,3 +1,9 @@
+### 3.1.1
+
+* Send valid host header - **[@jkrems](https://github.com/jkrems)** [#61](https://github.com/groupon/gofer/pull/61)
+  - [`154d266`](https://github.com/groupon/gofer/commit/154d266a509329528ca5ec904b2376b7e1a0cb4a) **fix:** Send valid host header
+
+
 ### 3.1.0
 
 * Echo back the url in res.url - **[@jkrems](https://github.com/jkrems)** [#60](https://github.com/groupon/gofer/pull/60)
