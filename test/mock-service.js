@@ -70,6 +70,9 @@ function handleRequest(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+  // Preflight requests that return a 404 confuse Chrome
+  if (req.method === 'OPTIONS') return res.end();
+
   var pathname = parseUrl(req.url).pathname;
   if (/^\/echo/.test(pathname)) {
     return sendEcho(req, res);

@@ -6,6 +6,7 @@
   "main": "lib/gofer.js",
   "browser": {
     "./lib/fetch.js": "./lib/fetch.browser.js",
+    "./test/instrument.js": "./test/instrument.browser.js",
     "./test/mock-service.js": "./test/mock-service.browser.js"
   },
   "homepage": "https://github.com/groupon/gofer",
