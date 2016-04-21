@@ -1,3 +1,10 @@
+### 3.2.0
+
+* Pass meta data into native methods - **[@jkrems](https://github.com/jkrems)** [#62](https://github.com/groupon/gofer/pull/62)
+  - [`109f6d1`](https://github.com/groupon/gofer/commit/109f6d107585fabbf80205f1a045e8101ed82c32) **feat:** Pass meta data into native methods
+  - [`44ff043`](https://github.com/groupon/gofer/commit/44ff043fa56b50c4d378eb9c1d404eb5500e8cf8) **refactor:** Remove util dependency
+
+
 ### 3.1.1
 
 * Send valid host header - **[@jkrems](https://github.com/jkrems)** [#61](https://github.com/groupon/gofer/pull/61)
