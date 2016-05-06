@@ -1,3 +1,9 @@
+### 3.2.1
+
+* Support isomorphic-fetch - **[@jkrems](https://github.com/jkrems)** [#63](https://github.com/groupon/gofer/pull/63)
+  - [`2234a20`](https://github.com/groupon/gofer/commit/2234a2022a9971db7aa1845259dcdab32acb00b8) **fix:** Support isomorphic-fetch
+
+
 ### 3.2.0
 
 * Pass meta data into native methods - **[@jkrems](https://github.com/jkrems)** [#62](https://github.com/groupon/gofer/pull/62)
