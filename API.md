@@ -166,14 +166,14 @@ Whenever an request is made, either via an endpoint or directly via `gofer.reque
 the options go through the following steps:
 
 1. The endpoint defaults are applied if the request was made through an endpoint
-3. `options.serviceName` and `options.serviceVersion` is added
-4. `options.methodName` and `options.endpointName` is added. The former defaults to the http verb but can be set to a custom value (e.g. `addFriend`). The latter is only set if the request was made through an endpoint method
-5. The service-specific and global defaults are applied
-6. For every registered option mapper `m` the `options` are set to `m(options)`
-7. A `User-Agent` header is added if not present already
-8. `null` and `undefined` values are removed from `qs`. If you want to pass empty values, you should use an empty string
+2. `options.serviceName` and `options.serviceVersion` is added
+3. `options.methodName` and `options.endpointName` is added. The former defaults to the http verb but can be set to a custom value (e.g. `addFriend`). The latter is only set if the request was made through an endpoint method
+4. The service-specific and global defaults are applied
+5. For every registered option mapper `m` the `options` are set to `m(options)`
+6. A `User-Agent` header is added if not present already
+7. `null` and `undefined` values are removed from `qs`. If you want to pass empty values, you should use an empty string
 
-Step 6 implies that every option mapper is a function that takes one argument `options` and returns transformed options.
+Step 5 implies that every option mapper is a function that takes one argument `options` and returns transformed options.
 Inside of the mapper `this` refers to the `gofer` instance.
 The example contains an option mapper that handles access tokens and a default base url.
 
