@@ -1,3 +1,9 @@
+### 2.4.11
+
+* docs: correct number list doc typo - **[@dbushong](https://github.com/dbushong)** [#64](https://github.com/groupon/gofer/pull/64)
+  - [`7737b86`](https://github.com/groupon/gofer/commit/7737b8693a675d8a5e1244d6231e1f67d0d5283b) **docs:** correct number list doc typo
+
+
 ### 2.4.10
 
 * Properly forward errors - **[@jkrems](https://github.com/jkrems)** [#53](https://github.com/groupon/gofer/pull/53)
