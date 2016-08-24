@@ -36,12 +36,15 @@ but it's mainly meant to be the base class for individual service clients.
 Example:
 
 ```js
+var util = require('util');
+
 var Gofer = require('gofer');
 var pkg = require('./package.json');
 
 function MyClient() {
   Gofer.apply(this, config, 'myService', pkg.version, pkg.name);
 }
+util.inherits(MyClient, Gofer);
 MyClient.prototype = Object.create(Gofer.prototype);
 MyClient.prototype.constructor = MyClient;
 ```
