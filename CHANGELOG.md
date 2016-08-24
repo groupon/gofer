@@ -1,3 +1,9 @@
+### 2.4.12
+
+* Add missing inheritance in example - **[@jkrems](https://github.com/jkrems)** [#65](https://github.com/groupon/gofer/pull/65)
+  - [`e1c9aa1`](https://github.com/groupon/gofer/commit/e1c9aa1afb9a3e0800ea097cdb17a4022333a151) **docs:** Add missing inheritance in example
+
+
 ### 2.4.11
 
 * docs: correct number list doc typo - **[@dbushong](https://github.com/dbushong)** [#64](https://github.com/groupon/gofer/pull/64)
