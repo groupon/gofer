@@ -20,6 +20,7 @@ Example:
 function MyClient() {
   Gofer.apply(this, arguments);
 }
+util.inherits(MyClient, Gofer);
 MyClient.prototype.serviceName = 'myService';
 MyClient.prototype.serviceVersion = require('package.json').version;
 ```
