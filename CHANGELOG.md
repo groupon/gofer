@@ -1,3 +1,9 @@
+### 3.2.2
+
+* Add missing inheritance in example (3.x) - **[@jkrems](https://github.com/jkrems)** [#66](https://github.com/groupon/gofer/pull/66)
+  - [`724f08a`](https://github.com/groupon/gofer/commit/724f08a1a8eb653b8498598f0816534aed557a8f) **docs:** Add missing inheritance in example
+
+
 ### 3.2.1
 
 * Support isomorphic-fetch - **[@jkrems](https://github.com/jkrems)** [#63](https://github.com/groupon/gofer/pull/63)
