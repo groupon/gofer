@@ -1,3 +1,9 @@
+### 3.3.0
+
+* Bring back debug support - **[@jkrems](https://github.com/jkrems)** [#67](https://github.com/groupon/gofer/pull/67)
+  - [`410fd51`](https://github.com/groupon/gofer/commit/410fd5157194149e8575580ef29c50d8d7484ce7) **feat:** Bring back debug support
+
+
 ### 3.2.2
 
 * Add missing inheritance in example (3.x) - **[@jkrems](https://github.com/jkrems)** [#66](https://github.com/groupon/gofer/pull/66)
