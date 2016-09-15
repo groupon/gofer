@@ -30,6 +30,9 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
+{Readable} = require 'stream'
+
+Bluebird = require 'bluebird'
 {extend} = require 'lodash'
 
 Hub = require './hub'
@@ -44,6 +47,31 @@ Hub = require './hub'
 { safeParseJSON, isJsonResponse } = require './json'
 
 GOOD_FORM_ENCODED = 'application/x-www-form-urlencoded; charset=utf-8'
+
+# All for giving people a somewhat dependable interface. Gofer 3.x cleans this up.
+wrapErrorInStream = (callback, error) ->
+  stream = new Readable()
+  stream._read = ->
+  stream.on 'error', callback if typeof callback == 'function'
+
+  errorEmitted = false
+  setImmediate ->
+    errorEmitted = true
+    stream.emit 'error', error
+
+  getRejectPromise = ->
+    return Bluebird.reject(error) if errorEmitted
+    new Bluebird (resolve, reject) ->
+      stream.on 'error', reject
+
+  Object.defineProperties stream, {
+    asPromise: { value: getRejectPromise }
+    getBody: { value: getRejectPromise }
+    getResponse: { value: getRejectPromise }
+    then: # same as ./promise.coffee
+      value: (onError, onSuccess) ->
+        @getBody().then onError, onSuccess
+  }
 
 class Gofer
   constructor: (config, @hub) ->
@@ -154,7 +182,7 @@ class Gofer
     try
       options = @_applyMappers merge(defaults, options)
     catch err
-      return cb err
+      return wrapErrorInStream cb, err
 
     options.headers ?= {}
     options.headers['User-Agent'] ?= buildUserAgent(options)

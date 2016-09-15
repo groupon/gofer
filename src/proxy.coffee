@@ -30,6 +30,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###
 
+Bluebird = require 'bluebird'
 {omit} = require 'lodash'
 Url = require 'url'
 
@@ -39,24 +40,25 @@ module.exports = (client, req, res, next) ->
   options =
     method: req.method
     headers: omit req.headers, ['host']
-    uri: pathname
+    body: req
     qs: omit query, [ 'callback' ]
     # Make sure we don't polute logs with errors that aren't errors
     # Browsers like to send If-Not-Modified-Since etc.
     minStatusCode: 200
     maxStatusCode: 399
 
-  # The explicit handling of an error passed into cb
-  # is because of a weirdness in gofer where failing option mappers
-  # lead to undefined being defined and the callback being called
-  # directly. Gross.
-  properReturnValue = false
-  proxyReq = client.request options, (err) ->
-    return if properReturnValue
-    next(err) if err?
+  proxyReq = client.fetch pathname, options
 
-  properReturnValue = proxyReq?
+  handleProxyResponse = (proxyRes) ->
+    new Bluebird (resolve, reject) ->
+      proxyRes.on 'error', reject
+      proxyRes.pipe res
+      proxyRes.on 'end', resolve
 
-  if properReturnValue
-    proxyReq.on 'error', next
-    req.pipe(proxyReq).pipe(res)
+  piped =
+    if typeof proxyReq.pipe == 'function'
+      handleProxyResponse proxyReq
+    else
+      proxyReq.then handleProxyResponse
+
+  piped.then null, next
