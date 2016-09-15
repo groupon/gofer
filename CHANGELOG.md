@@ -1,3 +1,9 @@
+### 3.4.0
+
+* Support searchDomain option - **[@jkrems](https://github.com/jkrems)** [#69](https://github.com/groupon/gofer/pull/69)
+  - [`64396ad`](https://github.com/groupon/gofer/commit/64396ad7d611831b77a76ffca5f427f1a79f1231) **feat:** Support searchDomain option
+
+
 ### 3.3.0
 
 * Bring back debug support - **[@jkrems](https://github.com/jkrems)** [#67](https://github.com/groupon/gofer/pull/67)
