@@ -1,3 +1,9 @@
+### 2.5.0
+
+* Support gofer 3 in gofer/proxy - **[@jkrems](https://github.com/jkrems)** [#68](https://github.com/groupon/gofer/pull/68)
+  - [`62a6846`](https://github.com/groupon/gofer/commit/62a6846695d9645ed22e4a07e16f1dd3a8d21398) **feat:** Support gofer 3 in gofer/proxy
+
+
 ### 2.4.12
 
 * Add missing inheritance in example - **[@jkrems](https://github.com/jkrems)** [#65](https://github.com/groupon/gofer/pull/65)
