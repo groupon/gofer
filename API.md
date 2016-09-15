@@ -28,6 +28,9 @@ import { fetch } from 'gofer';
 * `maxSockets`: Maximum number of parallel requests to the same domain. `gofer` will never use the global http(s) agent but will instead keep agents per client class.
 * `timeout`: Response- and socket read timeout in milliseconds.
 * `connectTimeout`: Timeout in milliseconds for the time between acquiring a socket and establishing a connection to the remote host. This should generally be relatively low.
+* `searchDomain`: Inspired by the `search` setting in `/etc/resolv.conf`.
+  Append this to any hostname that doesn't already end in a ".".
+  E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but `my.fully.qualified.name.` won't be touched.
 
 ## `Gofer`
 
