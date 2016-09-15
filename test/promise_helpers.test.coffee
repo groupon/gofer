@@ -65,6 +65,10 @@ describe 'promiseHelpers', ->
       crash: crashEndpoint
     }
 
+    MyApi::addOptionMapper (options) ->
+      throw new Error 'ForcedThrow' if options.forceThrow
+      options
+
     myApi = new MyApi defaultConfig
 
   it 'reacts properly to low-level errors', ->
@@ -88,3 +92,23 @@ describe 'promiseHelpers', ->
   it 'can act as a pseudo-thenable', ->
     myApi.query().then (reqMirror) ->
       assert.equal '/v1/zapp?p=1', reqMirror.url
+
+  it 'passes through option mapper errors to .then', ->
+    myApi.with(forceThrow: true).zapp().then().then unexpected, (err) ->
+      assert.equal 'ForcedThrow', err.message
+
+  it 'passes through option mapper errors to .then(onSuccess, onError)', ->
+    myApi.with(forceThrow: true).zapp().then unexpected, (err) ->
+      assert.equal 'ForcedThrow', err.message
+
+  it 'passes through option mapper errors to .getBody', ->
+    myApi.with(forceThrow: true).zapp().getBody().then unexpected, (err) ->
+      assert.equal 'ForcedThrow', err.message
+
+  it 'passes through option mapper errors to .getResponse', ->
+    myApi.with(forceThrow: true).zapp().getResponse().then unexpected, (err) ->
+      assert.equal 'ForcedThrow', err.message
+
+  it 'passes through option mapper errors to .asPromise', ->
+    myApi.with(forceThrow: true).zapp().asPromise().then unexpected, (err) ->
+      assert.equal 'ForcedThrow', err.message
