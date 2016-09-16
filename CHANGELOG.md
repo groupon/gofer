@@ -1,3 +1,9 @@
+### 2.6.0
+
+* Backport searchDomain option to 2.x - **[@jkrems](https://github.com/jkrems)** [#70](https://github.com/groupon/gofer/pull/70)
+  - [`f8d1202`](https://github.com/groupon/gofer/commit/f8d12020e098c6564cd7d138fb8b0a6f15105330) **feat:** Backport searchDomain option to 2.x
+
+
 ### 2.5.0
 
 * Support gofer 3 in gofer/proxy - **[@jkrems](https://github.com/jkrems)** [#68](https://github.com/groupon/gofer/pull/68)
