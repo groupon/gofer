@@ -86,6 +86,11 @@ cleanProperty = (obj, value, key) ->
   {protocol, hostname, port} = baseUrl
   {query, search} = uri
 
+  {searchDomain} = options
+  delete options.searchDomain # in case request starts looking at it
+  if searchDomain && hostname && hostname[hostname.length - 1] != '.'
+    hostname += ".#{searchDomain}."
+
   uri = Url.format {protocol, hostname, port, pathname, query, search}
   options.uri = replacePathParams(uri, options.pathParams)
   options

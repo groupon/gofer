@@ -194,6 +194,9 @@ In addition to the options mentioned in the [request docs](https://github.com/mi
 * `serviceName`: The name of the service that is talked to, e.g. "github". Used in the user-agent
 * `serviceVersion`: By convention the client version. Used in the user-agent
 * `pathParams`: If your `uri` includes `{tags}` they will be matched by this object. You can use this instead of string manipulation as this object is also logged
+* `searchDomain`: Inspired by the `search` setting in `/etc/resolv.conf`.
+  Append this to any hostname that doesn't already end in a ".".
+  E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but `my.fully.qualified.name.` won't be touched.
 
 In addition the following options are added that are useful for instrumentation but do not affect the actual HTTP request:
 

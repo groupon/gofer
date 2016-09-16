@@ -76,6 +76,23 @@ describe 'option mappers', ->
 
       client.foo.bar '123'
 
+  describe 'baseUrl w/ searchDomain', ->
+    it 'appends the searchDomain to non-fqdns in baseUrl', (done) ->
+      client = new MyApi myApi: { baseUrl: 'http://some.invalid.thing/v2', searchDomain: 'bar123' }
+      client.hub = fetch: (opts, cb) ->
+        assert.equal 'http://some.invalid.thing.bar123./v2/foo/bars/123', opts.uri
+        done()
+
+      client.foo.bar '123'
+
+    it 'never appends the searchDomain to fqdns in baseUrl', (done) ->
+      client = new MyApi myApi: { baseUrl: 'http://some.invalid.thing./v2', searchDomain: 'bar123' }
+      client.hub = fetch: (opts, cb) ->
+        assert.equal 'http://some.invalid.thing./v2/foo/bars/123', opts.uri
+        done()
+
+      client.foo.bar '123'
+
   describe 'onlyGlobal', ->
     it 'does not disturb the endpoint function', (done) ->
       myApi_onlyGlobal.hub = fetch: (opts, cb) ->
