@@ -1,0 +1,39 @@
+'use strict';
+var childProcess = require('child_process');
+var http = require('http');
+
+var SERVER_LISTEN = 'gofer-server-listen';
+
+var child;
+var server;
+
+exports.port = null;
+
+exports.fork = function fork(done) {
+  child = childProcess.fork(__filename);
+  child.on('message', function onChildMessage(message) {
+    if (message.kind === SERVER_LISTEN) {
+      exports.port = message.port;
+      done();
+    } else {
+      console.error(message);
+    }
+  });
+};
+
+exports.kill = function kill(done) {
+  child.kill();
+  done();
+};
+
+if (module === process.mainModule) {
+  server = http.createServer(function onRequest(req, res) {
+    setTimeout(function () {
+      res.end('ok');
+    }, 50);
+  });
+
+  server.listen(0, function onListen() {
+    process.send({ kind: SERVER_LISTEN, port: server.address().port });
+  });
+}
