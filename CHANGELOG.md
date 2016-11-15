@@ -1,3 +1,10 @@
+### 2.6.1
+
+* Fire IO timeouts after IO - **[@jkrems](https://github.com/jkrems)** [#71](https://github.com/groupon/gofer/pull/71)
+  - [`aba053d`](https://github.com/groupon/gofer/commit/aba053da0f8dfaeb97b0d9d59b61583c3336a425) **fix:** Fire IO timeouts after IO
+  - [`d51d6b2`](https://github.com/groupon/gofer/commit/d51d6b2e21151a913de172228699df20dd7412fb) **fix:** Handle socket timeouts w/ setIOTimeout
+
+
 ### 2.6.0
 
 * Backport searchDomain option to 2.x - **[@jkrems](https://github.com/jkrems)** [#70](https://github.com/groupon/gofer/pull/70)
