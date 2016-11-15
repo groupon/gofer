@@ -3,6 +3,7 @@ assert = require 'assertive'
 hub = require('../../hub')()
 
 serverBuilder = require './_test_server'
+remoteServer = require './_remote_server'
 
 checkRequestOptions = (err) ->
   assert.expect 'Includes responseData.requestOptions', err.responseData?.requestOptions?
@@ -19,6 +20,28 @@ describe 'Basic Integration Test', ->
 
   after (done) ->
     @server.close done
+
+  describe 'timeout in the presence of blocking event loop', ->
+
+    before remoteServer.fork
+
+    after remoteServer.kill
+
+    it 'gives it a last chance', (done) ->
+      @timeout 500
+
+      hub.fetch {
+        uri: "http://127.0.0.1:#{remoteServer.port}"
+        timeout: 100
+      }, (err, body, headers) ->
+        done err
+
+      blockEventLoop = ->
+        endTime = Date.now() + 150
+        while Date.now() < endTime
+          endTime = endTime
+
+      setTimeout blockEventLoop, 20
 
   describe 'connect timeout', ->
 
@@ -41,18 +64,31 @@ describe 'Basic Integration Test', ->
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
         uri: "http://127.0.0.1:#{@port}"
-        qs: {__latency: 10}
-        timeout: 20
+        qs: {__latency: 20}
+        timeout: 60
       }, (err, body, headers) ->
         done err
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
         uri: "http://127.0.0.1:#{@port}"
-        qs: {__latency: 30}
+        qs: {__latency: 60}
         timeout: 20
       }, (err, body, headers) ->
         assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
+        done()
+
+  describe 'socket timeout', ->
+    it 'emits a ESOCKETTIMEDOUT', (done) ->
+      @timeout 500
+
+      hub.fetch {
+        uri: "http://127.0.0.1:#{@port}"
+        qs: {__delay: 100}
+        timeout: 50
+      }, (err, body, headers) ->
+        assert.equal 'ESOCKETTIMEDOUT', err?.code
         checkRequestOptions err
         done()
 

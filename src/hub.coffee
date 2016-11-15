@@ -38,7 +38,7 @@ util = require 'util'
 request = require 'request'
 HRDuration = require 'hrduration'
 uuid = require 'node-uuid'
-{extend, map, mapValues} = require 'lodash'
+{extend, map, mapValues, once} = require 'lodash'
 debug = require('debug') 'gofer:hub'
 DefaultPromise = global.Promise ? require 'bluebird'
 
@@ -62,6 +62,36 @@ removeInvalidHeaderChars = (header) ->
   # Where `ch` is a character code (e.g. `str.charCodeAt(idx)`)
   "#{header}".replace /(?:\x7F|[^\x09\x20-\xFF])+/g, ''
 
+setIOTimeout = (callback, ms) ->
+  initialHandle = null
+  delayHandle = null
+  done = false
+
+  onDelay = ->
+    return if done
+    done = true
+    delayHandle = null
+    callback()
+
+  onTimer = ->
+    return if done
+    initialHandle = null
+    delayHandle = setImmediate onDelay
+
+  cancel = ->
+    return if done
+    done = true
+    clearTimeout initialHandle
+    clearImmediate delayHandle
+    initialHandle = delayHandle = null
+
+  initialHandle = setTimeout onTimer, ms
+  return cancel
+
+clearIOTimeout = (handle) ->
+  return unless handle
+  handle()
+
 # Default timeout intervals
 module.exports = Hub = ->
   hub = new EventEmitter
@@ -72,7 +102,8 @@ module.exports = Hub = ->
 
     fetchId = generateUUID()
 
-    options.timeout = checkTimeout options.timeout ? Hub.requestTimeout
+    headerTimeoutInterval = checkTimeout options.timeout ? Hub.requestTimeout
+    delete options.timeout
     connectTimeoutInterval = checkTimeout options.connectTimeout ? Hub.connectTimeout
 
     options.headers ?= {}
@@ -163,7 +194,7 @@ module.exports = Hub = ->
     req = request options, handleResult
 
     completionTimeoutInterval = options.completionTimeout
-    setupTimeouts connectTimeoutInterval, completionTimeoutInterval, req, responseData, getSeconds
+    setupTimeouts headerTimeoutInterval, connectTimeoutInterval, completionTimeoutInterval, req, responseData, getSeconds
 
     if typeof done == 'function'
       req.on 'goferResult', done
@@ -182,8 +213,28 @@ module.exports = Hub = ->
   # connection to the remote server to be established. It is standard practice
   # for this value to be significantly lower than the "request" timeout when
   # making requests to internal endpoints.
-  setupTimeouts = (connectTimeoutInterval, completionTimeoutInterval, request, responseData, getSeconds) ->
+  setupTimeouts = (headerTimeoutInterval, connectTimeoutInterval, completionTimeoutInterval, request, responseData, getSeconds) ->
     request.on 'request', (req) ->
+      fireTimeoutError = once (code = 'ETIMEDOUT') ->
+        # Ported from request's timeout logic
+        return unless request.req
+        req.abort()
+        e = new Error code
+        e.code = code
+        e.connect = req.socket && req.socket.readable == false
+        request.emit 'error', e
+
+      req.setTimeout headerTimeoutInterval, ->
+        # Give it one more tick/chance to clean up
+        setImmediate ->
+          fireTimeoutError('ESOCKETTIMEDOUT') if req.socket && req.socket.readable
+
+      headerTimeout = setIOTimeout fireTimeoutError, headerTimeoutInterval
+
+      onHeadersReceived = -> clearIOTimeout headerTimeout
+
+      req.on 'response', onHeadersReceived
+
       req.on 'socket', (socket) ->
         connectTimeout = undefined
         connectionTimedOut = ->
@@ -202,14 +253,14 @@ module.exports = Hub = ->
           responseData.connectDuration = getSeconds()
           hub.emit 'connect', responseData
 
-          clearTimeout connectTimeout
+          clearIOTimeout connectTimeout
           connectTimeout = null
 
           setupCompletionTimeout completionTimeoutInterval, req, responseData, getSeconds
 
         connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
-        connectTimeout = setTimeout connectionTimedOut, connectTimeoutInterval
+        connectTimeout = setIOTimeout connectionTimedOut, connectTimeoutInterval
 
   # This will setup a timer to make sure we don't wait to long for the response
   # to complete. The semantics are as follows:
