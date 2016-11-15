@@ -79,6 +79,19 @@ describe 'Basic Integration Test', ->
         checkRequestOptions err
         done()
 
+  describe 'socket timeout', ->
+    it 'emits a ESOCKETTIMEDOUT', (done) ->
+      @timeout 500
+
+      hub.fetch {
+        uri: "http://127.0.0.1:#{@port}"
+        qs: {__delay: 100}
+        timeout: 50
+      }, (err, body, headers) ->
+        assert.equal 'ESOCKETTIMEDOUT', err?.code
+        checkRequestOptions err
+        done()
+
   describe 'completion timeout', ->
 
     it 'does not pass an error when timeout is not exceeded', (done) ->

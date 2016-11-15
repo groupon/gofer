@@ -29,7 +29,10 @@ exports.kill = function kill(done) {
 if (module === process.mainModule) {
   server = http.createServer(function onRequest(req, res) {
     setTimeout(function () {
-      res.end('ok');
+      res.writeHead(200);
+      setTimeout(function () {
+        res.end('ok');
+      }, 50);
     }, 50);
   });
 

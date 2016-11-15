@@ -215,17 +215,19 @@ module.exports = Hub = ->
   # making requests to internal endpoints.
   setupTimeouts = (headerTimeoutInterval, connectTimeoutInterval, completionTimeoutInterval, request, responseData, getSeconds) ->
     request.on 'request', (req) ->
-      fireTimeoutError = once ->
+      fireTimeoutError = once (code = 'ETIMEDOUT') ->
         # Ported from request's timeout logic
         return unless request.req
         req.abort()
-        e = new Error 'ETIMEDOUT'
-        e.code = 'ETIMEDOUT'
+        e = new Error code
+        e.code = code
         e.connect = req.socket && req.socket.readable == false
         request.emit 'error', e
 
       req.setTimeout headerTimeoutInterval, ->
-        req.setTimeout 1, -> fireTimeoutError
+        # Give it one more tick/chance to clean up
+        setImmediate ->
+          fireTimeoutError('ESOCKETTIMEDOUT') if req.socket && req.socket.readable
 
       headerTimeout = setIOTimeout fireTimeoutError, headerTimeoutInterval
 
