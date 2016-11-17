@@ -27,6 +27,17 @@ buildApp = ->
         res.end "ok"
       ), req.query.__delay
 
+    else if req.query.__chunkDelay && req.query.__totalDelay
+      writeChunk = ->
+        res.write Array(4096+1).join 'a'
+      writeChunkHandle = setInterval writeChunk, +req.query.__chunkDelay
+
+      finishRes = ->
+        clearInterval writeChunkHandle
+        res.end 'ok'
+
+      setTimeout finishRes, +req.query.__totalDelay
+
     else
       res.end "ok"
 
