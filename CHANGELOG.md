@@ -1,3 +1,9 @@
+### 2.6.2
+
+* Verify completion timeout behavior - **[@jkrems](https://github.com/jkrems)** [#72](https://github.com/groupon/gofer/pull/72)
+  - [`a651458`](https://github.com/groupon/gofer/commit/a6514586206023d9c8e2a9b2619b45543d3a20c2) **test:** Verify completion timeout behavior
+
+
 ### 2.6.1
 
 * Fire IO timeouts after IO - **[@jkrems](https://github.com/jkrems)** [#71](https://github.com/groupon/gofer/pull/71)
