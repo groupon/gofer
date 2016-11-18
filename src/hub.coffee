@@ -276,6 +276,7 @@ module.exports = Hub = ->
 
       err = new Error 'ETIMEDOUT'
       err.code = 'ETIMEDOUT'
+      err.completion = true
       err.message = "Response timed out after #{completionTimeoutInterval}ms"
       err.responseData = responseData
       req.emit 'error', err

@@ -97,18 +97,35 @@ describe 'Basic Integration Test', ->
     it 'does not pass an error when timeout is not exceeded', (done) ->
       hub.fetch {
         uri: "http://127.0.0.1:#{@port}"
-        qs: {__delay: 10}
-        completionTimeout: 20
+        qs: {__delay: 20}
+        completionTimeout: 50
       }, (err, body, headers) ->
         done err
 
     it 'passes an error when timeout is exceeded', (done) ->
       hub.fetch {
         uri: "http://127.0.0.1:#{@port}"
-        qs: {__delay: 30}
+        qs: {__delay: 50}
         completionTimeout: 20
       }, (err, body, headers) ->
         assert.equal 'ETIMEDOUT', err?.code
+        checkRequestOptions err
+        done()
+
+    it 'is triggered by a constant trickle of packages', (done) ->
+      @timeout 400
+
+      complain = -> console.error '5s passed'
+      setTimeout complain, 5000
+
+      req = hub.fetch {
+        uri: "http://127.0.0.1:#{@port}"
+        qs: {__chunkDelay: 50, __totalDelay: 1000}
+        timeout: 100 # ensure we would not hit the "normal" timeout
+        completionTimeout: 200
+      }, (err, body, headers) ->
+        assert.equal 'ETIMEDOUT', err?.code
+        assert.expect err.completion
         checkRequestOptions err
         done()
 
