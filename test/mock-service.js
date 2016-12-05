@@ -19,6 +19,10 @@ function sendEcho(req, res) {
   var latency = query.__latency ? +query.__latency : 0;
   var hang = query.__hang ? +query.__hang : 0;
 
+  function forceFlush() {
+    res.write(Array(4096 + 1).join(' '));
+  }
+
   function sendBody() {
     res.end(JSON.stringify({
       method: req.method,
@@ -32,11 +36,8 @@ function sendEcho(req, res) {
     res.writeHead(res.statusCode, {
       'Content-Type': 'application/json',
     });
-    // See:
-    // https://michaelheap.com/force-flush-headers-using-the-http-module-for-nodejs/
-    res.socket.write(res._header);
-    res._headerSent = true;
     if (hang) {
+      forceFlush();
       setTimeout(sendBody, hang);
     } else {
       sendBody();
@@ -58,6 +59,33 @@ function sendEcho(req, res) {
 function send404(req, res) {
   res.statusCode = 404;
   sendEcho(req, res);
+}
+
+function sendChunks(req, res) {
+  var query = parseUrl(req.url, true).query;
+  var delay = query.__delay ? +query.__delay : 0;
+  var chunkDelay = query.__chunkDelay ? +query.__chunkDelay : 0;
+  var totalDelay = query.__totalDelay ? +query.__totalDelay : 0;
+  var writeChunkHandle;
+
+  function writeChunk() {
+    res.write(Array(4096 + 1).join(' '));
+  }
+
+  function finishRes() {
+    clearInterval(writeChunkHandle);
+    res.end('ok');
+  }
+
+  if (delay) {
+    writeChunk();
+    setTimeout(finishRes, delay);
+  } else if (chunkDelay && totalDelay) {
+    writeChunkHandle = setInterval(writeChunk, chunkDelay);
+    setTimeout(finishRes, totalDelay);
+  } else {
+    res.end('ok');
+  }
 }
 
 function handleRequest(req, res) {
@@ -83,7 +111,7 @@ function handleRequest(req, res) {
       return send404(req, res);
 
     default:
-      return res.end('ok');
+      return sendChunks(req, res);
   }
 }
 
