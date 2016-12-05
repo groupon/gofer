@@ -1,3 +1,9 @@
+### 3.5.0
+
+* Port better timeout handling from 2.x - **[@jkrems](https://github.com/jkrems)** [#73](https://github.com/groupon/gofer/pull/73)
+  - [`cdf0f37`](https://github.com/groupon/gofer/commit/cdf0f37170dcc8afcc59ba2751f39311b61d6521) **feat:** Port better timeout handling from 2.x
+
+
 ### 3.4.0
 
 * Support searchDomain option - **[@jkrems](https://github.com/jkrems)** [#69](https://github.com/groupon/gofer/pull/69)
