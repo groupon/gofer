@@ -1,3 +1,9 @@
+### 2.6.3
+
+* chore: replace deprecated 'node-uuid' with 'uuid' - **[@saumitrab](https://github.com/saumitrab)** [#74](https://github.com/groupon/gofer/pull/74)
+  - [`e35b6e7`](https://github.com/groupon/gofer/commit/e35b6e7393e3b86ca087d0740f997d9fc71f3084) **chore:** replace deprecated 'node-uuid' with 'uuid'
+
+
 ### 2.6.2
 
 * Verify completion timeout behavior - **[@jkrems](https://github.com/jkrems)** [#72](https://github.com/groupon/gofer/pull/72)
