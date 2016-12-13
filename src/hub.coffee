@@ -37,7 +37,7 @@ util = require 'util'
 
 request = require 'request'
 HRDuration = require 'hrduration'
-uuid = require 'node-uuid'
+uuid = require 'uuid'
 {extend, map, mapValues, once} = require 'lodash'
 debug = require('debug') 'gofer:hub'
 DefaultPromise = global.Promise ? require 'bluebird'
