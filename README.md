@@ -2,11 +2,11 @@
 
 > A gofer, go-fer or gopher /ˈɡoʊfər/ is an employee who specializes in delivery of special items to their superior(s).
 > The special items may be anything from a cup of coffee to a tailored suit or a car.
-> 
+>
 > — <cite>[Wikipedia: Gofer](https://en.wikipedia.org/wiki/Gofer)</cite>
 
 ```
-npm install --save gofer@beta
+npm install --save gofer
 ```
 
 A base class for HTTP clients.
