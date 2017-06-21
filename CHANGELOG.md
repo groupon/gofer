@@ -1,3 +1,10 @@
+### 2.6.4
+
+* Move 2.x to stable - **[@jkrems](https://github.com/jkrems)** [#75](https://github.com/groupon/gofer/pull/75)
+  - [`25b5fd0`](https://github.com/groupon/gofer/commit/25b5fd090d4614b5dce225e168f8a7322e300d7a) **chore:** Move 2.x to stable
+* [`c079a46`](https://github.com/groupon/gofer/commit/c079a468d92123899424444aa4c02f959a27f61d) **chore:** Allow publish from 2.x
+
+
 ### 2.6.3
 
 * chore: replace deprecated 'node-uuid' with 'uuid' - **[@saumitrab](https://github.com/saumitrab)** [#74](https://github.com/groupon/gofer/pull/74)
