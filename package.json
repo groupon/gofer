@@ -20,6 +20,10 @@
     "watch": "coffee --no-header -wcbo lib src & nodemon -w lib -w test -e coffee,js,json -x \"mocha\""
   },
   "nlm": {
+    "channels": {
+      "2.x": "stable",
+      "master": "latest"
+    },
     "license": {
       "files": [
         "src"
