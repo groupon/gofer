@@ -1,3 +1,9 @@
+### 3.5.1
+
+* Publish 3.x from master - **[@jkrems](https://github.com/jkrems)** [#76](https://github.com/groupon/gofer/pull/76)
+  - [`a152e6a`](https://github.com/groupon/gofer/commit/a152e6aa3417bd9fedc4ece3acc8d48f01c46c7e) **chore:** Publish 3.x from master
+
+
 ### 3.5.0
 
 * Port better timeout handling from 2.x - **[@jkrems](https://github.com/jkrems)** [#73](https://github.com/groupon/gofer/pull/73)
