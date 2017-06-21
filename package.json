@@ -23,10 +23,6 @@
     "posttest": "nlm verify"
   },
   "nlm": {
-    "channels": {
-      "3.x": "beta",
-      "master": "latest"
-    },
     "license": {
       "files": [
         "lib"
