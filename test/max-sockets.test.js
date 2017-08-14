@@ -59,8 +59,9 @@ describe('fetch: maxSockets', function () {
           'The next two are the same...',
           Math.abs(times[2] - times[3]) < 50);
         assert.expect(
-          '...just 100+ ms later',
-          times[2] - times[1] > 100);
+          // leaving some space for timing issues
+          '...just 100+ ms later (' + times[2] + ' - ' + times[0] + ' >= 90)',
+          times[2] - times[0] > 90);
 
         assert.expect(
           '#5 uses a different hostname, so it should happen with the first 2',
