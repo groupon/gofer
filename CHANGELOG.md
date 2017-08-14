@@ -1,3 +1,12 @@
+### 3.5.2
+
+* Fix link to breaking changes doc - **[@jkrems](https://github.com/jkrems)** [#77](https://github.com/groupon/gofer/pull/77)
+  - [`eb790cc`](https://github.com/groupon/gofer/commit/eb790cc2271228a047be1fd20c94ffe23811ef9e) **docs:** Fix link to breaking changes doc
+  - [`0d9759a`](https://github.com/groupon/gofer/commit/0d9759acef04ef46c5d6ebf57b41d8a55a3ecce7) **chore:** Modernize travis config
+  - [`ea684dd`](https://github.com/groupon/gofer/commit/ea684dd0826ae576438dce0cbb444769a63c7405) **test:** Compare to proper base timing
+  - [`fedc713`](https://github.com/groupon/gofer/commit/fedc713c4a0370e262f02625347e3cbb3c38f225) **chore:** Ignore package-lock.json
+
+
 ### 3.5.1
 
 * Publish 3.x from master - **[@jkrems](https://github.com/jkrems)** [#76](https://github.com/groupon/gofer/pull/76)
