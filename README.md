@@ -16,7 +16,7 @@ The design is meant to enforce a certain level of consistency in how the clients
 Use in browsers might require a `fetch` polyfill.
 
 If you used `gofer` 2.x before,
-you might want to read about [all the changes in 3.x](/BREAKING-v3.md).
+you might want to read about [all the changes in 3.x](/BREAKING_v3.md).
 
 **[API docs](/API.md)** •
 **[Walkthrough](#walkthrough)**
