@@ -116,7 +116,7 @@ function handleRequest(req, res) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-a, x-b');
 
   // Preflight requests that return a 404 confuse Chrome
   if (req.method === 'OPTIONS') return res.end();
