@@ -28,10 +28,10 @@ describe('fetch: https', function () {
         if (typeof document === 'undefined') {
           if (error.code) {
             // more recent node versions (e.g. 4+)
-            assert.equal('SELF_SIGNED_CERT_IN_CHAIN', error.code);
+            assert.match(/SELF_SIGNED/, error.code);
           } else {
             // old node versions (e.g. 0.10)
-            assert.equal('SELF_SIGNED_CERT_IN_CHAIN', error.message);
+            assert.match(/SELF_SIGNED/, error.message);
           }
         }
       });
@@ -55,9 +55,8 @@ describe('fetch: https', function () {
       // Browsers don't allow to side-step https
       return this.skip();
     }
-    var fs = require('fs');
     return fetch(options.baseUrlTls, {
-      ca: fs.readFileSync('test/certs/client/my-root-ca.crt.pem'),
+      ca: [options.certOptions.cert],
     })
       .then(function (res) {
         assert.equal(200, res.statusCode);
