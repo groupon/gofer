@@ -1,3 +1,12 @@
+### 3.5.3
+
+* Fix header option leak - **[@jkrems](https://github.com/jkrems)** [#78](https://github.com/groupon/gofer/pull/78)
+  - [`4168096`](https://github.com/groupon/gofer/commit/4168096af97360da470393854e884233f90f5226) **test:** Remove fixed certificates
+  - [`35a22df`](https://github.com/groupon/gofer/commit/35a22df316ee0f149d3d4aa3be0535ab3e841644) **test:** Use smaller reddit endpoint
+  - [`c6a2397`](https://github.com/groupon/gofer/commit/c6a239763d3251591223d90b84e2d7e27d8f16c2) **fix:** Prevent mutation of defaults
+  - [`485414a`](https://github.com/groupon/gofer/commit/485414a75ad0883589f0ed7de51908d08f0b9b28) **test:** Verify that headers do not leak into defaults
+
+
 ### 3.5.2
 
 * Fix link to breaking changes doc - **[@jkrems](https://github.com/jkrems)** [#77](https://github.com/groupon/gofer/pull/77)
