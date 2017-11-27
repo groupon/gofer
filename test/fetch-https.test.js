@@ -15,10 +15,8 @@ describe('fetch: https', function () {
     // This is a remote call which isn't great but it means we get a valid
     // https certificate without having to pull any tricks.
     this.timeout(2000);
-    return fetch('https://api.reddit.com/r/javascript/about.json')
-      .then(function (res) {
-        assert.equal(200, res.statusCode);
-      });
+    return fetch('https://api.reddit.com/user/ageitgey/about.json')
+      .json();
   });
 
   it('fails with self-signed https', function () {
@@ -28,10 +26,10 @@ describe('fetch: https', function () {
         if (typeof document === 'undefined') {
           if (error.code) {
             // more recent node versions (e.g. 4+)
-            assert.equal('SELF_SIGNED_CERT_IN_CHAIN', error.code);
+            assert.match(/SELF_SIGNED/, error.code);
           } else {
             // old node versions (e.g. 0.10)
-            assert.equal('SELF_SIGNED_CERT_IN_CHAIN', error.message);
+            assert.match(/SELF_SIGNED/, error.message);
           }
         }
       });
@@ -55,9 +53,8 @@ describe('fetch: https', function () {
       // Browsers don't allow to side-step https
       return this.skip();
     }
-    var fs = require('fs');
     return fetch(options.baseUrlTls, {
-      ca: fs.readFileSync('test/certs/client/my-root-ca.crt.pem'),
+      ca: [options.certOptions.cert],
     })
       .then(function (res) {
         assert.equal(200, res.statusCode);

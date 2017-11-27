@@ -1,8 +1,10 @@
 'use strict';
-var fs = require('fs');
+
 var http = require('http');
 var https = require('https');
 var parseUrl = require('url').parse;
+
+var selfSigned = require('self-signed');
 
 var options = require('./mock-service.browser');
 
@@ -11,6 +13,24 @@ var MOCK_SERVICE_PORT_TLS = +(options.baseUrlTls.match(/:(\d+)/)[1]);
 
 var server;
 var serverTls;
+
+function generateCertOptions() {
+  var keypair = selfSigned({
+    name: 'localhost',
+    city: 'Chicago',
+    state: 'Illinois',
+    organization: 'Test',
+    unit: 'Test',
+  }, {
+    alt: ['127.0.0.1', 'http://localhost'],
+    expire: 60 * 60 * 1000, // one hour
+  });
+  return {
+    cert: keypair.cert,
+    key: keypair.private,
+  };
+}
+var certOptions = generateCertOptions();
 
 function sendEcho(req, res) {
   var chunks = [];
@@ -96,7 +116,7 @@ function handleRequest(req, res) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-a, x-b');
 
   // Preflight requests that return a 404 confuse Chrome
   if (req.method === 'OPTIONS') return res.end();
@@ -123,15 +143,10 @@ function bootupServers(done) {
   }
   server = http.createServer(handleRequest);
   server.on('error', done);
-  server.listen(MOCK_SERVICE_PORT, onListen);
-  var certOptions = {
-    key: fs.readFileSync('test/certs/server/my-server.key.pem'),
-    ca: [fs.readFileSync('test/certs/server/my-root-ca.crt.pem')],
-    cert: fs.readFileSync('test/certs/server/my-server.crt.pem'),
-  };
+  server.listen(MOCK_SERVICE_PORT, '127.0.0.1', onListen);
   serverTls = https.createServer(certOptions, handleRequest);
   serverTls.on('error', done);
-  serverTls.listen(MOCK_SERVICE_PORT_TLS, onListen);
+  serverTls.listen(MOCK_SERVICE_PORT_TLS, '127.0.0.1', onListen);
 }
 
 if (typeof before === 'function') {
@@ -163,4 +178,6 @@ if (process.mainModule === module) {
   });
 }
 
+// Exposed for the https test so we can set up a compatible client
+options.certOptions = certOptions;
 module.exports = options;

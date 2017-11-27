@@ -25,6 +25,27 @@ describe('gofer', function () {
     });
   });
 
+  describe('call that sets a header', function () {
+    var gofer;
+    before(function () {
+      gofer = new Gofer().with({
+        headers: { 'x-a': 'foo' },
+      }).with(options);
+
+      return gofer.fetch('/echo', {
+        headers: { 'x-b': 'should not leak' },
+      }).json();
+    });
+
+    it('does not affect defaults', function () {
+      return gofer.fetch('/echo').json()
+        .then(function (echo) {
+          assert.equal('foo', echo.headers['x-a']);
+          assert.equal(undefined, echo.headers['x-b']);
+        });
+    });
+  });
+
   describe('sub-class', function () {
     function SubGofer(config) {
       Gofer.call(this, config, 'sub', '1.2.3', 'my-sub-client');
