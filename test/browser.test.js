@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * This re-runs the whole test suite inside of phantomjs.
  * That's great for CI but tends to be hard to debug.
@@ -22,16 +23,21 @@ var execFile = module.require('' + 'child_process').execFile;
 
 require('./mock-service');
 
-describe('in a browser', function () {
-  it('works (almost) just the same', function (done) {
+describe('in a browser', function() {
+  it('works (almost) just the same', function(done) {
     var mochifyBin = require.resolve('.bin/mochify');
     this.timeout(60 * 1000);
-    var child = execFile(mochifyBin, [
-      '--reporter', 'spec',
-      './node_modules/promise/polyfill',
-      './node_modules/whatwg-fetch',
-      './test/**/*.test.js',
-    ], done);
+    var child = execFile(
+      mochifyBin,
+      [
+        '--reporter',
+        'spec',
+        './node_modules/promise/polyfill',
+        './node_modules/whatwg-fetch',
+        './test/**/*.test.js',
+      ],
+      done
+    );
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stderr);
   });

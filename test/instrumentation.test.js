@@ -1,4 +1,5 @@
 'use strict';
+
 var assert = require('assertive');
 var assign = require('lodash/assign');
 
@@ -21,17 +22,17 @@ function ensureEmpty() {
   assert.equal(null, instrument.pathParams);
 }
 
-describe('Verify instrumentation support', function () {
+describe('Verify instrumentation support', function() {
   var client = new Gofer({ instrumented: options }, 'instrumented');
 
   client.registerEndpoints({
-    echo: function (fetch) {
-      return function () {
+    echo: function(fetch) {
+      return function() {
         return fetch('/{x}', { method: 'PUT', pathParams: { x: 'echo' } });
       };
     },
-    named: function (fetch) {
-      return function () {
+    named: function(fetch) {
+      return function() {
         return fetch('/echo', { method: 'PUT', methodName: 'echo' });
       };
     },
@@ -40,14 +41,14 @@ describe('Verify instrumentation support', function () {
   before('add instrumentation', instrument);
   after('remove instrumentation', instrument.reset);
 
-  describe('direct request', function () {
+  describe('direct request', function() {
     before(ensureEmpty);
 
-    before('make a request', function () {
+    before('make a request', function() {
       return client.fetch('/echo');
     });
 
-    it('sets the meta data', function () {
+    it('sets the meta data', function() {
       assert.equal('instrumented', instrument.serviceName);
       assert.equal(undefined, instrument.endpointName);
       assert.equal('get', instrument.methodName);
@@ -55,14 +56,14 @@ describe('Verify instrumentation support', function () {
     });
   });
 
-  describe('call endpoint', function () {
+  describe('call endpoint', function() {
     before(ensureEmpty);
 
-    before('make a request', function () {
+    before('make a request', function() {
       return client.echo();
     });
 
-    it('sets the meta data', function () {
+    it('sets the meta data', function() {
       assert.equal('instrumented', instrument.serviceName);
       assert.equal('echo', instrument.endpointName);
       assert.equal('put', instrument.methodName);
@@ -70,14 +71,14 @@ describe('Verify instrumentation support', function () {
     });
   });
 
-  describe('with explicit methodName', function () {
+  describe('with explicit methodName', function() {
     before(ensureEmpty);
 
-    before('make a request', function () {
+    before('make a request', function() {
       return client.named();
     });
 
-    it('sets the meta data', function () {
+    it('sets the meta data', function() {
       assert.equal('instrumented', instrument.serviceName);
       assert.equal('named', instrument.endpointName);
       assert.equal('echo', instrument.methodName);

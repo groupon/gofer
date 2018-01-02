@@ -1,4 +1,7 @@
+/* eslint-env browser */
+
 'use strict';
+
 var assign = require('lodash/assign');
 
 var original = typeof window !== 'undefined' ? window.fetch : null;
