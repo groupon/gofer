@@ -1,3 +1,9 @@
+### 3.5.4
+
+* Apply latest nlm generator - **[@markowsiak](https://github.com/markowsiak)** [#79](https://github.com/groupon/gofer/pull/79)
+  - [`9ea499a`](https://github.com/groupon/gofer/commit/9ea499a2b914f8c27e74da75d7952802df26c550) **chore:** apply latest generator
+
+
 ### 3.5.3
 
 * Fix header option leak - **[@jkrems](https://github.com/jkrems)** [#78](https://github.com/groupon/gofer/pull/78)
