@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 'use strict';
 
 var http = require('http');
@@ -8,23 +10,26 @@ var selfSigned = require('self-signed');
 
 var options = require('./mock-service.browser');
 
-var MOCK_SERVICE_PORT = +(options.baseUrl.match(/:(\d+)/)[1]);
-var MOCK_SERVICE_PORT_TLS = +(options.baseUrlTls.match(/:(\d+)/)[1]);
+var MOCK_SERVICE_PORT = +options.baseUrl.match(/:(\d+)/)[1];
+var MOCK_SERVICE_PORT_TLS = +options.baseUrlTls.match(/:(\d+)/)[1];
 
 var server;
 var serverTls;
 
 function generateCertOptions() {
-  var keypair = selfSigned({
-    name: 'localhost',
-    city: 'Chicago',
-    state: 'Illinois',
-    organization: 'Test',
-    unit: 'Test',
-  }, {
-    alt: ['127.0.0.1', 'http://localhost'],
-    expire: 60 * 60 * 1000, // one hour
-  });
+  var keypair = selfSigned(
+    {
+      name: 'localhost',
+      city: 'Chicago',
+      state: 'Illinois',
+      organization: 'Test',
+      unit: 'Test',
+    },
+    {
+      alt: ['127.0.0.1', 'http://localhost'],
+      expire: 60 * 60 * 1000, // one hour
+    }
+  );
   return {
     cert: keypair.cert,
     key: keypair.private,
@@ -44,12 +49,14 @@ function sendEcho(req, res) {
   }
 
   function sendBody() {
-    res.end(JSON.stringify({
-      method: req.method,
-      url: req.url,
-      headers: req.headers,
-      body: Buffer.concat(chunks).toString(),
-    }));
+    res.end(
+      JSON.stringify({
+        method: req.method,
+        url: req.url,
+        headers: req.headers,
+        body: Buffer.concat(chunks).toString(),
+      })
+    );
   }
 
   function sendHeader() {
@@ -115,8 +122,14 @@ function handleRequest(req, res) {
   if (req.headers.origin) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-a, x-b');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, HEAD, OPTIONS, DELETE, PATCH'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, x-a, x-b'
+  );
 
   // Preflight requests that return a 404 confuse Chrome
   if (req.method === 'OPTIONS') return res.end();
@@ -152,7 +165,7 @@ function bootupServers(done) {
 if (typeof before === 'function') {
   before(bootupServers);
 
-  after(function () {
+  after(function() {
     if (server) {
       try {
         server.close();
@@ -170,7 +183,7 @@ if (typeof before === 'function') {
   });
 }
 if (process.mainModule === module) {
-  bootupServers(function (error) {
+  bootupServers(function(error) {
     if (error) throw error;
     /* eslint no-console:0 */
     console.log('Listening on %s', options.baseUrl);
