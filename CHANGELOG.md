@@ -1,3 +1,10 @@
+### 2.6.5
+
+* Ignore searchDomain for localhost and IP - **[@jkrems](https://github.com/jkrems)** [#81](https://github.com/groupon/gofer/pull/81)
+  - [`685d29a`](https://github.com/groupon/gofer/commit/685d29aa4739ed905b3012aa0937a6260e642d3b) **chore:** Ignore package-lock.json
+  - [`7030693`](https://github.com/groupon/gofer/commit/7030693b9222ecc10a8a28fcd8b7aea02fe15d44) **fix:** Ignore searchDomain for localhost and IP
+
+
 ### 2.6.4
 
 * Move 2.x to stable - **[@jkrems](https://github.com/jkrems)** [#75](https://github.com/groupon/gofer/pull/75)
