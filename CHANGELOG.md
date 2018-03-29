@@ -1,3 +1,9 @@
+### 3.5.5
+
+* Ignore searchDomain for localhost and IP - **[@jkrems](https://github.com/jkrems)** [#80](https://github.com/groupon/gofer/pull/80)
+  - [`8cfb230`](https://github.com/groupon/gofer/commit/8cfb230673dafb6907c0fa7a6d5facc02980ae9b) **fix:** Ignore searchDomain for localhost and IP
+
+
 ### 3.5.4
 
 * Apply latest nlm generator - **[@markowsiak](https://github.com/markowsiak)** [#79](https://github.com/groupon/gofer/pull/79)
