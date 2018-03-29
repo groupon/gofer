@@ -71,6 +71,18 @@ cleanProperty = (obj, value, key) ->
   delete defaults.endpointDefaults
   { defaults, endpointDefaults }
 
+IPv4 = /^\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}$/
+canApplySearchDomain = (hostname) ->
+  return false if hostname == 'localhost'
+  return false if hostname[hostname.length - 1] == '.'
+  # A hostname shouldn't contain ":" (IPv6 adddress) or be an IPv4 address
+  hostname.indexOf(':') == -1 && !IPv4.test(hostname)
+
+buildHostname = (hostname, searchDomain) ->
+  if searchDomain && canApplySearchDomain(hostname)
+    return "#{hostname}.#{searchDomain}."
+  hostname
+
 @applyBaseUrl = (baseUrl, options) ->
   uri = options.uri
   uri = Url.parse uri if 'string' == typeof uri
@@ -88,8 +100,7 @@ cleanProperty = (obj, value, key) ->
 
   {searchDomain} = options
   delete options.searchDomain # in case request starts looking at it
-  if searchDomain && hostname && hostname[hostname.length - 1] != '.'
-    hostname += ".#{searchDomain}."
+  hostname = buildHostname(hostname, searchDomain)
 
   uri = Url.format {protocol, hostname, port, pathname, query, search}
   options.uri = replacePathParams(uri, options.pathParams)
