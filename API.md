@@ -197,6 +197,8 @@ In addition to the options mentioned in the [request docs](https://github.com/mi
 * `searchDomain`: Inspired by the `search` setting in `/etc/resolv.conf`.
   Append this to any hostname that doesn't already end in a ".".
   E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but `my.fully.qualified.name.` won't be touched.
+* `keepAlive`: If set to `true`, enables the request `forever` option and does
+  not send the `Connection: close` header
 
 In addition the following options are added that are useful for instrumentation but do not affect the actual HTTP request:
 

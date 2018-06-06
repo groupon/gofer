@@ -111,7 +111,8 @@ module.exports = Hub = ->
       options.method.toUpperCase()
     else
       'GET'
-    hubHeaders = generateHeaders options.requestId, fetchId
+    options.forever = options.keepAlive
+    hubHeaders = generateHeaders options.requestId, fetchId, options.keepAlive
     extend options.headers, hubHeaders
     options.headers = mapValues options.headers, removeInvalidHeaderChars
 
@@ -295,10 +296,9 @@ module.exports = Hub = ->
 generateUUID = ->
   uuid.v1().replace /-/g, ''
 
-generateHeaders = (requestId, fetchId) ->
-  headers =
-    'Connection': 'close'
-    'X-Fetch-ID': fetchId
+generateHeaders = (requestId, fetchId, keepAlive) ->
+  headers = 'X-Fetch-ID': fetchId
+  headers.Connection = 'close' unless keepAlive
 
   headers['X-Request-ID'] = requestId if requestId?
   headers
