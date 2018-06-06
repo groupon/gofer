@@ -31,6 +31,7 @@ import { fetch } from 'gofer';
 * `searchDomain`: Inspired by the `search` setting in `/etc/resolv.conf`.
   Append this to any hostname that doesn't already end in a ".".
   E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but `my.fully.qualified.name.` won't be touched.
+* `keepAlive`: if set to `true`, enables HTTP keep-alive
 
 ## `Gofer`
 
