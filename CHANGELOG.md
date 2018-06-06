@@ -1,3 +1,10 @@
+### 2.7.0
+
+* support `keepAlive: true` option - **[@dbushong](https://github.com/dbushong)** [#82](https://github.com/groupon/gofer/pull/82)
+  - [`2e50961`](https://github.com/groupon/gofer/commit/2e5096184d3634746b181e30ca0b3678402bdb05) **feat:** support `keepAlive: true` option
+  - [`b0278f9`](https://github.com/groupon/gofer/commit/b0278f96a26611f871c9e9a72e371ec83f8660a5) **chore:** clean-up travis build targets
+
+
 ### 2.6.5
 
 * Ignore searchDomain for localhost and IP - **[@jkrems](https://github.com/jkrems)** [#81](https://github.com/groupon/gofer/pull/81)
