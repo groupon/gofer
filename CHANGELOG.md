@@ -1,3 +1,9 @@
+### 3.5.6
+
+* use proper timeout to fix keepAlive - **[@dbushong](https://github.com/dbushong)** [#83](https://github.com/groupon/gofer/pull/83)
+  - [`7eb902f`](https://github.com/groupon/gofer/commit/7eb902f30fc739bc511f8dd2ec093f4b597dcdbd) **fix:** use proper timeout to fix keepAlive
+
+
 ### 3.5.5
 
 * Ignore searchDomain for localhost and IP - **[@jkrems](https://github.com/jkrems)** [#80](https://github.com/groupon/gofer/pull/80)
