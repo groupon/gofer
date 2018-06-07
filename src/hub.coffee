@@ -240,6 +240,12 @@ module.exports = Hub = ->
       req.on 'response', onHeadersReceived
 
       req.on 'socket', (socket) ->
+        connectingSocket = socket.socket ? socket
+
+        unless connectingSocket._connecting || connectingSocket.connecting
+          setupCompletionTimeout completionTimeoutInterval, req, responseData, getSeconds
+          return
+
         connectTimeout = undefined
         connectionTimedOut = ->
           req.abort()
@@ -262,7 +268,6 @@ module.exports = Hub = ->
 
           setupCompletionTimeout completionTimeoutInterval, req, responseData, getSeconds
 
-        connectingSocket = socket.socket ? socket
         connectingSocket.on 'connect', connectionSuccessful
         connectTimeout = setIOTimeout connectionTimedOut, connectTimeoutInterval
 
