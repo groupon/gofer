@@ -1,3 +1,9 @@
+### 2.7.1
+
+* properly clear completion timeouts - **[@dbushong](https://github.com/dbushong)** [#85](https://github.com/groupon/gofer/pull/85)
+  - [`780c998`](https://github.com/groupon/gofer/commit/780c998658c943807fdf2bcc558c607bd4931f00) **fix:** properly clear completion timeouts
+
+
 ### 2.7.0
 
 * support `keepAlive: true` option - **[@dbushong](https://github.com/dbushong)** [#82](https://github.com/groupon/gofer/pull/82)
