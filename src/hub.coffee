@@ -135,6 +135,9 @@ module.exports = Hub = ->
     hub.emit 'start', baseLog
 
     handleResult = (error, response, body) ->
+      if responseData.completionSuccessful
+        responseData.completionSuccessful()
+        delete responseData.completionSuccessful
       parseJSON = options.parseJSON ? isJsonResponse(response, body)
       {parseError, body} = safeParseJSON body, response if parseJSON
       error ?= parseError
@@ -282,13 +285,12 @@ module.exports = Hub = ->
       err.responseData = responseData
       req.emit 'error', err
 
-    completionSuccessful = ->
+    responseData.completionSuccessful = ->
       responseData.completionDuration = getSeconds() - responseData.connectDuration
 
       clearTimeout completionTimeout
       completionTimeout = null
 
-    req.on 'complete', completionSuccessful
     completionTimeout = setTimeout completionTimedOut, completionTimeoutInterval
 
   return hub
