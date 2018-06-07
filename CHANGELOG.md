@@ -1,3 +1,9 @@
+### 3.5.7
+
+* clear completionTimer on response completion - **[@dbushong](https://github.com/dbushong)** [#84](https://github.com/groupon/gofer/pull/84)
+  - [`368d061`](https://github.com/groupon/gofer/commit/368d061c7d6cdd90d795113940c70b081db88ecc) **fix:** clear completionTimer on response completion
+
+
 ### 3.5.6
 
 * use proper timeout to fix keepAlive - **[@dbushong](https://github.com/dbushong)** [#83](https://github.com/groupon/gofer/pull/83)
