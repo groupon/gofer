@@ -1,3 +1,9 @@
+### 3.5.8
+
+* don't set connect timeout for keepalive - **[@dbushong](https://github.com/dbushong)** [#86](https://github.com/groupon/gofer/pull/86)
+  - [`cd57ced`](https://github.com/groupon/gofer/commit/cd57ced861752d43dba670391e4181f443442331) **fix:** don't set connect timeout for keepalive
+
+
 ### 3.5.7
 
 * clear completionTimer on response completion - **[@dbushong](https://github.com/dbushong)** [#84](https://github.com/groupon/gofer/pull/84)
