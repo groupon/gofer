@@ -1,3 +1,9 @@
+### 2.7.2
+
+* don't set connect timeout for keepalive - **[@dbushong](https://github.com/dbushong)** [#87](https://github.com/groupon/gofer/pull/87)
+  - [`b94a5b9`](https://github.com/groupon/gofer/commit/b94a5b925e0f096e04f8432188650ef0e35daa20) **fix:** don't set connect timeout for keepalive
+
+
 ### 2.7.1
 
 * properly clear completion timeouts - **[@dbushong](https://github.com/dbushong)** [#85](https://github.com/groupon/gofer/pull/85)
