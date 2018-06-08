@@ -1,6 +1,6 @@
 {
   "name": "gofer",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "description": "A general purpose service client library for node.js",
   "license": "BSD-3-Clause",
   "main": "lib/gofer.js",

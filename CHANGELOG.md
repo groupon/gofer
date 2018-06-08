@@ -1,3 +1,9 @@
+### 2.8.0
+
+* enable gzip support by default - **[@dbushong](https://github.com/dbushong)** [#88](https://github.com/groupon/gofer/pull/88)
+  - [`54168fe`](https://github.com/groupon/gofer/commit/54168fe4080580bdbcc88b5bff1004222b0aecc6) **feat:** enable gzip support by default
+
+
 ### 2.7.2
 
 * don't set connect timeout for keepalive - **[@dbushong](https://github.com/dbushong)** [#87](https://github.com/groupon/gofer/pull/87)
