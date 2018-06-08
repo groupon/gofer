@@ -106,6 +106,7 @@ module.exports = Hub = ->
     delete options.timeout
     connectTimeoutInterval = checkTimeout options.connectTimeout ? Hub.connectTimeout
 
+    options.gzip ?= true
     options.headers ?= {}
     options.method = if options.method?
       options.method.toUpperCase()
