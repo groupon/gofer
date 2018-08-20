@@ -29,12 +29,14 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-'use strict';
-var assign = require('lodash/assign');
-var omit = require('lodash/omit');
 
-var Gofer = require('../');
-var pkg = require('../package.json');
+'use strict';
+
+const assign = require('lodash/assign');
+const omit = require('lodash/omit');
+
+const Gofer = require('../');
+const pkg = require('../package.json');
 
 // Generate our ServiceClient class
 function GithubClient() {
@@ -43,17 +45,18 @@ function GithubClient() {
 GithubClient.prototype = Object.create(Gofer.prototype);
 GithubClient.prototype.constructor = GithubClient;
 
-var DEFAULT_BASE_URL = 'https://api.github.com';
-GithubClient.prototype.addOptionMapper(function githubDefaults(opts) {
+const DEFAULT_BASE_URL = 'https://api.github.com';
+GithubClient.prototype.addOptionMapper(opts => {
   // We extract all options we will be handling ourselves and then remove
   // them, making sure nobody gets confused by them
-  var accessToken = opts.accessToken;
-  var oauthCode = opts.oauthCode;
-  var webUrl = opts.webUrl;
-  var clientId = opts.clientId;
-  var clientSecret = opts.clientSecret;
+  const accessToken = opts.accessToken;
+  const oauthCode = opts.oauthCode;
+  const webUrl = opts.webUrl;
+  const clientId = opts.clientId;
+  const clientSecret = opts.clientSecret;
 
-  opts = omit(opts,
+  opts = omit(
+    opts,
     'accessToken',
     'oauthCode',
     'webUrl',
@@ -63,7 +66,7 @@ GithubClient.prototype.addOptionMapper(function githubDefaults(opts) {
 
   if (accessToken) {
     opts.headers = opts.headers || {};
-    opts.headers.authorization = 'token ' + accessToken;
+    opts.headers.authorization = `token ${accessToken}`;
   }
 
   // There's only call using this but since clientId, clientSecret and webUrl
@@ -96,11 +99,15 @@ GithubClient.prototype.registerEndpoints({
     return {
       create: function create(oauthCode, cb) {
         // request(uri: string, options, callback)
-        return request('/login/oauth/access_token', {
-          oauthCode: oauthCode,
-          json: true,
-          method: 'POST',
-        }, cb);
+        return request(
+          '/login/oauth/access_token',
+          {
+            oauthCode: oauthCode,
+            json: true,
+            method: 'POST',
+          },
+          cb
+        );
       },
     };
   },
@@ -117,10 +124,14 @@ GithubClient.prototype.registerEndpoints({
           }
 
           // fetch(url: string, options, callback)
-          return fetch(username ? ('/users/{username}/repos') : '/user/repos', {
-            pathParams: { username: username },
-            qs: assign({ per_page: 100 }, qs),
-          }, cb);
+          return fetch(
+            username ? '/users/{username}/repos' : '/user/repos',
+            {
+              pathParams: { username: username },
+              qs: assign({ per_page: 100 }, qs),
+            },
+            cb
+          );
         },
       };
     };
@@ -128,7 +139,7 @@ GithubClient.prototype.registerEndpoints({
 
   // The simplest thing last: an endpoint that is just a method
   // Usage: `github.emojis().pipe(process.stdout)`
-  emojis: function (fetch) {
+  emojis: function(fetch) {
     return function emojis(cb) {
       // fetch(url: string, options, callback)
       return fetch('/emojis', {}, cb);
@@ -140,7 +151,7 @@ module.exports = GithubClient;
 
 if (require.main === module) {
   /* eslint no-console:0 */
-  var github = new GithubClient({
+  const github = new GithubClient({
     globalDefaults: {
       timeout: 5000,
       connectTimeout: 1000,
@@ -152,18 +163,21 @@ if (require.main === module) {
   });
 
   // Get all supported emojis, dump response to stdout
-  github.emojis().json().then(console.log);
+  github
+    .emojis()
+    .json()
+    .then(console.log);
 
   // List repos of the `groupon` github org
-  github.user('groupon').repos(function (err, repoList) {
+  github.user('groupon').repos((err, repoList) => {
     if (err) throw err;
-    repoList.forEach(function (repo) {
+    repoList.forEach(repo => {
       console.log(repo.name, '\t#', repo.description);
     });
   });
 
   // Make a raw call to `/` (resource discovery)
-  github.fetch('/', function (err, data, response) {
+  github.fetch('/', (err, data, response) => {
     if (err) throw err;
     console.log('Status code: %d', response.statusCode);
     console.log('Returned %d resources', Object.keys(data).length);
@@ -171,16 +185,21 @@ if (require.main === module) {
 
   // This is expected to fail unless you pass in a valid access token. If you
   // do, this will output the first of your repos.
-  github.fetch('/user/repos', {
-    accessToken: process.env.GH_TOKEN,
-  }).done(function (myRepos) {
-    if (myRepos.length) {
-      console.log('One of your repos: %s', myRepos[0].name);
-    } else {
-      console.log('No repositories found');
-    }
-  }, function (error) {
-    console.log('Failed to get repos, try passing in an access token');
-    console.log(error.message);
-  });
+  github
+    .fetch('/user/repos', {
+      accessToken: process.env.GH_TOKEN,
+    })
+    .done(
+      myRepos => {
+        if (myRepos.length) {
+          console.log('One of your repos: %s', myRepos[0].name);
+        } else {
+          console.log('No repositories found');
+        }
+      },
+      error => {
+        console.log('Failed to get repos, try passing in an access token');
+        console.log(error.message);
+      }
+    );
 }

@@ -1,8 +1,11 @@
 'use strict';
-require('whatwg-fetch'); // polyfill for fetch, required by gofer
-var Gofer = require('gofer');
 
-var rawResponse = document.createElement('pre');
+/* eslint-env browser */
+
+require('whatwg-fetch'); // polyfill for fetch, required by gofer
+const Gofer = require('gofer');
+
+const rawResponse = document.createElement('pre');
 rawResponse.innerText = '(loading)';
 document.body.appendChild(rawResponse);
 
@@ -24,16 +27,17 @@ function onEchoResponse(data) {
 }
 
 function onEchoError(error) {
-  rawResponse.innerText = error.message + '\n\n' + error.stack;
+  rawResponse.innerText = `${error.message}\n\n${error.stack}`;
 }
 
-var echo = new EchoClient({
+const echo = new EchoClient({
   echo: {
     baseUrl: '/echo',
     qs: { fromConfig: 'foo' },
   },
 });
 
-echo.echo({ fromCall: 'mergedIn' })
+echo
+  .echo({ fromCall: 'mergedIn' })
   .then(onEchoResponse)
   .catch(onEchoError);

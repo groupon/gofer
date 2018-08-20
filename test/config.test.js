@@ -2,11 +2,11 @@
 
 'use strict';
 
-var assert = require('assertive');
+const assert = require('assertive');
 
-var Gofer = require('../');
+const Gofer = require('../');
 
-var CONFIG = {
+const CONFIG = {
   globalDefaults: { timeout: 100, connectTimeout: 55 },
   a: { timeout: 1001 },
   b: {
@@ -26,11 +26,11 @@ function GoferB(config) {
 }
 GoferB.prototype = Object.create(Gofer.prototype);
 
-describe('config handling', function() {
-  var a;
-  var b;
+describe('config handling', () => {
+  let a;
+  let b;
 
-  before(function() {
+  before(() => {
     GoferB.prototype.registerEndpoints({
       x: function(fetch) {
         return function(cb) {
@@ -43,7 +43,7 @@ describe('config handling', function() {
     b = new GoferB(CONFIG);
   });
 
-  it('applies service-level config', function() {
+  it('applies service-level config', () => {
     assert.equal(
       'applies service-level default',
       1001,

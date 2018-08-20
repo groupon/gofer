@@ -2,9 +2,9 @@
 
 'use strict';
 
-var assign = require('lodash/assign');
+const assign = require('lodash/assign');
 
-var original = typeof window !== 'undefined' ? window.fetch : null;
+const original = typeof window !== 'undefined' ? window.fetch : null;
 
 function instrument() {
   window.fetch = function fetch(url, options) {

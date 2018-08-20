@@ -19,26 +19,36 @@
 if (typeof document !== 'undefined') return;
 
 // Ignore this import when processing via browserify
-var execFile = module.require('' + 'child_process').execFile;
+const spawn = /** @type {import('child_process').spawn} */ (module.require(
+  '' + 'child_process'
+).spawn);
 
 require('./mock-service');
 
-describe('in a browser', function() {
-  it('works (almost) just the same', function(done) {
-    var mochifyBin = require.resolve('.bin/mochify');
+describe('in a browser', () => {
+  it('works (almost) just the same', function() {
+    const mochifyBin = require.resolve('.bin/mochify');
     this.timeout(60 * 1000);
-    var child = execFile(
+    const child = spawn(
       mochifyBin,
       [
+        '--allow-chrome-as-root',
         '--reporter',
         'spec',
         './node_modules/promise/polyfill',
         './node_modules/whatwg-fetch',
         './test/**/*.test.js',
       ],
-      done
+      {
+        stdio: 'inherit',
+      }
     );
-    child.stdout.pipe(process.stdout);
-    child.stderr.pipe(process.stderr);
+    return new Promise((resolve, reject) => {
+      child.on('error', reject);
+      child.on('exit', code => {
+        if (code === 0) resolve();
+        reject(new Error(`Browser tests failed with code ${code}`));
+      });
+    });
   });
 });
