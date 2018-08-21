@@ -2,7 +2,7 @@
 
 const assert = require('assertive');
 
-const Gofer = require('../');
+const { Gofer } = require('../');
 
 const options = require('./mock-service');
 

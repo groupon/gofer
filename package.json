@@ -55,6 +55,7 @@
     "name": "Groupon",
     "email": "opensource@groupon.com"
   },
+  "types": "lib/gofer.d.ts",
   "files": [
     "*.js",
     "lib"

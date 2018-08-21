@@ -9,7 +9,7 @@ const assert = require('assertive');
 const FormData = require('form-data');
 const assign = require('lodash/assign');
 
-const Gofer = require('../');
+const { Gofer } = require('../');
 
 const defaultOptions = require('./mock-service');
 
@@ -32,23 +32,24 @@ function appendAll(form, formData) {
 describe('fetch: multi-part via form-data', () => {
   // This serves as a POC that more "exotic" features can be
   // added via option mappers without requiring support in Gofer.
-  const client = new Gofer().with(defaultOptions);
-  client.registerEndpoint('echo', fetch => {
-    return function(options) {
-      return fetch('/echo', options).json();
-    };
-  });
-  client.addOptionMapper(options => {
-    const formData = options.formData;
-    if (formData) {
-      delete options.formData;
-      const form = (options.body = new FormData());
-      appendAll(form, formData);
-      options.headers = options.headers || {};
-      assign(options.headers, form.getHeaders());
+  class MultiPartClient extends Gofer {
+    echo(options) {
+      return this.fetch('/echo', options).json();
     }
-    return options;
-  });
+
+    _mapOptions(options) {
+      const formData = options.formData;
+      if (formData) {
+        delete options.formData;
+        const form = (options.body = new FormData());
+        appendAll(form, formData);
+        options.headers = options.headers || {};
+        assign(options.headers, form.getHeaders());
+      }
+      return options;
+    }
+  }
+  const client = new MultiPartClient().with(defaultOptions);
 
   it('can send a complex form with file uploads', () => {
     const file = fs.createReadStream('test/.eslintrc');

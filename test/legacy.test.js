@@ -2,9 +2,7 @@
 
 const assert = require('assertive');
 
-const Gofer = require('../');
-
-const fetch = Gofer.fetch;
+const { Gofer, fetch } = require('../');
 
 const options = require('./mock-service');
 
@@ -27,20 +25,15 @@ describe('callback removal', () => {
   });
 
   describe('registerEndpoints w/ callback', () => {
-    function EchoClient(config) {
-      Gofer.call(this, config, 'echo');
-    }
-    EchoClient.prototype = Object.create(Gofer.prototype, {
-      constructor: { value: EchoClient },
-    });
+    class EchoClient extends Gofer {
+      constructor(config) {
+        super(config, 'echo');
+      }
 
-    EchoClient.prototype.registerEndpoints({
-      echo: function(withDefaults) {
-        return function(qs, callback) {
-          return withDefaults('/echo', { qs: qs }, callback);
-        };
-      },
-    });
+      echo(qs, callback) {
+        return this.fetch('/echo', { qs: qs }, callback);
+      }
+    }
 
     const client = new EchoClient({
       echo: { baseUrl: options.baseUrl },
@@ -52,10 +45,10 @@ describe('callback removal', () => {
     });
   });
 
-  describe('using new Gofer().* w/ callback', () => {
+  describe('using new Gofer().fetch w/ callback', () => {
     it('throws a TypeError', () => {
       const gofer = new Gofer().with(options);
-      const err = assert.throws(() => gofer.get('/echo', {}, () => {}));
+      const err = assert.throws(() => gofer.fetch('/echo', {}, () => {}));
       assertCallbackError(err);
     });
   });

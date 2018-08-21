@@ -4,10 +4,13 @@ The biggest change in 3.x is that `gofer` is now a real class
 and no longer encourages "prototype magic" to build clients.
 It also drops support for callbacks and switches to native promises.
 
+To simplify the export, `gofer` now exports two independent properties:
+`Gofer` and `fetch`.
+
 Simple `fetch`-style usage:
 
 ```js
-myClient.issues.show('132')
+myClient.getIssue('132')
   .then(res => res.json())
   .then(data => console.log(data));
 ```
@@ -15,7 +18,7 @@ myClient.issues.show('132')
 Convenience methods for validating status codes & parsing the response body:
 
 ```js
-myClient.issues.show('132')
+myClient.getIssue('132')
   .json() // or .text() / .body([encoding])
   .then(data => console.log(data));
 ```
@@ -26,7 +29,7 @@ It's specific to `gofer`'s more high-level API.
 Catching specific errors:
 
 ```js
-myClient.issues.show('132')
+myClient.getIssue('132')
   .json()
   .then(data => console.log(data))
   .catch(error => {
@@ -45,11 +48,20 @@ There is only one signature for `fetch`, with the 2nd argument being optional.
 
 * `fetch(url, options = {})`
 
+The method-aware helpers (`myClient.post`) have been removed.
+Instead pass the method in the options:
+
+```js
+myClient.fetch('/path', { method: 'POST' });
+```
+
 ### No `.prototype.registerEndpoint(s)`
 
 Endpoint defitions should be done using proper class methods:
 
 ```js
+const { Gofer } = require('gofer');
+
 class Example extends Gofer {
   constructor(config) {
     super(config, 'example');
@@ -64,6 +76,8 @@ class Example extends Gofer {
   }
 }
 ```
+
+Please note that only ES6 classes can inherit from `Gofer` now.
 
 ### No more option mappers
 

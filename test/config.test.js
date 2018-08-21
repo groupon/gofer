@@ -4,7 +4,7 @@
 
 const assert = require('assertive');
 
-const Gofer = require('../');
+const { Gofer } = require('../');
 
 const CONFIG = {
   globalDefaults: { timeout: 100, connectTimeout: 55 },
@@ -16,29 +16,23 @@ const CONFIG = {
   },
 };
 
-function GoferA(config) {
-  Gofer.call(this, config, 'a');
+class GoferA extends Gofer {
+  constructor(config) {
+    super(config, 'a');
+  }
 }
-GoferA.prototype = Object.create(Gofer.prototype);
 
-function GoferB(config) {
-  Gofer.call(this, config, 'b');
+class GoferB extends Gofer {
+  constructor(config) {
+    super(config, 'b');
+  }
 }
-GoferB.prototype = Object.create(Gofer.prototype);
 
 describe('config handling', () => {
   let a;
   let b;
 
   before(() => {
-    GoferB.prototype.registerEndpoints({
-      x: function(fetch) {
-        return function(cb) {
-          return fetch('/something', cb);
-        };
-      },
-    });
-
     a = new GoferA(CONFIG);
     b = new GoferB(CONFIG);
   });

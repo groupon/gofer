@@ -4,17 +4,13 @@
 
 const assert = require('assertive');
 
-const Gofer = require('../');
+const { Gofer, fetch } = require('../');
 
 const options = require('./mock-service');
 
 describe('gofer', () => {
   it('exports a `fetch` function', () => {
-    assert.hasType(Function, Gofer.fetch);
-  });
-
-  it('exposes Gofer as exports.default', () => {
-    assert.equal(Gofer, Gofer.default);
+    assert.hasType(Function, fetch);
   });
 
   describe('direct usage', () => {
@@ -24,7 +20,7 @@ describe('gofer', () => {
     });
 
     it('can fetch something', () => {
-      return gofer.get('/echo');
+      return gofer.fetch('/echo');
     });
   });
 
@@ -56,10 +52,11 @@ describe('gofer', () => {
   });
 
   describe('sub-class', () => {
-    function SubGofer(config) {
-      Gofer.call(this, config, 'sub', '1.2.3', 'my-sub-client');
+    class SubGofer extends Gofer {
+      constructor(config) {
+        super(config, 'sub', '1.2.3', 'my-sub-client');
+      }
     }
-    SubGofer.prototype = Object.create(Gofer.prototype);
 
     let sub;
     before('create SubGofer instance', () => {
@@ -68,7 +65,7 @@ describe('gofer', () => {
 
     it('can fetch something', () => {
       return sub
-        .get('/echo')
+        .fetch('/echo')
         .json()
         .then(echo => {
           const expectedUserAgent =

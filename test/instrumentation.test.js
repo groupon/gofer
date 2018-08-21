@@ -3,7 +3,7 @@
 const assert = require('assertive');
 const assign = require('lodash/assign');
 
-const Gofer = require('../');
+const { Gofer } = require('../');
 
 const instrument = require('./instrument');
 
@@ -23,20 +23,28 @@ function ensureEmpty() {
 }
 
 describe('Verify instrumentation support', () => {
-  const client = new Gofer({ instrumented: options }, 'instrumented');
+  class Instrumented extends Gofer {
+    constructor() {
+      super({ globalDefaults: options }, 'instrumented');
+    }
 
-  client.registerEndpoints({
-    echo: function(fetch) {
-      return function() {
-        return fetch('/{x}', { method: 'PUT', pathParams: { x: 'echo' } });
-      };
-    },
-    named: function(fetch) {
-      return function() {
-        return fetch('/echo', { method: 'PUT', methodName: 'echo' });
-      };
-    },
-  });
+    echo() {
+      return this.fetch('/{x}', {
+        method: 'PUT',
+        pathParams: { x: 'echo' },
+        endpointName: 'echo',
+      });
+    }
+
+    named() {
+      return this.fetch('/echo', {
+        method: 'PUT',
+        methodName: 'echo',
+        endpointName: 'named',
+      });
+    }
+  }
+  const client = new Instrumented();
 
   before('add instrumentation', instrument);
   after('remove instrumentation', instrument.reset);

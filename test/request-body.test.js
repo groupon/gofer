@@ -4,17 +4,17 @@
 
 const assert = require('assertive');
 
-const Gofer = require('../');
+const { Gofer } = require('../');
 
 const defaultOptions = require('./mock-service');
 
 describe('fetch: sending a body', () => {
-  const client = new Gofer().with(defaultOptions);
-  client.registerEndpoint('echo', fetch => {
-    return function(options) {
-      return fetch('/echo', options).json();
-    };
-  });
+  class EchoClient extends Gofer {
+    echo(options) {
+      return this.fetch('/echo', options).json();
+    }
+  }
+  const client = new EchoClient().with(defaultOptions);
 
   it('can send a string', () => {
     return client.echo({ body: 'I💖🍕', method: 'PUT' }).then(echo => {
