@@ -8,53 +8,25 @@ const fetch = Gofer.fetch;
 
 const options = require('./mock-service');
 
-describe('legacy / callback mode', () => {
+describe('callback removal', () => {
   if (typeof document === 'object') {
     it.skip('(callback interface not supported in browser builds)');
     return;
   }
 
-  describe('using Gofer.fetch', () => {
-    let returnValue;
-    let error;
-    let data;
-    let response;
+  function assertCallbackError(err) {
+    assert.equal('TypeError', err.name);
+    assert.equal('Gofer 4.x no longer supports callbacks', err.message);
+  }
 
-    before(done => {
-      returnValue = fetch('/echo', options, (_error, _data, _response) => {
-        error = _error;
-        data = _data;
-        response = _response;
-        done(error);
-      });
-    });
-
-    it('returns undefined', () => {
-      assert.equal(undefined, returnValue);
-    });
-
-    it('returns the parsed body as data', () => {
-      assert.truthy(data);
-      assert.equal('GET', data.method);
-    });
-
-    it('includes the response object', () => {
-      assert.truthy(response);
-      assert.equal(200, response.statusCode);
-    });
-
-    it('includes the parsed body on 404s', done => {
-      fetch('/json/404', options, (notFoundError, body) => {
-        assert.truthy(notFoundError);
-        assert.truthy(body);
-        assert.equal('/json/404', body.url);
-        assert.deepEqual(notFoundError.body, body);
-        done();
-      });
+  describe('Gofer.fetch w/ callback', () => {
+    it('throws a TypeError', () => {
+      const err = assert.throws(() => fetch('/', {}, () => {}));
+      assertCallbackError(err);
     });
   });
 
-  describe('registerEndpoints', () => {
+  describe('registerEndpoints w/ callback', () => {
     function EchoClient(config) {
       Gofer.call(this, config, 'echo');
     }
@@ -74,34 +46,17 @@ describe('legacy / callback mode', () => {
       echo: { baseUrl: options.baseUrl },
     });
 
-    it('can be used as a promise', () => {
-      return client.echo({ a: 42 }).then(response => {
-        assert.equal(200, response.statusCode);
-      });
-    });
-
-    it('turns into errback-style when callback is provided', done => {
-      const result = client.echo({ a: 42 }, (error, data, response) => {
-        if (error) return done(error);
-        assert.equal('Does *not* return a promise', undefined, result);
-        assert.equal(200, response.statusCode);
-        assert.equal('GET', data.method);
-        done();
-      });
+    it('throws a TypeError', () => {
+      const err = assert.throws(() => client.echo({ a: 42 }, () => {}));
+      assertCallbackError(err);
     });
   });
 
-  describe('using new Gofer().*', () => {
-    let gofer;
-    before('create Gofer instance', () => {
-      gofer = new Gofer().with(options);
-    });
-
-    it('exposes the legacy mode interface', done => {
-      gofer.get('/echo', {}, (error, body) => {
-        assert.truthy(body);
-        done(error);
-      });
+  describe('using new Gofer().* w/ callback', () => {
+    it('throws a TypeError', () => {
+      const gofer = new Gofer().with(options);
+      const err = assert.throws(() => gofer.get('/echo', {}, () => {}));
+      assertCallbackError(err);
     });
   });
 });

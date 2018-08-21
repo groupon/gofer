@@ -82,16 +82,12 @@ describe('fetch: timeouts', () => {
     before(remoteServer.fork);
     after(remoteServer.kill);
 
-    it('gives it a last chance', function(done) {
+    it('gives it a last chance', function() {
       this.timeout(500);
 
-      fetch(
-        `http://127.0.0.1:${remoteServer.port}`,
-        {
-          timeout: 100,
-        },
-        done
-      );
+      const promise = fetch(`http://127.0.0.1:${remoteServer.port}`, {
+        timeout: 100,
+      });
 
       function blockEventLoop() {
         let endTime = Date.now() + 150;
@@ -101,6 +97,7 @@ describe('fetch: timeouts', () => {
       }
 
       setTimeout(blockEventLoop, 20);
+      return promise;
     });
   });
 
