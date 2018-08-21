@@ -1,11 +1,6 @@
 'use strict';
 
 const assert = require('assertive');
-const Bluebird = require('bluebird');
-
-// This is important because PhantomJS has a non-writeable
-// error.stack property and the resulting warnings make the tests fail...
-Bluebird.config({ warnings: false });
 
 const fetch = require('../').fetch;
 
