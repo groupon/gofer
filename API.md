@@ -51,6 +51,35 @@ import { fetch } from 'gofer';
 [basicauth]: https://en.wikipedia.org/wiki/Basic_access_authentication
 [tls]: https://nodejs.org/api/tls.html#tls_new_tls_tlssocket_socket_options
 
+### Return/callback value
+
+`fetch()` returns a Promise for, or calls the callback specified with a
+response object, which supports the following methods.  For convenience
+in Promise mode, you may also invoke each of them directly on the Promise
+returned from `fetch()`, i.e. you may do:
+
+```js
+fetch(url).then(res => res.json()).then(obj => console.log(obj.status));
+// OR
+fetch(url).json().then(obj => console.log(obj.status));
+```
+
+#### `.json() => Promise<Object>`
+
+Returns a Promise for the entire response text, parsed as JSON
+
+#### `.text() => Promise<string>`
+
+Returns a Promise for the entire response, charset decoded
+
+#### `.rawBody() => Promise<buffer>`
+
+Returns a Promise for the raw response body, as a Buffer
+
+#### `.stream() => ReadableStream`
+
+Returns a stream for the data as it arrives
+
 ## `Gofer`
 
 This class can be used directly
