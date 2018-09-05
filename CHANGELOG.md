@@ -1,3 +1,11 @@
+### 3.6.0
+
+* support `fetch().stream().then()` - **[@dbushong](https://github.com/dbushong)** [#90](https://github.com/groupon/gofer/pull/90)
+  - [`19b6c1e`](https://github.com/groupon/gofer/commit/19b6c1e50878ecd9d951f4213c3c5fb0f7aae100) **feat:** support `fetch().stream().then()`
+  - [`a9b6483`](https://github.com/groupon/gofer/commit/a9b6483dba99f1b20a94936f00a6d5b11992bacf) **docs:** wrap API docs @ 80 columns
+  - [`6c8e040`](https://github.com/groupon/gofer/commit/6c8e04032cb8feb13adc2ff8452e0a1fae83a352) **docs:** `.json()`, `.text()`, etc.
+
+
 ### 3.5.8
 
 * don't set connect timeout for keepalive - **[@dbushong](https://github.com/dbushong)** [#86](https://github.com/groupon/gofer/pull/86)
