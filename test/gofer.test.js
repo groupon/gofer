@@ -3,6 +3,7 @@
 'use strict';
 
 var assert = require('assertive');
+var assign = require('lodash/assign');
 
 var Gofer = require('../');
 
@@ -26,6 +27,31 @@ describe('gofer', function() {
     it('can fetch something', function() {
       return gofer.get('/echo');
     });
+  });
+
+  describe('allows getting merged options', function() {
+    var gofer = new Gofer({}, 'my-service', '1.2.3', 'my-client').with(options);
+    assert.deepEqual(
+      assign({}, options, {
+        clientName: 'my-client',
+        clientVersion: '1.2.3',
+        serviceName: 'my-service',
+      }),
+      gofer.getMergedOptions()
+    );
+
+    assert.deepEqual(
+      assign({}, options, {
+        customOption: 42,
+        clientName: 'different-client',
+        clientVersion: '1.2.3',
+        serviceName: 'my-service',
+      }),
+      gofer.getMergedOptions({
+        customOption: 42,
+        clientName: 'different-client',
+      })
+    );
   });
 
   describe('call that sets a header', function() {
