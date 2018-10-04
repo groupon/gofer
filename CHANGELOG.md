@@ -1,3 +1,9 @@
+### 3.7.0
+
+* Add gofer.getMergedOptions - **[@jkrems](https://github.com/jkrems)** [#91](https://github.com/groupon/gofer/pull/91)
+  - [`fb9809e`](https://github.com/groupon/gofer/commit/fb9809ead2ebed842a4e86b9200084648a6a7065) **feat:** Add gofer.getMergedOptions
+
+
 ### 3.6.0
 
 * support `fetch().stream().then()` - **[@dbushong](https://github.com/dbushong)** [#90](https://github.com/groupon/gofer/pull/90)
