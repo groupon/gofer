@@ -76,6 +76,10 @@ describe('fetch: searchDomain', function() {
       server.listen(done);
     });
 
+    after(function() {
+      server.close();
+    });
+
     it('never appends the searchDomain to localhost', function() {
       var options = {
         baseUrl: 'http://localhost:' + server.address().port,
