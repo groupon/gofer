@@ -8,9 +8,7 @@ The module has two exports:
 ## `fetch(url, options, callback)`
 
 ```js
-var fetch = require('gofer').fetch;
-// Or using module imports:
-import { fetch } from 'gofer';
+const { fetch } = require('gofer');
 ```
 
 ### Options
@@ -87,29 +85,15 @@ but it's mainly meant to be the base class for individual service clients.
 Example:
 
 ```js
-var util = require('util');
-
-var Gofer = require('gofer');
-var pkg = require('./package.json');
-
-function MyClient() {
-  Gofer.apply(this, config, 'myService', pkg.version, pkg.name);
-}
-util.inherits(MyClient, Gofer);
-MyClient.prototype = Object.create(Gofer.prototype);
-MyClient.prototype.constructor = MyClient;
-```
-
-Using `class` syntax:
-
-```js
-import Gofer from 'gofer';
-import { version, name } from './package.json';
+const Gofer = require('gofer');
+const { version, name } = require('./package.json');
 
 class MyClient extends Gofer {
   constructor(config) {
     super(config, 'myService', version, name);
   }
+
+  /* endpoint definitions here */
 }
 ```
 
@@ -149,13 +133,10 @@ class GoferA extends Gofer {
 
 class GoferB extends Gofer {
   constructor(config) { super(config, 'b'); }
+  x() {
+    return this.get('/something', { endpointName: 'x' });
+  }
 }
-
-GoferB.prototype.registerEndpoints({
-  x: function (fetch) {
-    return function (cb) { return fetch('/something', cb); };
-  },
-});
 
 const a = new GoferA(config), b = new GoferB(config);
 a.fetch('/something'); // will use timeout: 1001, connectTimeout: 55
@@ -214,26 +195,24 @@ the class. Common variants are a function or a nested objects with functions.
 
 ```js
 MyService.prototype.registerEndpoints({
-  simple: function(fetch) {
-    return function(cb) {
-      return fetch('/some-path', cb);
-    };
+  simple(fetch) {
+    return cb => fetch('/some-path', cb);
   },
-  complex: function(fetch) {
+  complex(fetch) {
     return {
-      foo: function(qs, cb) {
+      foo(qs, cb) {
         return fetch('/foo', { qs: qs }, cb);
       },
-      bar: function(entity, cb) {
+      bar(entity, cb) {
         return fetch('/bar', { json: entity, method: 'PUT' }, cb);
       }
     }
   }
 });
-var my = new MyService();
+const my = new MyService();
 my.simple(); // returns a Promise
 my.complex.foo({ limit: 1 }); // returns a Promise
-my.complex.bar({ name: 'Jordan', friends: 231 }, function(err, body) {});
+my.complex.bar({ name: 'Jordan', friends: 231 }, (err, body) => {});
 ```
 
 ### Instance methods
