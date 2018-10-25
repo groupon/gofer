@@ -1,3 +1,13 @@
+### 3.7.1
+
+* modern docs & deps - **[@dbushong](https://github.com/dbushong)** [#92](https://github.com/groupon/gofer/pull/92)
+  - [`6cced2e`](https://github.com/groupon/gofer/commit/6cced2ea02c2b7805191a3f3579c76a6f257faae) **docs:** update docs to use modern JS
+  - [`7296fe7`](https://github.com/groupon/gofer/commit/7296fe77cc5be83d87f3bbe7d6c398a0c900e6a7) **docs:** update examples to use modern JS
+  - [`a60fe6c`](https://github.com/groupon/gofer/commit/a60fe6cb8fa53aa130777f19227618e79af29cd0) **chore:** run travis on more modern setup
+  - [`f2c822a`](https://github.com/groupon/gofer/commit/f2c822a352f8f4e69f36c1fc7badae7d1e6c62c8) **chore:** update lint rules
+  - [`482213b`](https://github.com/groupon/gofer/commit/482213b731fd89f94c2b5d95f6daa3afeb92116f) **chore:** update deps to make `npm audit` clean
+
+
 ### 3.7.0
 
 * Add gofer.getMergedOptions - **[@jkrems](https://github.com/jkrems)** [#91](https://github.com/groupon/gofer/pull/91)
