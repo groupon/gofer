@@ -29,41 +29,67 @@ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-'use strict';
-var assign = require('lodash/assign');
-var omit = require('lodash/omit');
 
-var Gofer = require('../');
-var pkg = require('../package.json');
+'use strict';
+
+const Gofer = require('../');
+const { version, name } = require('../package.json');
+
+const DEFAULT_BASE_URL = 'https://api.github.com';
 
 // Generate our ServiceClient class
-function GithubClient() {
-  Gofer.call(this, 'github', pkg.version);
-}
-GithubClient.prototype = Object.create(Gofer.prototype);
-GithubClient.prototype.constructor = GithubClient;
+class GithubClient extends Gofer {
+  constructor(config) {
+    super(config, 'github', version, name);
+  }
 
-var DEFAULT_BASE_URL = 'https://api.github.com';
-GithubClient.prototype.addOptionMapper(function githubDefaults(opts) {
+  createAccessToken(oauthCode) {
+    /**
+     * Exchange auth- for access token
+     *
+     * @see http://developer.github.com/v3/oauth/#web-application-flow
+     */
+    return this.fetch('/login/oauth/access_token', {
+      endpointName: 'createAccessToken',
+      oauthCode,
+      method: 'POST',
+      json: true,
+    })
+      .json()
+      .then(res => res.access_token);
+  }
+
+  userRepos(username, qs) {
+    // fetch(url: string, options, callback)
+    return this.fetch(username ? '/users/{username}/repos' : '/user/repos', {
+      endpointName: 'userRepos',
+      pathParams: { username },
+      qs: Object.assign({ per_page: 100 }, qs),
+    }).json();
+  }
+
+  emojis() {
+    return this.fetch('/emojis', { endpointName: 'emojis' }).json();
+  }
+}
+
+GithubClient.prototype.addOptionMapper(opts => {
   // We extract all options we will be handling ourselves and then remove
   // them, making sure nobody gets confused by them
-  var accessToken = opts.accessToken;
-  var oauthCode = opts.oauthCode;
-  var webUrl = opts.webUrl;
-  var clientId = opts.clientId;
-  var clientSecret = opts.clientSecret;
+  const {
+    accessToken,
+    oauthCode,
+    webUrl,
+    clientId,
+    clientSecret,
+    ...otherOpts
+  } = opts;
 
-  opts = omit(opts,
-    'accessToken',
-    'oauthCode',
-    'webUrl',
-    'clientId',
-    'clientSecret'
-  );
+  opts = otherOpts;
 
   if (accessToken) {
     opts.headers = opts.headers || {};
-    opts.headers.authorization = 'token ' + accessToken;
+    opts.headers.authorization = `token ${accessToken}`;
   }
 
   // There's only call using this but since clientId, clientSecret and webUrl
@@ -77,70 +103,15 @@ GithubClient.prototype.addOptionMapper(function githubDefaults(opts) {
     };
   }
 
-  return assign({ baseUrl: DEFAULT_BASE_URL }, opts);
-});
-
-// Endpoints will be added to the prototype of the client, on access they
-// will be initialized with a pre-configured function to make requests. The
-// name of the function happens to be `request` because it (apart from some
-// magical injection of parameters) forwards its arguments to request.
-GithubClient.prototype.registerEndpoints({
-  // This is one possible style of "endpoint": a namespace for functions.
-  // Usage: `github.accessToken.create('my-code').pipe(process.stdout);`
-  accessToken: function accessToken(request) {
-    /**
-     * Exchange auth- for access token
-     *
-     * @see http://developer.github.com/v3/oauth/#web-application-flow
-     */
-    return {
-      create: function create(oauthCode, cb) {
-        // request(uri: string, options, callback)
-        return request('/login/oauth/access_token', {
-          oauthCode: oauthCode,
-          json: true,
-          method: 'POST',
-        }, cb);
-      },
-    };
-  },
-
-  // Different style: "entity actions"
-  // Usage: `github.user('groupon').repos().pipe(process.stdout)`
-  user: function user(fetch) {
-    return function withUser(username) {
-      return {
-        repos: function repos(qs, cb) {
-          if (typeof qs === 'function') {
-            cb = qs;
-            qs = {};
-          }
-
-          // fetch(url: string, options, callback)
-          return fetch(username ? ('/users/{username}/repos') : '/user/repos', {
-            pathParams: { username: username },
-            qs: assign({ per_page: 100 }, qs),
-          }, cb);
-        },
-      };
-    };
-  },
-
-  // The simplest thing last: an endpoint that is just a method
-  // Usage: `github.emojis().pipe(process.stdout)`
-  emojis: function (fetch) {
-    return function emojis(cb) {
-      // fetch(url: string, options, callback)
-      return fetch('/emojis', {}, cb);
-    };
-  },
+  return Object.assign({ baseUrl: DEFAULT_BASE_URL }, opts);
 });
 
 module.exports = GithubClient;
 
 if (require.main === module) {
-  /* eslint no-console:0 */
-  var github = new GithubClient({
+  /* eslint-disable no-console */
+
+  const github = new GithubClient({
     globalDefaults: {
       timeout: 5000,
       connectTimeout: 1000,
@@ -152,35 +123,45 @@ if (require.main === module) {
   });
 
   // Get all supported emojis, dump response to stdout
-  github.emojis().json().then(console.log);
+  github
+    .emojis()
+    .json()
+    .then(console.log, console.error);
 
   // List repos of the `groupon` github org
-  github.user('groupon').repos(function (err, repoList) {
-    if (err) throw err;
-    repoList.forEach(function (repo) {
+  github.userRepos('groupon').then(repoList => {
+    repoList.forEach(repo => {
       console.log(repo.name, '\t#', repo.description);
     });
-  });
+  }, console.error);
 
   // Make a raw call to `/` (resource discovery)
-  github.fetch('/', function (err, data, response) {
-    if (err) throw err;
-    console.log('Status code: %d', response.statusCode);
-    console.log('Returned %d resources', Object.keys(data).length);
-  });
+  github
+    .fetch('/')
+    .then(response => {
+      console.log('Status code: %d', response.statusCode);
+      return response.json();
+    })
+    .then(data => {
+      console.log('Returned %d resources', Object.keys(data).length);
+    })
+    .catch(console.error);
 
   // This is expected to fail unless you pass in a valid access token. If you
   // do, this will output the first of your repos.
-  github.fetch('/user/repos', {
-    accessToken: process.env.GH_TOKEN,
-  }).done(function (myRepos) {
-    if (myRepos.length) {
-      console.log('One of your repos: %s', myRepos[0].name);
-    } else {
-      console.log('No repositories found');
+  github.userRepos({ accessToken: process.env.GH_TOKEN }).then(
+    myRepos => {
+      if (myRepos.length) {
+        console.log('One of your repos: %s', myRepos[0].name);
+      } else {
+        console.log('No repositories found');
+      }
+    },
+    error => {
+      console.log('Failed to get repos, try passing in an access token');
+      console.log(error.message);
     }
-  }, function (error) {
-    console.log('Failed to get repos, try passing in an access token');
-    console.log(error.message);
-  });
+  );
+
+  /* eslint-enable no-console */
 }
