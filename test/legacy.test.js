@@ -82,7 +82,7 @@ describe('legacy / callback mode', function() {
 
     it('turns into errback-style when callback is provided', function(done) {
       var result = client.echo({ a: 42 }, function(error, data, response) {
-        if (error) return done(error);
+        if (error) return void done(error);
         assert.equal('Does *not* return a promise', undefined, result);
         assert.equal(200, response.statusCode);
         assert.equal('GET', data.method);
