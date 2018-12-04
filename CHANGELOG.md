@@ -1,3 +1,9 @@
+### 3.7.2
+
+* update lockfile for security audit - **[@dbushong](https://github.com/dbushong)** [#93](https://github.com/groupon/gofer/pull/93)
+  - [`f106211`](https://github.com/groupon/gofer/commit/f106211e6ad6f043b2300b662863f1ed43e4091f) **chore:** update lockfile for security audit - see: [2018-16472](See: https://nvd.nist.gov/vuln/detail/CVE-2018-16472)
+
+
 ### 3.7.1
 
 * modern docs & deps - **[@dbushong](https://github.com/dbushong)** [#92](https://github.com/groupon/gofer/pull/92)
