@@ -192,3 +192,12 @@ github.emojis()
 ```
 
 You can check `examples/github.js` for a richer example.
+
+## File Uploads
+
+Gofer does not by default ship with support for `multipart/form-data` file
+uploads, but it is easy to add, using the [form-data][form-data] module,
+and an option mapper as shown in this [multi-part mapper test][multi-part].
+
+[form-data]: https://www.npmjs.com/package/form-data
+[multi-part]: test/multi-part-mapper.test.js
