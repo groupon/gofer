@@ -1,3 +1,9 @@
+### 3.7.3
+
+* add note to README about multi-part uploads - **[@dbushong](https://github.com/dbushong)** [#94](https://github.com/groupon/gofer/pull/94)
+  - [`5b35197`](https://github.com/groupon/gofer/commit/5b351970b6744fb9857fa6fcea8f3f61cba3beba) **docs:** add note to README about multi-part uploads
+
+
 ### 3.7.2
 
 * update lockfile for security audit - **[@dbushong](https://github.com/dbushong)** [#93](https://github.com/groupon/gofer/pull/93)
