@@ -1,3 +1,9 @@
+### 3.7.4
+
+* Respect secureContext in options - **[@jkrems](https://github.com/jkrems)** [#95](https://github.com/groupon/gofer/pull/95)
+  - [`f338444`](https://github.com/groupon/gofer/commit/f338444ed34771cde5898c976955812bbe85e338) **fix:** Respect secureContext in options
+
+
 ### 3.7.3
 
 * add note to README about multi-part uploads - **[@dbushong](https://github.com/dbushong)** [#94](https://github.com/groupon/gofer/pull/94)
