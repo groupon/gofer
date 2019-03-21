@@ -1,5 +1,7 @@
 'use strict';
 
+var tls = require('tls');
+
 var assert = require('assertive');
 var Bluebird = require('bluebird');
 
@@ -53,6 +55,21 @@ describe('fetch: https', function() {
     }
     return fetch(options.baseUrlTls, {
       ca: [options.certOptions.cert],
+    }).then(function(res) {
+      assert.equal(200, res.statusCode);
+    });
+  });
+
+  it('can load using reusable secureContext', function() {
+    if (typeof document !== 'undefined') {
+      // Browsers don't allow to side-step https
+      return this.skip();
+    }
+    var secureContext = tls.createSecureContext({
+      ca: [options.certOptions.cert],
+    });
+    return fetch(options.baseUrlTls, {
+      secureContext: secureContext,
     }).then(function(res) {
       assert.equal(200, res.statusCode);
     });
