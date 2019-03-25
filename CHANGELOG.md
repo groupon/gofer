@@ -1,3 +1,9 @@
+### 3.7.5
+
+* fix: bug in body validation - **[@dbushong](https://github.com/dbushong)** [#96](https://github.com/groupon/gofer/pull/96)
+  - [`c21d116`](https://github.com/groupon/gofer/commit/c21d116b3962820b9a6db37206bd17bdd2b75923) **fix:** bug in body validation
+
+
 ### 3.7.4
 
 * Respect secureContext in options - **[@jkrems](https://github.com/jkrems)** [#95](https://github.com/groupon/gofer/pull/95)
