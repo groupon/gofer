@@ -1,3 +1,9 @@
+### 3.7.6
+
+* chore(deps): bump js-yaml from 3.12.0 to 3.13.1 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#97](https://github.com/groupon/gofer/pull/97)
+  - [`c442229`](https://github.com/groupon/gofer/commit/c442229a299b96f9c7cd5dfb14c7a5c43992a902) **chore:** bump js-yaml from 3.12.0 to 3.13.1
+
+
 ### 3.7.5
 
 * fix: bug in body validation - **[@dbushong](https://github.com/dbushong)** [#96](https://github.com/groupon/gofer/pull/96)
