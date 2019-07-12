@@ -1,3 +1,9 @@
+### 3.7.7
+
+* chore(deps): bump lodash from 4.17.11 to 4.17.13 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#98](https://github.com/groupon/gofer/pull/98)
+  - [`59b17d8`](https://github.com/groupon/gofer/commit/59b17d8e0479ff12a323550821cc058d711960aa) **chore:** bump lodash from 4.17.11 to 4.17.13 - see: [4](- [Commits](https://github.com/lodash/lodash/compare/4)
+
+
 ### 3.7.6
 
 * chore(deps): bump js-yaml from 3.12.0 to 3.13.1 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#97](https://github.com/groupon/gofer/pull/97)
