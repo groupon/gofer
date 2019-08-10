@@ -1,3 +1,9 @@
+### 3.7.8
+
+* upgrade nlm & npm audit fix - **[@dbushong](https://github.com/dbushong)** [#99](https://github.com/groupon/gofer/pull/99)
+  - [`b2d2079`](https://github.com/groupon/gofer/commit/b2d207997f3d2a2ce0ab33b70f3829626aa91ef0) **chore:** upgrade nlm & npm audit fix
+
+
 ### 3.7.7
 
 * chore(deps): bump lodash from 4.17.11 to 4.17.13 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#98](https://github.com/groupon/gofer/pull/98)
