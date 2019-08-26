@@ -1,3 +1,9 @@
+### 3.7.9
+
+* chore(deps): bump eslint-utils from 1.3.1 to 1.4.2 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#100](https://github.com/groupon/gofer/pull/100)
+  - [`908d467`](https://github.com/groupon/gofer/commit/908d4672dd0d8a9496f627c2d35c891afaac9df7) **chore:** bump eslint-utils from 1.3.1 to 1.4.2
+
+
 ### 3.7.8
 
 * upgrade nlm & npm audit fix - **[@dbushong](https://github.com/dbushong)** [#99](https://github.com/groupon/gofer/pull/99)
