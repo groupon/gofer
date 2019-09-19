@@ -29,6 +29,7 @@
       ]
     }
   },
+  "types": "lib/typedefs.d.ts",
   "dependencies": {
     "bluebird": "^3.3.3",
     "debug": "^2.2.0",
