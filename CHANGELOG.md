@@ -1,3 +1,9 @@
+### 3.8.1
+
+* add missing verbs & make types match - **[@dbushong](https://github.com/dbushong)** [#102](https://github.com/groupon/gofer/pull/102)
+  - [`4c52721`](https://github.com/groupon/gofer/commit/4c527214f91c02b014296fb79afe1b382e03337a) **fix:** add missing verbs & make types match
+
+
 ### 3.8.0
 
 * add basic typescript type definitions - **[@dbushong](https://github.com/dbushong)** [#101](https://github.com/groupon/gofer/pull/101)
