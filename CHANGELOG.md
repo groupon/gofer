@@ -1,3 +1,10 @@
+### 3.8.0
+
+* add basic typescript type definitions - **[@dbushong](https://github.com/dbushong)** [#101](https://github.com/groupon/gofer/pull/101)
+  - [`36e7ea5`](https://github.com/groupon/gofer/commit/36e7ea5c7791e9ee55efa33fb6bd7d434d030451) **feat:** add basic typescript type definitions
+  - [`d6805f9`](https://github.com/groupon/gofer/commit/d6805f9ebc830cf561fd0701dc106ab92e6cf444) **chore:** update travis versions
+
+
 ### 3.7.9
 
 * chore(deps): bump eslint-utils from 1.3.1 to 1.4.2 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#100](https://github.com/groupon/gofer/pull/100)
