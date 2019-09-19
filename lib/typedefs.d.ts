@@ -1,5 +1,5 @@
-import { SecureContext } from 'tls';
-import { ServerResponse } from 'http';
+import { SecureContext } from "tls";
+import { ServerResponse } from "http";
 
 type BodyMethods = {
   json(): Promise<any>;
@@ -28,8 +28,9 @@ declare class Gofer {
   get(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   post(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   put(path: string, opts?: Gofer.FetchOpts): FetchResponse;
-  delete(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+  del(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   head(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+  delete(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   patch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   options(path: string, opts?: Gofer.FetchOpts): FetchResponse;
 }
@@ -45,7 +46,7 @@ declare namespace Gofer {
     keepAlive?: boolean;
     baseUrl?: string;
     headers?: { [name: string]: string };
-    auth?: string | { username: string, password: string };
+    auth?: string | { username: string; password: string };
     qs?: { [name: string]: any };
     maxSockets?: number;
     minStatusCode?: number;
