@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assertive');
-const Bluebird = require('bluebird');
 
 const Gofer = require('../');
 
@@ -42,7 +41,7 @@ describe('fetch: maxSockets', () => {
       },
       'bar'
     );
-    return Bluebird.all([
+    return Promise.all([
       foo
         .fetch('/echo/1')
         .json()
