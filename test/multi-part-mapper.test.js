@@ -7,7 +7,6 @@ const fs = require('fs');
 
 const assert = require('assertive');
 const FormData = require('form-data');
-const assign = require('lodash/assign');
 
 const Gofer = require('../');
 
@@ -45,7 +44,7 @@ describe('fetch: multi-part via form-data', () => {
       const form = (options.body = new FormData());
       appendAll(form, formData);
       options.headers = options.headers || {};
-      assign(options.headers, form.getHeaders());
+      Object.assign(options.headers, form.getHeaders());
     }
     return options;
   });

@@ -3,7 +3,6 @@
 'use strict';
 
 const assert = require('assertive');
-const assign = require('lodash/assign');
 
 const Gofer = require('../');
 
@@ -34,7 +33,7 @@ describe('gofer', () => {
       options
     );
     assert.deepEqual(
-      assign({}, options, {
+      Object.assign({}, options, {
         clientName: 'my-client',
         clientVersion: '1.2.3',
         serviceName: 'my-service',
@@ -43,7 +42,7 @@ describe('gofer', () => {
     );
 
     assert.deepEqual(
-      assign({}, options, {
+      Object.assign({}, options, {
         customOption: 42,
         clientName: 'different-client',
         clientVersion: '1.2.3',

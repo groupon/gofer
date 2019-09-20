@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assertive');
-const assign = require('lodash/assign');
 
 const Gofer = require('../');
 
@@ -10,7 +9,7 @@ const instrument = require('./instrument');
 const options = require('./mock-service');
 
 function ensureEmpty() {
-  assign(instrument, {
+  Object.assign(instrument, {
     serviceName: null,
     endpointName: null,
     methodName: null,

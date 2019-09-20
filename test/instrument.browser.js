@@ -2,8 +2,6 @@
 
 'use strict';
 
-const assign = require('lodash/assign');
-
 const original = typeof window !== 'undefined' ? window.fetch : null;
 
 function instrument() {
@@ -11,7 +9,7 @@ function instrument() {
     // This is terrible instrumentation because it doesn't handle
     // all possible arguments. E.g. `url` could also be an instance
     // of Request.
-    assign(instrument, options || {});
+    Object.assign(instrument, options || {});
     return original.apply(this, arguments);
   };
 }

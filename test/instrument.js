@@ -2,8 +2,6 @@
 
 const http = require('http');
 
-const assign = require('lodash/assign');
-
 const original = http.request;
 
 function instrument() {
@@ -11,7 +9,7 @@ function instrument() {
     // This is terrible instrumentation because it doesn't handle
     // all possible arguments. `options` isn't the only possible
     // call signature of `http.request`.
-    assign(instrument, options);
+    Object.assign(instrument, options);
     return original.apply(this, arguments);
   };
 }
