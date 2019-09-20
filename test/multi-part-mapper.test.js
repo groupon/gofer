@@ -51,7 +51,7 @@ describe('fetch: multi-part via form-data', () => {
   });
 
   it('can send a complex form with file uploads', () => {
-    const file = fs.createReadStream('test/.eslintrc');
+    const file = fs.createReadStream('package.json');
     return client
       .echo({
         formData: {
@@ -67,7 +67,7 @@ describe('fetch: multi-part via form-data', () => {
           echo.headers['content-type']
         );
         assert.include(
-          'Content-Disposition: form-data; name="myFile"; filename=".eslintrc"',
+          'Content-Disposition: form-data; name="myFile"; filename="package.json"',
           echo.body
         );
         assert.include(
