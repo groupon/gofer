@@ -21,7 +21,11 @@ describe('fetch: https', () => {
     return fetch('https://api.reddit.com/user/ageitgey/about.json').json();
   });
 
-  it('fails with self-signed https', () => {
+  it('fails with self-signed https', function() {
+    if (typeof document !== 'undefined') {
+      // puppeteer ignores self-signed cert errors(?)
+      return this.skip();
+    }
     return assert.rejects(fetch(options.baseUrlTls)).then(error => {
       // In browsers we don't get any nice, reliable errors (yet?)
       if (typeof document === 'undefined') {

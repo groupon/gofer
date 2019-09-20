@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * This re-runs the whole test suite inside of phantomjs.
+ * This re-runs the whole test suite inside of chromium.
  * That's great for CI but tends to be hard to debug.
  *
  * So for debugging purposes there's:
@@ -11,7 +11,7 @@
  * 3. Open `tmp/test.html` in your browser
  *
  * ```
- * mochify --watch --consolify tmp/test.html --reporter spec ./node_modules/promise/polyfill ./node_modules/whatwg-fetch ./test/**\/*.test.js
+ * npx mochify --watch --consolify tmp/test.html --reporter spec ./test/**\/*.test.js
  * ```
  */
 
@@ -29,13 +29,7 @@ describe('in a browser', () => {
     this.timeout(60 * 1000);
     const child = execFile(
       mochifyBin,
-      [
-        '--reporter',
-        'spec',
-        './node_modules/promise/polyfill',
-        './node_modules/whatwg-fetch',
-        './test/**/*.test.js',
-      ],
+      ['--reporter', 'spec', './test/**/*.test.js'],
       done
     );
     child.stdout.pipe(process.stdout);
