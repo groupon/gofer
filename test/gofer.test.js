@@ -2,35 +2,37 @@
 
 'use strict';
 
-var assert = require('assertive');
-var assign = require('lodash/assign');
+const assert = require('assertive');
+const assign = require('lodash/assign');
 
-var Gofer = require('../');
+const Gofer = require('../');
 
-var options = require('./mock-service');
+const options = require('./mock-service');
 
-describe('gofer', function() {
-  it('exports a `fetch` function', function() {
+describe('gofer', () => {
+  it('exports a `fetch` function', () => {
     assert.hasType(Function, Gofer.fetch);
   });
 
-  it('exposes Gofer as exports.default', function() {
+  it('exposes Gofer as exports.default', () => {
     assert.equal(Gofer, Gofer.default);
   });
 
-  describe('direct usage', function() {
-    var gofer;
-    before('create Gofer instance', function() {
+  describe('direct usage', () => {
+    let gofer;
+    before('create Gofer instance', () => {
       gofer = new Gofer().with(options);
     });
 
-    it('can fetch something', function() {
+    it('can fetch something', () => {
       return gofer.get('/echo');
     });
   });
 
-  describe('allows getting merged options', function() {
-    var gofer = new Gofer({}, 'my-service', '1.2.3', 'my-client').with(options);
+  describe('allows getting merged options', () => {
+    const gofer = new Gofer({}, 'my-service', '1.2.3', 'my-client').with(
+      options
+    );
     assert.deepEqual(
       assign({}, options, {
         clientName: 'my-client',
@@ -54,9 +56,9 @@ describe('gofer', function() {
     );
   });
 
-  describe('call that sets a header', function() {
-    var gofer;
-    before(function() {
+  describe('call that sets a header', () => {
+    let gofer;
+    before(() => {
       gofer = new Gofer()
         .with({
           headers: { 'x-a': 'foo' },
@@ -70,34 +72,34 @@ describe('gofer', function() {
         .json();
     });
 
-    it('does not affect defaults', function() {
+    it('does not affect defaults', () => {
       return gofer
         .fetch('/echo')
         .json()
-        .then(function(echo) {
+        .then(echo => {
           assert.equal('foo', echo.headers['x-a']);
           assert.equal(undefined, echo.headers['x-b']);
         });
     });
   });
 
-  describe('sub-class', function() {
+  describe('sub-class', () => {
     function SubGofer(config) {
       Gofer.call(this, config, 'sub', '1.2.3', 'my-sub-client');
     }
     SubGofer.prototype = Object.create(Gofer.prototype);
 
-    var sub;
-    before('create SubGofer instance', function() {
+    let sub;
+    before('create SubGofer instance', () => {
       sub = new SubGofer({ sub: options });
     });
 
-    it('can fetch something', function() {
+    it('can fetch something', () => {
       return sub
         .get('/echo')
         .json()
-        .then(function(echo) {
-          var expectedUserAgent =
+        .then(echo => {
+          const expectedUserAgent =
             typeof navigator !== 'undefined'
               ? navigator.userAgent
               : 'my-sub-client/1.2.3';

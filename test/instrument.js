@@ -1,10 +1,10 @@
 'use strict';
 
-var http = require('http');
+const http = require('http');
 
-var assign = require('lodash/assign');
+const assign = require('lodash/assign');
 
-var original = http.request;
+const original = http.request;
 
 function instrument() {
   http.request = function request(options) {

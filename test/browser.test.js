@@ -19,15 +19,15 @@
 if (typeof document !== 'undefined') return;
 
 // Ignore this import when processing via browserify
-var execFile = module.require('' + 'child_process').execFile;
+const execFile = module.require('' + 'child_process').execFile;
 
 require('./mock-service');
 
-describe('in a browser', function() {
+describe('in a browser', () => {
   it('works (almost) just the same', function(done) {
-    var mochifyBin = require.resolve('.bin/mochify');
+    const mochifyBin = require.resolve('.bin/mochify');
     this.timeout(60 * 1000);
-    var child = execFile(
+    const child = execFile(
       mochifyBin,
       [
         '--reporter',

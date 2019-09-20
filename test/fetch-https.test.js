@@ -1,19 +1,19 @@
 'use strict';
 
-var tls = require('tls');
+const tls = require('tls');
 
-var assert = require('assertive');
-var Bluebird = require('bluebird');
+const assert = require('assertive');
+const Bluebird = require('bluebird');
 
 // This is important because PhantomJS has a non-writeable
 // error.stack property and the resulting warnings make the tests fail...
 Bluebird.config({ warnings: false });
 
-var fetch = require('../').fetch;
+const fetch = require('../').fetch;
 
-var options = require('./mock-service');
+const options = require('./mock-service');
 
-describe('fetch: https', function() {
+describe('fetch: https', () => {
   it('can load from valid https remote', function() {
     // This is a remote call which isn't great but it means we get a valid
     // https certificate without having to pull any tricks.
@@ -21,8 +21,8 @@ describe('fetch: https', function() {
     return fetch('https://api.reddit.com/user/ageitgey/about.json').json();
   });
 
-  it('fails with self-signed https', function() {
-    return assert.rejects(fetch(options.baseUrlTls)).then(function(error) {
+  it('fails with self-signed https', () => {
+    return assert.rejects(fetch(options.baseUrlTls)).then(error => {
       // In browsers we don't get any nice, reliable errors (yet?)
       if (typeof document === 'undefined') {
         if (error.code) {
@@ -43,7 +43,7 @@ describe('fetch: https', function() {
     }
     return fetch(options.baseUrlTls, {
       rejectUnauthorized: false,
-    }).then(function(res) {
+    }).then(res => {
       assert.equal(200, res.statusCode);
     });
   });
@@ -55,7 +55,7 @@ describe('fetch: https', function() {
     }
     return fetch(options.baseUrlTls, {
       ca: [options.certOptions.cert],
-    }).then(function(res) {
+    }).then(res => {
       assert.equal(200, res.statusCode);
     });
   });
@@ -65,12 +65,12 @@ describe('fetch: https', function() {
       // Browsers don't allow to side-step https
       return this.skip();
     }
-    var secureContext = tls.createSecureContext({
+    const secureContext = tls.createSecureContext({
       ca: [options.certOptions.cert],
     });
     return fetch(options.baseUrlTls, {
-      secureContext: secureContext,
-    }).then(function(res) {
+      secureContext,
+    }).then(res => {
       assert.equal(200, res.statusCode);
     });
   });

@@ -1,23 +1,24 @@
-/* eslint-disable no-underscore-dangle */
-
 'use strict';
 
-var http = require('http');
-var https = require('https');
-var parseUrl = require('url').parse;
+/* eslint-disable no-underscore-dangle */
+/* eslint-env mocha */
 
-var selfSigned = require('self-signed');
+const http = require('http');
+const https = require('https');
+const parseUrl = require('url').parse;
 
-var options = require('./mock-service.browser');
+const selfSigned = require('self-signed');
 
-var MOCK_SERVICE_PORT = +options.baseUrl.match(/:(\d+)/)[1];
-var MOCK_SERVICE_PORT_TLS = +options.baseUrlTls.match(/:(\d+)/)[1];
+const options = require('./mock-service.browser');
 
-var server;
-var serverTls;
+const MOCK_SERVICE_PORT = +options.baseUrl.match(/:(\d+)/)[1];
+const MOCK_SERVICE_PORT_TLS = +options.baseUrlTls.match(/:(\d+)/)[1];
+
+let server;
+let serverTls;
 
 function generateCertOptions() {
-  var keypair = selfSigned(
+  const keypair = selfSigned(
     {
       name: 'localhost',
       city: 'Chicago',
@@ -35,14 +36,14 @@ function generateCertOptions() {
     key: keypair.private,
   };
 }
-var certOptions = generateCertOptions();
+const certOptions = generateCertOptions();
 
 function sendEcho(req, res) {
-  var chunks = [];
-  var query = parseUrl(req.url, true).query;
+  const chunks = [];
+  const query = parseUrl(req.url, true).query;
 
-  var latency = query.__latency ? +query.__latency : 0;
-  var hang = query.__hang ? +query.__hang : 0;
+  const latency = query.__latency ? +query.__latency : 0;
+  const hang = query.__hang ? +query.__hang : 0;
 
   function forceFlush() {
     res.write(Array(4096 + 1).join(' '));
@@ -71,10 +72,10 @@ function sendEcho(req, res) {
     }
   }
 
-  req.on('data', function onChunk(chunk) {
+  req.on('data', chunk => {
     chunks.push(chunk);
   });
-  req.on('end', function onEnd() {
+  req.on('end', () => {
     if (latency) {
       setTimeout(sendHeader, latency);
     } else {
@@ -89,11 +90,11 @@ function send404(req, res) {
 }
 
 function sendChunks(req, res) {
-  var query = parseUrl(req.url, true).query;
-  var delay = query.__delay ? +query.__delay : 0;
-  var chunkDelay = query.__chunkDelay ? +query.__chunkDelay : 0;
-  var totalDelay = query.__totalDelay ? +query.__totalDelay : 0;
-  var writeChunkHandle;
+  const query = parseUrl(req.url, true).query;
+  const delay = query.__delay ? +query.__delay : 0;
+  const chunkDelay = query.__chunkDelay ? +query.__chunkDelay : 0;
+  const totalDelay = query.__totalDelay ? +query.__totalDelay : 0;
+  let writeChunkHandle;
 
   function writeChunk() {
     res.write(Array(4096 + 1).join(' '));
@@ -134,7 +135,7 @@ function handleRequest(req, res) {
   // Preflight requests that return a 404 confuse Chrome
   if (req.method === 'OPTIONS') return res.end();
 
-  var pathname = parseUrl(req.url).pathname;
+  const pathname = parseUrl(req.url).pathname;
   if (/^\/echo/.test(pathname)) {
     return sendEcho(req, res);
   }
@@ -149,7 +150,7 @@ function handleRequest(req, res) {
 }
 
 function bootupServers(done) {
-  var serversListening = 0;
+  let serversListening = 0;
   function onListen() {
     ++serversListening;
     if (serversListening === 2) done();
@@ -165,7 +166,7 @@ function bootupServers(done) {
 if (typeof before === 'function') {
   before(bootupServers);
 
-  after(function() {
+  after(() => {
     if (server) {
       try {
         server.close();
@@ -183,7 +184,7 @@ if (typeof before === 'function') {
   });
 }
 if (process.mainModule === module) {
-  bootupServers(function(error) {
+  bootupServers(error => {
     if (error) throw error;
     /* eslint no-console:0 */
     console.log('Listening on %s', options.baseUrl);

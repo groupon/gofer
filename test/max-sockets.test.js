@@ -1,11 +1,11 @@
 'use strict';
 
-var assert = require('assertive');
-var Bluebird = require('bluebird');
+const assert = require('assertive');
+const Bluebird = require('bluebird');
 
-var Gofer = require('../');
+const Gofer = require('../');
 
-var options = require('./mock-service');
+const options = require('./mock-service');
 
 function urlWithDate(echo) {
   return { url: echo.url, time: Date.now() };
@@ -15,14 +15,14 @@ function getUrlPath(item) {
   return item.url.replace(/^\/echo\/([^?]+)(?:\?.*)?/, '$1');
 }
 
-describe('fetch: maxSockets', function() {
+describe('fetch: maxSockets', () => {
   it('loads two one after the other', function() {
     if (typeof document !== 'undefined') {
       // Browsers don't allow us to control the parallism
       return this.skip();
     }
     this.timeout(2000);
-    var foo = new Gofer(
+    const foo = new Gofer(
       {
         foo: {
           baseUrl: options.baseUrl,
@@ -32,7 +32,7 @@ describe('fetch: maxSockets', function() {
       },
       'foo'
     );
-    var bar = new Gofer(
+    const bar = new Gofer(
       {
         bar: {
           baseUrl: options.baseUrl,
@@ -67,14 +67,14 @@ describe('fetch: maxSockets', function() {
         .fetch('/echo/bar')
         .json()
         .then(urlWithDate),
-    ]).then(function(results) {
+    ]).then(results => {
       assert.hasType(Array, results);
       assert.deepEqual(
         ['1', '2', '3', '4', '5', 'bar'],
         results.map(getUrlPath)
       );
 
-      var times = results.map(function(result) {
+      const times = results.map(result => {
         return result.time;
       });
 
@@ -90,7 +90,7 @@ describe('fetch: maxSockets', function() {
       );
       assert.expect(
         // leaving some space for timing issues
-        '...just 100+ ms later (' + times[2] + ' - ' + times[0] + ' >= 90)',
+        `...just 100+ ms later (${times[2]} - ${times[0]} >= 90)`,
         times[2] - times[0] > 90
       );
 
