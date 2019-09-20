@@ -29,7 +29,7 @@ describe('fetch: sending a body', () => {
       return this.skip();
     }
     return client
-      .echo({ body: new Buffer('I💖🍕'), method: 'PUT' })
+      .echo({ body: Buffer.from('I💖🍕'), method: 'PUT' })
       .then(echo => {
         assert.equal('PUT', echo.method);
         assert.equal('9', echo.headers['content-length']);
