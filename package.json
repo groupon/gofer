@@ -43,9 +43,7 @@
     "lodash.isobjectlike": "^4.0.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.merge": "^4.6.2",
-    "lodash.mergewith": "^4.6.2",
-    "qs": "^6.1.0",
-    "url": "^0.11.0"
+    "lodash.mergewith": "^4.6.2"
   },
   "devDependencies": {
     "assertive": "^2.1.0",

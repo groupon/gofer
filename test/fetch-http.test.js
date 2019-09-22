@@ -111,22 +111,22 @@ describe('fetch: the basics', () => {
   });
 
   it('throws when the url is not a string', () => {
-    assert.equal(
-      'url has to be a string',
+    assert.include(
+      'Invalid URL',
       assert.throws(() => {
         fetch();
       }).message
     );
 
-    assert.equal(
-      'url has to be a string',
+    assert.include(
+      'Invalid URL',
       assert.throws(() => {
         fetch(true);
       }).message
     );
 
-    assert.equal(
-      'url has to be a string',
+    assert.include(
+      'Invalid URL',
       assert.throws(() => {
         fetch(null);
       }).message
