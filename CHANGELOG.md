@@ -1,3 +1,35 @@
+### 4.0.0
+
+#### Breaking Changes
+
+Now requires a modern browser that can support basic
+ES6+ syntax
+
+*See: [`739cf50`](https://github.com/groupon/gofer/commit/739cf508b64976b1eb69dcb281d4968a1fa1b2f7)*
+
+you no longer get a Bluebird-flavored Promise back when
+you call gofer functions in promise mode
+
+*See: [`f2bc735`](https://github.com/groupon/gofer/commit/f2bc73587bbfae740adf191425538f3ea5dacc25)*
+
+Now requires Node 8.x and/or a browser with native URL and URLSearchParams support
+
+*See: [`bbe30c1`](https://github.com/groupon/gofer/commit/bbe30c1491689fabe3288073f39781043b0d4d62)*
+
+#### Commits
+
+* Modernize and Reduce package size - **[@dbushong](https://github.com/dbushong)** [#103](https://github.com/groupon/gofer/pull/103)
+  - [`c9e684c`](https://github.com/groupon/gofer/commit/c9e684c4cb56816a88848b37127343c79aae42bb) **chore:** upgrade linting & node reqs
+  - [`56a3394`](https://github.com/groupon/gofer/commit/56a339462f5f48d04acc7bcb358f950714fe4303) **refactor:** eslint --fix test
+  - [`739cf50`](https://github.com/groupon/gofer/commit/739cf508b64976b1eb69dcb281d4968a1fa1b2f7) **refactor:** eslint --fix lib
+  - [`7f5a2ea`](https://github.com/groupon/gofer/commit/7f5a2ea1dbb397d28a66ffb34e439ed9acf45056) **test:** fix test for new .eslintrc.json
+  - [`f34c7eb`](https://github.com/groupon/gofer/commit/f34c7eb3d9f23e7688ce3b36228d7ae013e3e224) **test:** fix tests for new mochify
+  - [`f2bc735`](https://github.com/groupon/gofer/commit/f2bc73587bbfae740adf191425538f3ea5dacc25) **refactor:** use native Promises instead of bluebird
+  - [`d869ea6`](https://github.com/groupon/gofer/commit/d869ea632e45682554fb6a855bee293b02e276fb) **refactor:** use lodash.* for remaining needs
+  - [`0e77ee5`](https://github.com/groupon/gofer/commit/0e77ee56425ad0a76c5aa1f7bb63f299715e9710) **test:** use proper `Buffer.from()`
+  - [`bbe30c1`](https://github.com/groupon/gofer/commit/bbe30c1491689fabe3288073f39781043b0d4d62) **refactor:** use native URL & URLSearchParams
+
+
 ### 3.8.1
 
 * add missing verbs & make types match - **[@dbushong](https://github.com/dbushong)** [#102](https://github.com/groupon/gofer/pull/102)
