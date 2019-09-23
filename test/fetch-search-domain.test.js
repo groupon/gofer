@@ -1,23 +1,23 @@
 'use strict';
 
-var http = require('http');
+const http = require('http');
 
-var assert = require('assertive');
+const assert = require('assertive');
 
-var fetch = require('../').fetch;
+const fetch = require('../').fetch;
 
-describe('fetch: searchDomain', function() {
+describe('fetch: searchDomain', () => {
   if (typeof document !== 'undefined') {
     // This is not really a feature relevant for client-side code.
     it('is not implemented');
     return;
   }
 
-  it('appends the searchDomain to non-fqdns in uri', function() {
-    var options = { searchDomain: 'bar123' };
+  it('appends the searchDomain to non-fqdns in uri', () => {
+    const options = { searchDomain: 'bar123' };
     return assert
       .rejects(fetch('http://some.invalid.thing/a/path', options))
-      .then(function(error) {
+      .then(error => {
         assert.equal('ENOTFOUND', error.code);
         if ('hostname' in error) {
           // node 4.x+
@@ -26,12 +26,12 @@ describe('fetch: searchDomain', function() {
       });
   });
 
-  it('appends the searchDomain to non-fqdns in baseUrl', function() {
-    var options = {
+  it('appends the searchDomain to non-fqdns in baseUrl', () => {
+    const options = {
       baseUrl: 'http://some.invalid.thing/a',
       searchDomain: 'bar123',
     };
-    return assert.rejects(fetch('/path', options)).then(function(error) {
+    return assert.rejects(fetch('/path', options)).then(error => {
       assert.equal('ENOTFOUND', error.code);
       if ('hostname' in error) {
         // node 4.x+
@@ -40,11 +40,11 @@ describe('fetch: searchDomain', function() {
     });
   });
 
-  it('never appends the searchDomain to fqdns in uri', function() {
-    var options = { searchDomain: 'bar123' };
+  it('never appends the searchDomain to fqdns in uri', () => {
+    const options = { searchDomain: 'bar123' };
     return assert
       .rejects(fetch('http://some.invalid.thing./a/path', options))
-      .then(function(error) {
+      .then(error => {
         assert.equal('ENOTFOUND', error.code);
         if ('hostname' in error) {
           // node 4.x+
@@ -53,12 +53,12 @@ describe('fetch: searchDomain', function() {
       });
   });
 
-  it('never appends the searchDomain to fqdns in baseUrl', function() {
-    var options = {
+  it('never appends the searchDomain to fqdns in baseUrl', () => {
+    const options = {
       baseUrl: 'http://some.invalid.thing./a',
       searchDomain: 'bar123',
     };
-    return assert.rejects(fetch('/path', options)).then(function(error) {
+    return assert.rejects(fetch('/path', options)).then(error => {
       assert.equal('ENOTFOUND', error.code);
       if ('hostname' in error) {
         // node 4.x+
@@ -67,39 +67,39 @@ describe('fetch: searchDomain', function() {
     });
   });
 
-  describe('localhost and IP', function() {
-    var server = http.createServer(function(req, res) {
+  describe('localhost and IP', () => {
+    const server = http.createServer((req, res) => {
       res.end('{"ok":true}');
     });
 
-    before(function(done) {
+    before(done => {
       server.listen(done);
     });
 
-    after(function() {
+    after(() => {
       server.close();
     });
 
-    it('never appends the searchDomain to localhost', function() {
-      var options = {
-        baseUrl: 'http://localhost:' + server.address().port,
+    it('never appends the searchDomain to localhost', () => {
+      const options = {
+        baseUrl: `http://localhost:${server.address().port}`,
         searchDomain: 'bar123',
       };
       return fetch('/path', options)
         .json()
-        .then(function(result) {
+        .then(result => {
           assert.deepEqual({ ok: true }, result);
         });
     });
 
-    it('never appends the searchDomain to an IP address', function() {
-      var options = {
-        baseUrl: 'http://127.0.0.1:' + server.address().port,
+    it('never appends the searchDomain to an IP address', () => {
+      const options = {
+        baseUrl: `http://127.0.0.1:${server.address().port}`,
         searchDomain: 'bar123',
       };
       return fetch('/path', options)
         .json()
-        .then(function(result) {
+        .then(result => {
           assert.deepEqual({ ok: true }, result);
         });
     });

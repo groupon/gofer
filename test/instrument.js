@@ -1,17 +1,15 @@
 'use strict';
 
-var http = require('http');
+const http = require('http');
 
-var assign = require('lodash/assign');
-
-var original = http.request;
+const original = http.request;
 
 function instrument() {
   http.request = function request(options) {
     // This is terrible instrumentation because it doesn't handle
     // all possible arguments. `options` isn't the only possible
     // call signature of `http.request`.
-    assign(instrument, options);
+    Object.assign(instrument, options);
     return original.apply(this, arguments);
   };
 }

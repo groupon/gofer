@@ -2,7 +2,6 @@
 
 The biggest change in 3.x is that `gofer` no longer uses `request` behind the scenes.
 Also we're trying to align the interface more closely with [`fetch`](https://github.com/github/fetch).
-Whenever we return a promise, it will be `Bluebird`-flavored.
 
 Simple `fetch`-style usage:
 
