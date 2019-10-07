@@ -1,5 +1,5 @@
-import { SecureContext } from "tls";
-import { ServerResponse } from "http";
+import { SecureContext } from 'tls';
+import { ServerResponse } from 'http';
 
 type BodyMethods = {
   json(): Promise<any>;
@@ -19,10 +19,14 @@ declare class Gofer {
   );
 
   addOptionMapper(mapper: (opts: Gofer.Opts) => Gofer.Opts): void;
+  getMergedOptions(
+    defaults?: Gofer.FetchOpts,
+    options?: Gofer.FetchOpts
+  ): Gofer.FetchOpts;
 
-  clone(): Gofer;
+  clone(): this;
 
-  with(opts: Gofer.Opts): Gofer;
+  with(opts: Gofer.Opts): this;
 
   fetch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   get(path: string, opts?: Gofer.FetchOpts): FetchResponse;
@@ -53,12 +57,13 @@ declare namespace Gofer {
     maxStatusCode?: number;
     rejectUnauthorized?: boolean;
     secureContext?: SecureContext;
+    [opt: string]: any;
   };
 
   export type FetchOpts = Opts & {
-    endpointName: string;
+    endpointName?: string;
     json?: object;
-    method?: "GET" | "PUT" | "POST" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+    method?: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
     body?: string | Buffer | ReadableStream;
     form?: { [name: string]: any };
   };
