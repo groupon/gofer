@@ -1,3 +1,9 @@
+### 4.0.1
+
+* various type declaration fixes - **[@dbushong](https://github.com/dbushong)** [#106](https://github.com/groupon/gofer/pull/106)
+  - [`5f5968f`](https://github.com/groupon/gofer/commit/5f5968fb262c2e7c33c985bcfe16a47dc635d22d) **fix:** various type declarations - see: [#104](https://github.com/groupon/gofer/issues/104), [#105](https://github.com/groupon/gofer/issues/105)
+
+
 ### 4.0.0
 
 #### Breaking Changes
