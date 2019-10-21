@@ -1,3 +1,9 @@
+### 4.0.2
+
+* add property "defaults" to typedefs - **[@dbushong](https://github.com/dbushong)** [#107](https://github.com/groupon/gofer/pull/107)
+  - [`2219a1c`](https://github.com/groupon/gofer/commit/2219a1ce4524dc546a044816a014ebf1aa8c4947) **fix:** add property "defaults" to typedefs
+
+
 ### 4.0.1
 
 * various type declaration fixes - **[@dbushong](https://github.com/dbushong)** [#106](https://github.com/groupon/gofer/pull/106)
