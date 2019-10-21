@@ -37,6 +37,8 @@ declare class Gofer {
   delete(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   patch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   options(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+
+  defaults: Gofer.Opts;
 }
 
 declare namespace Gofer {
