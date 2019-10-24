@@ -42,10 +42,13 @@ declare class Gofer {
 }
 
 declare namespace Gofer {
-  export function fetch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+  export function fetch(
+    path: string,
+    opts?: Gofer.FetchOpts & { pathParams?: { [param: string]: string } }
+  ): FetchResponse;
 
   export type Opts = {
-    pathParams?: { [param: string]: string };
+    pathParams?: { [param: string]: string | undefined };
     timeout?: number;
     connectTimeout?: number;
     searchDomain?: string;
