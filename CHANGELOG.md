@@ -1,3 +1,10 @@
+### 4.0.3
+
+* optional path params - **[@dbushong](https://github.com/dbushong)** [#108](https://github.com/groupon/gofer/pull/108)
+  - [`2d53eb1`](https://github.com/groupon/gofer/commit/2d53eb1acf196c7472d2d08c3f7e9225046bf767) **fix:** types: pathParams can be initially undef
+  - [`de401c7`](https://github.com/groupon/gofer/commit/de401c7ba1791602383a96344817da52d007367e) **chore:** npm audit fix
+
+
 ### 4.0.2
 
 * add property "defaults" to typedefs - **[@dbushong](https://github.com/dbushong)** [#107](https://github.com/groupon/gofer/pull/107)
