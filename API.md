@@ -36,10 +36,17 @@ const { fetch } = require('gofer');
 * `maxSockets`: Maximum number of parallel requests to the same domain. `gofer`
     will never use the global http(s) agent but will instead keep agents per
     client class.
-* `timeout`: Response- and socket read timeout in milliseconds.
+* `timeout`: Response- and socket read timeout in milliseconds (default: 10000)
+    1. if the socket is idle for more than this time, there will be an
+        ESOCKETTIMEDOUT (NodeJS only)
+    2. if it takes longer to receive response headers (measured from when the
+        request function is first called), there will be an ETIMEDOUT
 * `connectTimeout`: Timeout in milliseconds for the time between acquiring a
     socket and establishing a connection to the remote host. This should
-    generally be relatively low.
+    generally be relatively low. (default: 1000) (NodeJS only)
+* `completionTimeout`: Timeout in milliseconds between when the response headers
+    have been received, and when the final byte of the response body has been
+    received.  (no default; disabled by default) (NodeJS only)
 * `searchDomain`: Inspired by the `search` setting in `/etc/resolv.conf`.
     Append this to any hostname that doesn't already end in a ".".
     E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but
