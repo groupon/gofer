@@ -5,7 +5,7 @@
 
 const http = require('http');
 const https = require('https');
-const parseUrl = require('url').parse;
+const { URL } = require('url');
 
 const selfSigned = require('self-signed');
 
@@ -40,10 +40,10 @@ const certOptions = generateCertOptions();
 
 function sendEcho(req, res) {
   const chunks = [];
-  const query = parseUrl(req.url, true).query;
+  const query = new URL(`http://localhost${req.url}`).searchParams;
 
-  const latency = query.__latency ? +query.__latency : 0;
-  const hang = query.__hang ? +query.__hang : 0;
+  const latency = query.has('__latency') ? +query.get('__latency') : 0;
+  const hang = query.has('__hang') ? +query.get('__hang') : 0;
 
   function forceFlush() {
     res.write(Array(4096 + 1).join(' '));
@@ -90,10 +90,10 @@ function send404(req, res) {
 }
 
 function sendChunks(req, res) {
-  const query = parseUrl(req.url, true).query;
-  const delay = query.__delay ? +query.__delay : 0;
-  const chunkDelay = query.__chunkDelay ? +query.__chunkDelay : 0;
-  const totalDelay = query.__totalDelay ? +query.__totalDelay : 0;
+  const query = new URL(`http://localhost${req.url}`).searchParams;
+  const delay = query.has('__delay') ? +query.get('__delay') : 0;
+  const chunkDelay = query.has('__chunkDelay') ? +query.get('__chunkDelay') : 0;
+  const totalDelay = query.has('__totalDelay') ? +query.get('__totalDelay') : 0;
   let writeChunkHandle;
 
   function writeChunk() {
@@ -135,7 +135,7 @@ function handleRequest(req, res) {
   // Preflight requests that return a 404 confuse Chrome
   if (req.method === 'OPTIONS') return res.end();
 
-  const pathname = parseUrl(req.url).pathname;
+  const pathname = new URL(`http://localhost${req.url}`).pathname;
   if (/^\/echo/.test(pathname)) {
     return sendEcho(req, res);
   }
