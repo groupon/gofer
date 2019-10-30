@@ -1,5 +1,5 @@
 import { SecureContext } from 'tls';
-import { ServerResponse } from 'http';
+import { IncomingMessage } from 'http';
 
 type BodyMethods = {
   json(): Promise<any>;
@@ -8,7 +8,7 @@ type BodyMethods = {
   stream(): ReadableStream;
 };
 
-type FetchResponse = Promise<ServerResponse & BodyMethods> & BodyMethods;
+type FetchResponse = Promise<IncomingMessage & BodyMethods> & BodyMethods;
 
 declare class Gofer {
   constructor(
