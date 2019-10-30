@@ -1,3 +1,12 @@
+### 4.1.0
+
+* use lower of later timeouts - **[@dbushong](https://github.com/dbushong)** [#109](https://github.com/groupon/gofer/pull/109)
+  - [`7ce205e`](https://github.com/groupon/gofer/commit/7ce205e6ceead372270c920be019e7c1b1ce9d56) **feat:** use lower of later timeouts
+  - [`a887e66`](https://github.com/groupon/gofer/commit/a887e66cbbe3c2cb9c2faef92e0a68b023f4bce0) **chore:** upgrade linting
+  - [`92ad166`](https://github.com/groupon/gofer/commit/92ad166e2c48d66af0df6170f17f83c4bb8bbfeb) **refactor:** make lint happy
+  - [`caea42d`](https://github.com/groupon/gofer/commit/caea42d2cce29ac8396c06308d27ac5c99fdcc96) **fix:** correct FetchResponse type
+
+
 ### 4.0.3
 
 * optional path params - **[@dbushong](https://github.com/dbushong)** [#108](https://github.com/groupon/gofer/pull/108)
