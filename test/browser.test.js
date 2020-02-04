@@ -29,7 +29,7 @@ describe('in a browser', () => {
     this.timeout(60 * 1000);
     const child = execFile(
       mochifyBin,
-      ['--reporter', 'spec', './test/**/*.test.js'],
+      ['--allow-chrome-as-root', './test/**/*.test.js'],
       done
     );
     child.stdout.pipe(process.stdout);
