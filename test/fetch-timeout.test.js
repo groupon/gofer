@@ -134,7 +134,7 @@ describe('fetch: timeouts', () => {
     });
 
     it('is triggered by a constant trickle of packages', function() {
-      this.timeout(400);
+      this.timeout(600);
 
       return assert
         .rejects(
