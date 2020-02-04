@@ -1,3 +1,15 @@
+### 4.1.1
+
+* Fix lgtm.com issues & package updates - **[@aaarichter](https://github.com/aaarichter)** [#110](https://github.com/groupon/gofer/pull/110)
+  - [`ba8ea4c`](https://github.com/groupon/gofer/commit/ba8ea4cc6d0f491be2cc74ed3ccfa5177f976fc5) **chore:** upgrade dependencies
+  - [`27caa09`](https://github.com/groupon/gofer/commit/27caa091b839511f6fee8a75a8dffd3218878e37) **fix:** remove self-assigned variables
+  - [`97bf3e0`](https://github.com/groupon/gofer/commit/97bf3e08e88addc73191a1e98cb96bffa0a2ad8b) **fix:** body validating condition
+  - [`18d1a57`](https://github.com/groupon/gofer/commit/18d1a57e94003cce9e9fa1e7f1356fc6fbdebc32) **style:** fix code inspection issues
+  - [`0c097cc`](https://github.com/groupon/gofer/commit/0c097cc088fc4e060252e7803daed7db46f3caa2) **style:** fix lint error
+  - [`4d83c28`](https://github.com/groupon/gofer/commit/4d83c28111534b5ce173af99c7468d7cd4dba39f) **test:** bump up timeout
+  - [`4bc3643`](https://github.com/groupon/gofer/commit/4bc3643c7181de1e273a739a91ba3423146e7515) **fix:** set --allow-chrome-as-root to mochify setup
+
+
 ### 4.1.0
 
 * use lower of later timeouts - **[@dbushong](https://github.com/dbushong)** [#109](https://github.com/groupon/gofer/pull/109)
