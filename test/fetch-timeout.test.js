@@ -30,7 +30,7 @@ describe('fetch: timeouts', () => {
       this.skip();
     }
     this.timeout(500);
-    // total latency is 400 but each indendently is <300
+    // total latency is 400 but each independently is <300
     return fetchWithLatency(200, 200, 300).then(res => {
       assert.equal(200, res.statusCode);
     });
@@ -94,9 +94,9 @@ describe('fetch: timeouts', () => {
       );
 
       function blockEventLoop() {
-        let endTime = Date.now() + 150;
+        const endTime = Date.now() + 150;
         while (Date.now() < endTime) {
-          endTime = endTime;
+          /*noop*/
         }
       }
 
