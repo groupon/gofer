@@ -24,14 +24,14 @@ const { fetch } = require('gofer');
     https://my-api.com/v2/echo.
 * `pathParams`: Values for placeholders in the url path. E.g. `{ foo: 'bar' }`
     will replace all occurrences of `{foo}` in the url path with `'bar'`.
-* `qs`: Additional query parameters that will be serialized using the
+* `qs`: Additional query parameters that will be recursively serialized using
+    an algorithm similar to that of the
     [`qs` library](https://www.npmjs.com/package/qs).
 * `body`: Content of the request body, either as a string, a Buffer, or a
     readable stream.
 * `json`: Content of the request body to be sent as a JSON encoded value.
 * `form`: Content of the request body to be sent using `x-www-form-urlencoded`.
-    The serialization is handled by the
-    [`qs` library](https://www.npmjs.com/package/qs).
+    The serialization is the same as that used by the `qs` option.
 * All [TLS socket options][tls] for https requests.
 * `maxSockets`: Maximum number of parallel requests to the same domain. `gofer`
     will never use the global http(s) agent but will instead keep agents per

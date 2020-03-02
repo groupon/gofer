@@ -123,7 +123,9 @@ describe('fetch: timeouts', () => {
         .rejects(
           fetch('/', {
             baseUrl: options.baseUrl,
-            qs: { __delay: 50 },
+            qs: { __chunkDelay: 5, __totalDelay: 50 },
+            connectTimeout: 10,
+            timeout: 15,
             completionTimeout: 20,
           }).text()
         )
