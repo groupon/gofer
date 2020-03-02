@@ -1,3 +1,11 @@
+### 4.1.2
+
+* correct the API docs regarding qs - **[@dbushong](https://github.com/dbushong)** [#111](https://github.com/groupon/gofer/pull/111)
+  - [`500dd1f`](https://github.com/groupon/gofer/commit/500dd1fe2f5c06ced7bc66edbe60bf0c1e5dba82) **docs:** correct the API docs regarding qs
+  - [`12c35c7`](https://github.com/groupon/gofer/commit/12c35c7f636fa4f4c4108ff17575556062e0e8e5) **test:** try to fix completionTimeout test race
+  - [`35f1b22`](https://github.com/groupon/gofer/commit/35f1b2299121458d36e507e9bb93b2b2885f27bc) **test:** increase timeout for https test
+
+
 ### 4.1.1
 
 * Fix lgtm.com issues & package updates - **[@aaarichter](https://github.com/aaarichter)** [#110](https://github.com/groupon/gofer/pull/110)
