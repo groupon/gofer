@@ -12,7 +12,7 @@ describe('fetch: https', () => {
   it('can load from valid https remote', function() {
     // This is a remote call which isn't great but it means we get a valid
     // https certificate without having to pull any tricks.
-    this.timeout(2000);
+    this.timeout(10000);
     return fetch('https://api.reddit.com/user/ageitgey/about.json').json();
   });
 
