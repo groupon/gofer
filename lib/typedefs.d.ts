@@ -56,7 +56,7 @@ declare namespace Gofer {
     baseUrl?: string;
     headers?: { [name: string]: string };
     auth?: string | { username: string; password: string };
-    qs?: { [name: string]: any };
+    qs?: { [name: string]: any } | URLSearchParams;
     maxSockets?: number;
     minStatusCode?: number;
     maxStatusCode?: number;
