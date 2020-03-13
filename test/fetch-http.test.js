@@ -73,6 +73,24 @@ describe('fetch: the basics', () => {
       });
   });
 
+  it('can add URLSearchParams', () => {
+    return fetch('/echo?y=url&z=bar', {
+      baseUrl: options.baseUrl,
+      qs: new URLSearchParams([
+        ['y', 'other'],
+        ['a', '1'],
+        ['a', '2'],
+      ]),
+    })
+      .json()
+      .then(echo => {
+        assert.equal(
+          '/echo?y=url&z=bar&y=other&a=1&a=2',
+          decodeURIComponent(echo.url)
+        );
+      });
+  });
+
   it('can replace path params', () => {
     return fetch('/{foo}/other/{foo}/{bar}', {
       baseUrl: `${options.baseUrl}/echo/{foo}`,

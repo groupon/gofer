@@ -24,9 +24,12 @@ const { fetch } = require('gofer');
     https://my-api.com/v2/echo.
 * `pathParams`: Values for placeholders in the url path. E.g. `{ foo: 'bar' }`
     will replace all occurrences of `{foo}` in the url path with `'bar'`.
-* `qs`: Additional query parameters that will be recursively serialized using
-    an algorithm similar to that of the
-    [`qs` library](https://www.npmjs.com/package/qs).
+* `qs`: Additional query parameters that will be combined with those present
+    in the initial path/url arg.  If `qs` is a plain JS object, the contents
+    will be recursively serialized using an algorithm similar to that of the
+    [`qs` library](https://www.npmjs.com/package/qs).   If it is a JavaScript
+    `URLSearchParams` object, each entry in it will be `.append()`ed to any
+    existing query parameters.
 * `body`: Content of the request body, either as a string, a Buffer, or a
     readable stream.
 * `json`: Content of the request body to be sent as a JSON encoded value.
