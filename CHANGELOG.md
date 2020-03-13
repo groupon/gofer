@@ -1,3 +1,19 @@
+### 5.0.0
+
+#### Breaking Changes
+
+drop support for Node < 10
+needed for isomorphic uses of global URLSearchParams
+
+*See: [`7223986`](https://github.com/groupon/gofer/commit/7223986f6c8a316250e2152217391f4119df4d6b)*
+
+#### Commits
+
+* allow qs to be URLSearchParams - **[@dbushong](https://github.com/dbushong)** [#112](https://github.com/groupon/gofer/pull/112)
+  - [`7223986`](https://github.com/groupon/gofer/commit/7223986f6c8a316250e2152217391f4119df4d6b) **chore:** upgrade, update, & audit
+  - [`12ea54f`](https://github.com/groupon/gofer/commit/12ea54f94cdd562abf6bb533ec4625c7f83b2296) **feat:** support URLSearchParams for `qs`
+
+
 ### 4.1.2
 
 * correct the API docs regarding qs - **[@dbushong](https://github.com/dbushong)** [#111](https://github.com/groupon/gofer/pull/111)
