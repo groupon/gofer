@@ -1,3 +1,9 @@
+### 5.0.1 - 2020-03-18
+
+* chore(deps): update dependencies - **[@aaarichter](https://github.com/aaarichter)** [#113](https://github.com/groupon/gofer/pull/113)
+  - [`a3e25bc`](https://github.com/groupon/gofer/commit/a3e25bc6edf0b37726131259439693f4ca14fbe6) **chore:** update dependencies
+
+
 ### 5.0.0
 
 #### Breaking Changes
