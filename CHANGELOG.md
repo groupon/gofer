@@ -1,3 +1,9 @@
+### 5.0.2 - 2020-07-20
+
+* chore(deps): bump lodash from 4.17.13 to 4.17.19 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#115](https://github.com/groupon/gofer/pull/115)
+  - [`b8ebd53`](https://github.com/groupon/gofer/commit/b8ebd536b1fa763366a743931d0658dd4c85f470) **chore:** bump lodash from 4.17.13 to 4.17.19 - see: [4](- [Commits](https://github.com/lodash/lodash/compare/4)
+
+
 ### 5.0.1 - 2020-03-18
 
 * chore(deps): update dependencies - **[@aaarichter](https://github.com/aaarichter)** [#113](https://github.com/groupon/gofer/pull/113)
