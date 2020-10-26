@@ -2,10 +2,11 @@ language: node_js
 node_js:
   - 10
   - 12
+  - 14
 deploy:
   - provider: script
     script: npx nlm release
-    skip_cleanup: true
+    cleanup: true
     'on':
       branch: master
-      node: 12
+      node_js: 14

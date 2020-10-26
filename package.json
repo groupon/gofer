@@ -28,7 +28,7 @@
     "test:unit": "nyc mocha"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=10.13"
   },
   "mocha": {
     "recursive": true
@@ -42,7 +42,7 @@
   },
   "types": "lib/typedefs.d.ts",
   "dependencies": {
-    "debug": "^4.1.1",
+    "debug": "^4.2.0",
     "lodash.isobjectlike": "^4.0.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.merge": "^4.6.2",
@@ -50,19 +50,19 @@
   },
   "devDependencies": {
     "assertive": "^5.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-groupon": "^8.1.1",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-mocha": "^6.3.0",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint": "^7.12.0",
+    "eslint-config-groupon": "^10.0.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "form-data": "^3.0.0",
-    "mocha": "^7.1.0",
+    "mocha": "^8.2.0",
     "mochify": "^6.6.0",
-    "nlm": "^4.1.1",
+    "nlm": "^5.1.0",
     "npm-run-all": "^4.1.5",
-    "nyc": "^15.0.0",
-    "prettier": "^1.19.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.1.2",
     "self-signed": "^1.3.1"
   },
   "author": {
