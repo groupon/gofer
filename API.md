@@ -55,6 +55,7 @@ const { fetch } = require('gofer');
     E.g. `my-hostname` turns into `my-hostname.<searchDomain>.` but
     `my.fully.qualified.name.` won't be touched.
 * `keepAlive`: if set to `true`, enables HTTP keep-alive
+  ⚠ Enabling `keepAlive` can lead to `MaxListenersExceededWarning: Possible EventEmitter memory leak detected.` warnings.
 
 [basicauth]: https://en.wikipedia.org/wiki/Basic_access_authentication
 [tls]: https://nodejs.org/api/tls.html#tls_new_tls_tlssocket_socket_options
@@ -90,8 +91,7 @@ Returns a stream for the data as it arrives
 
 ## `Gofer`
 
-This class can be used directly
-but it's mainly meant to be the base class for individual service clients.
+This class can be used directly, but it's mainly meant to be the base class for individual service clients.
 Example:
 
 ```js
