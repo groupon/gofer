@@ -123,10 +123,7 @@ if (require.main === module) {
   });
 
   // Get all supported emojis, dump response to stdout
-  github
-    .emojis()
-    .json()
-    .then(console.log, console.error);
+  github.emojis().json().then(console.log, console.error);
 
   // List repos of the `groupon` github org
   github.userRepos('groupon').then(repoList => {

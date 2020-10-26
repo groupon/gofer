@@ -33,7 +33,7 @@ describe('fetch: multi-part via form-data', () => {
   // added via option mappers without requiring support in Gofer.
   const client = new Gofer().with(defaultOptions);
   client.registerEndpoint('echo', fetch => {
-    return function(options) {
+    return function (options) {
       return fetch('/echo', options).json();
     };
   });

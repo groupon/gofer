@@ -26,12 +26,12 @@ describe('Verify instrumentation support', () => {
 
   client.registerEndpoints({
     echo(fetch) {
-      return function() {
+      return function () {
         return fetch('/{x}', { method: 'PUT', pathParams: { x: 'echo' } });
       };
     },
     named(fetch) {
-      return function() {
+      return function () {
         return fetch('/echo', { method: 'PUT', methodName: 'echo' });
       };
     },

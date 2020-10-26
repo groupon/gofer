@@ -24,7 +24,7 @@ const execFile = module.require('' + 'child_process').execFile;
 require('./mock-service');
 
 describe('in a browser', () => {
-  it('works (almost) just the same', function(done) {
+  it('works (almost) just the same', function (done) {
     const mochifyBin = require.resolve('.bin/mochify');
     this.timeout(60 * 1000);
     const child = execFile(

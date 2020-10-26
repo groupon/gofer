@@ -15,7 +15,7 @@ function getUrlPath(item) {
 }
 
 describe('fetch: maxSockets', () => {
-  it('loads two one after the other', function() {
+  it('loads two one after the other', function () {
     if (typeof document !== 'undefined') {
       // Browsers don't allow us to control the parallism
       return this.skip();
@@ -42,30 +42,15 @@ describe('fetch: maxSockets', () => {
       'bar'
     );
     return Promise.all([
-      foo
-        .fetch('/echo/1')
-        .json()
-        .then(urlWithDate),
-      foo
-        .fetch('/echo/2')
-        .json()
-        .then(urlWithDate),
-      foo
-        .fetch('/echo/3')
-        .json()
-        .then(urlWithDate),
-      foo
-        .fetch('/echo/4')
-        .json()
-        .then(urlWithDate),
+      foo.fetch('/echo/1').json().then(urlWithDate),
+      foo.fetch('/echo/2').json().then(urlWithDate),
+      foo.fetch('/echo/3').json().then(urlWithDate),
+      foo.fetch('/echo/4').json().then(urlWithDate),
       foo
         .fetch('/echo/5', { baseUrl: 'http://127.0.0.1:3066' })
         .json()
         .then(urlWithDate),
-      bar
-        .fetch('/echo/bar')
-        .json()
-        .then(urlWithDate),
+      bar.fetch('/echo/bar').json().then(urlWithDate),
     ]).then(results => {
       assert.hasType(Array, results);
       assert.deepEqual(

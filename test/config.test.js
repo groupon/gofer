@@ -33,7 +33,7 @@ describe('config handling', () => {
   before(() => {
     GoferB.prototype.registerEndpoints({
       x(fetch) {
-        return function(cb) {
+        return function (cb) {
           return fetch('/something', cb);
         };
       },

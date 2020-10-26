@@ -16,14 +16,14 @@ function fetchWithLatency(latency, hang, timeout) {
 }
 
 describe('fetch: timeouts', () => {
-  it('succeeds if timeout is not exceeded', function() {
+  it('succeeds if timeout is not exceeded', function () {
     this.timeout(500);
     return fetchWithLatency(100, 100, 300).then(res => {
       assert.equal(200, res.statusCode);
     });
   });
 
-  it('response- & read-timeout are independent', function() {
+  it('response- & read-timeout are independent', function () {
     if (typeof document !== 'undefined') {
       // This isn't reliable in browser because we can't rely
       // that the response will be exposed in time.
@@ -36,7 +36,7 @@ describe('fetch: timeouts', () => {
     });
   });
 
-  it('will time out if response takes too long', function() {
+  it('will time out if response takes too long', function () {
     this.timeout(300);
     return assert.rejects(fetchWithLatency(200, 0, 100)).then(error => {
       // We set both the socket timeout & the response timeout to the same number.
@@ -48,7 +48,7 @@ describe('fetch: timeouts', () => {
     });
   });
 
-  it('will time out if body takes too long', function() {
+  it('will time out if body takes too long', function () {
     if (typeof document !== 'undefined') {
       // This isn't reliable in browser because we can't rely
       // that the response will be exposed in time.
@@ -60,7 +60,7 @@ describe('fetch: timeouts', () => {
     });
   });
 
-  it('connection timed out', function() {
+  it('connection timed out', function () {
     if (typeof document !== 'undefined') {
       // This isn't reliable in browser because there is no connection timeout.
       this.skip();
@@ -82,7 +82,7 @@ describe('fetch: timeouts', () => {
     before(remoteServer.fork);
     after(remoteServer.kill);
 
-    it('gives it a last chance', function(done) {
+    it('gives it a last chance', function (done) {
       this.timeout(500);
 
       fetch(
@@ -135,7 +135,7 @@ describe('fetch: timeouts', () => {
         });
     });
 
-    it('is triggered by a constant trickle of packages', function() {
+    it('is triggered by a constant trickle of packages', function () {
       this.timeout(600);
 
       return assert

@@ -158,7 +158,7 @@ describe('fetch: the basics', () => {
     assert.equal('baseUrl may not contain a query string', error.message);
   });
 
-  it('exposes a promise to a response body stream', function() {
+  it('exposes a promise to a response body stream', function () {
     if (typeof document !== 'undefined') {
       // Streams in the browser and streams in node are two different things.
       return this.skip();

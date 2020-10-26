@@ -64,7 +64,7 @@ describe('legacy / callback mode', () => {
 
     EchoClient.prototype.registerEndpoints({
       echo(withDefaults) {
-        return function(qs, callback) {
+        return function (qs, callback) {
           return withDefaults('/echo', { qs }, callback);
         };
       },

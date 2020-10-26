@@ -11,7 +11,7 @@ const defaultOptions = require('./mock-service');
 describe('fetch: sending a body', () => {
   const client = new Gofer().with(defaultOptions);
   client.registerEndpoint('echo', fetch => {
-    return function(options) {
+    return function (options) {
       return fetch('/echo', options).json();
     };
   });
@@ -24,7 +24,7 @@ describe('fetch: sending a body', () => {
     });
   });
 
-  it('can send a Buffer', function() {
+  it('can send a Buffer', function () {
     if (typeof document !== 'undefined') {
       return this.skip();
     }
@@ -37,7 +37,7 @@ describe('fetch: sending a body', () => {
       });
   });
 
-  it('can send a node ReadableStream', function() {
+  it('can send a node ReadableStream', function () {
     if (typeof document !== 'undefined') {
       return this.skip();
     }
