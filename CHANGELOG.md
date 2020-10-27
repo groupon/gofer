@@ -1,3 +1,9 @@
+### 5.0.4 - 2020-10-27
+
+* chore(deps): bump elliptic from 6.5.2 to 6.5.3 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#116](https://github.com/groupon/gofer/pull/116)
+  - [`10a45cd`](https://github.com/groupon/gofer/commit/10a45cd9ef934538e0afe0dc2361642c5ccf70d0) ♻️ **chore:** bump elliptic from 6.5.2 to 6.5.3 - see: [v6](- [Commits](https://github.com/indutny/elliptic/compare/v6)
+
+
 ### 5.0.3 - 2020-10-27
 
 * docs: add warning to keepAlive options & update dependencies - **[@aaarichter](https://github.com/aaarichter)** [#117](https://github.com/groupon/gofer/pull/117)
