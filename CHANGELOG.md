@@ -1,3 +1,11 @@
+### 5.0.3 - 2020-10-27
+
+* docs: add warning to keepAlive options & update dependencies - **[@aaarichter](https://github.com/aaarichter)** [#117](https://github.com/groupon/gofer/pull/117)
+  - [`4a1438a`](https://github.com/groupon/gofer/commit/4a1438a6ec0532971d96be23f9284768eee7c79d) ♻️ **chore:** update dependencies
+  - [`e764b95`](https://github.com/groupon/gofer/commit/e764b95bea602f29c042e15389038b85176b0d90) 🎨 **style:** fix eslint issues
+  - [`7fbedde`](https://github.com/groupon/gofer/commit/7fbedde0f3fbe280d707e89e5cf9e8396ca7b076) 📝 **docs:** add warning to keepAlive options
+
+
 ### 5.0.2 - 2020-07-20
 
 * chore(deps): bump lodash from 4.17.13 to 4.17.19 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#115](https://github.com/groupon/gofer/pull/115)
