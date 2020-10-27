@@ -9,14 +9,14 @@ const fetch = require('../').fetch;
 const options = require('./mock-service');
 
 describe('fetch: https', () => {
-  it('can load from valid https remote', function() {
+  it('can load from valid https remote', function () {
     // This is a remote call which isn't great but it means we get a valid
     // https certificate without having to pull any tricks.
     this.timeout(10000);
     return fetch('https://api.reddit.com/user/ageitgey/about.json').json();
   });
 
-  it('fails with self-signed https', function() {
+  it('fails with self-signed https', function () {
     if (typeof document !== 'undefined') {
       // puppeteer ignores self-signed cert errors(?)
       return this.skip();
@@ -35,7 +35,7 @@ describe('fetch: https', () => {
     });
   });
 
-  it('supports rejectUnauthorized=false', function() {
+  it('supports rejectUnauthorized=false', function () {
     if (typeof document !== 'undefined') {
       // Browsers don't allow to side-step https
       return this.skip();
@@ -47,7 +47,7 @@ describe('fetch: https', () => {
     });
   });
 
-  it('can load from self-signed https remote', function() {
+  it('can load from self-signed https remote', function () {
     if (typeof document !== 'undefined') {
       // Browsers don't allow to side-step https
       return this.skip();
@@ -59,7 +59,7 @@ describe('fetch: https', () => {
     });
   });
 
-  it('can load using reusable secureContext', function() {
+  it('can load using reusable secureContext', function () {
     if (typeof document !== 'undefined') {
       // Browsers don't allow to side-step https
       return this.skip();

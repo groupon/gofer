@@ -33,7 +33,4 @@ const echo = new EchoClient({
   },
 });
 
-echo
-  .echo({ fromCall: 'mergedIn' })
-  .then(onEchoResponse)
-  .catch(onEchoError);
+echo.echo({ fromCall: 'mergedIn' }).then(onEchoResponse).catch(onEchoError);
