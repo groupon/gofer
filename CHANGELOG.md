@@ -1,3 +1,10 @@
+### v5.0.5 (2020-12-18)
+
+#### 🔼 Dependencies
+
+* [#118](https://github.com/groupon/gofer/pull/118) chore(deps): bump ini from 1.3.5 to 1.3.7 ([@dependabot[bot]](https://github.com/apps/dependabot)) 
+
+
 ### 5.0.4 - 2020-10-27
 
 * chore(deps): bump elliptic from 6.5.2 to 6.5.3 - **[@dependabot[bot]](https://github.com/apps/dependabot)** [#116](https://github.com/groupon/gofer/pull/116)
