@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/groupon/gofer.svg?branch=master)](https://travis-ci.com/groupon/gofer)
+
 # `gofer`
 
 > A gofer, go-fer or gopher /ˈɡoʊfər/ is an employee who specializes

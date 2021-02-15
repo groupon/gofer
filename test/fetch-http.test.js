@@ -59,6 +59,16 @@ describe('fetch: the basics', () => {
       });
   });
 
+  it('extends async error stack with previous stack in error object ', function () {
+    if (global.document) {
+      this.skip();
+    }
+
+    return assert.rejects(fetch('/json/404', options).json()).then(error => {
+      assert.include('at request', error.stack);
+    });
+  });
+
   it('can add query string arguments', () => {
     return fetch('/echo?y=url&z=bar', {
       baseUrl: options.baseUrl,
