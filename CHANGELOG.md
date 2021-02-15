@@ -1,3 +1,10 @@
+### v5.1.0 (2021-02-15)
+
+#### 🚀 New Features
+
+* [#119](https://github.com/groupon/gofer/pull/119) feat: capture async stack traces (for node) ([@aaarichter](https://github.com/aaarichter)) 
+
+
 ### v5.0.5 (2020-12-18)
 
 #### 🔼 Dependencies
