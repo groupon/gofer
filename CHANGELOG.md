@@ -1,3 +1,10 @@
+### v5.1.1 (2021-03-26)
+
+#### 🏡 Internal
+
+* [#120](https://github.com/groupon/gofer/pull/120) chore: switch to main branch & update packages ([@aaarichter](https://github.com/aaarichter)) 
+
+
 ### v5.1.0 (2021-02-15)
 
 #### 🚀 New Features
