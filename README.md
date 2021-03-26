@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/groupon/gofer.svg?branch=master)](https://travis-ci.com/groupon/gofer)
+[![Build Status](https://travis-ci.com/groupon/gofer.svg?branch=main)](https://travis-ci.com/groupon/gofer)
 
 # `gofer`
 
@@ -166,11 +166,11 @@ To make our client a little nicer to use we'll add an [option mapper](/API.md#op
 The options we return will be passed on to `fetch`.
 
 ```js
-Github.prototype.addOptionMapper(opts =>
+Github.prototype.addOptionMapper(opts => {
   // opts contains the already merged options, including global-, service-,
   // and endpoint-defaults. In our example opts.timeout will be 2000, etc.
-  Object.assign({ baseUrl: 'https://api.github.com' }, opts);
-);
+  return {...opts,  baseUrl: 'https://api.github.com' };
+});
 ```
 
 Finally we can instantiate and make the call:
