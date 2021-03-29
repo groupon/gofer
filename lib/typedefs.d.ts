@@ -62,6 +62,7 @@ declare namespace Gofer {
     maxStatusCode?: number;
     rejectUnauthorized?: boolean;
     secureContext?: SecureContext;
+    captureAsyncStack?: boolean;
     [opt: string]: any;
   };
 
