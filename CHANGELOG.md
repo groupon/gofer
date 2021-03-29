@@ -1,3 +1,10 @@
+### v5.1.2 (2021-03-29)
+
+#### 🐛 Bug Fixes
+
+* [#121](https://github.com/groupon/gofer/pull/121) fix: guard asyncStack capturing with captureAsyncStack option ([@aaarichter](https://github.com/aaarichter)) 
+
+
 ### v5.1.1 (2021-03-26)
 
 #### 🏡 Internal
