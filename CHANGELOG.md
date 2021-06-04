@@ -1,3 +1,15 @@
+### v5.1.3 (2021-06-04)
+<a id="v5.1.3"></a>
+#### 🔼 Dependencies
+
+* [`0741221`](https://github.com/groupon/gofer/commit/0741221f25278530437812bf6e422a7c968bf0eb) chore: bump ws `from 7.4.4` `to 7.4.6` (#123) - see: [#123](https://github.com/groupon/gofer/issues/123), [7](- [Commits](https://github.com/websockets/ws/compare/7)
+* [`19ae11c`](https://github.com/groupon/gofer/commit/19ae11c894b7f6c371d22ae0e23544d0264a07e7) chore: bump hosted-git-info `from 2.7.1` `to 2.8.9` (#122) - see: [#122](https://github.com/groupon/gofer/issues/122)
+
+#### 🏡 Internal
+
+* [#124](https://github.com/groupon/gofer/pull/124) ci(actions): add actions workflow ([@aaarichter](https://github.com/aaarichter))
+
+
 ### v5.1.2 (2021-03-29)
 
 #### 🐛 Bug Fixes
