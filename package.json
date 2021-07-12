@@ -40,6 +40,17 @@
       ]
     }
   },
+  "c8": {
+    "reporter": [
+      "text",
+      "json-summary"
+    ],
+    "exclude": [
+      "examples/**",
+      "**/*.d.ts",
+      "{spec,test}{,s}/**"
+    ]
+  },
   "types": "lib/typedefs.d.ts",
   "dependencies": {
     "debug": "^4.3.2",
