@@ -104,8 +104,8 @@ describe('fetch: timeouts', () => {
       setTimeout(blockEventLoop, 20);
     });
 
-    it('can be aborted with AbortController signal (Node 16+)', async function () {
-      if (!semver.satisfies(process.versions.node, '>=16.0.0')) {
+    it('can be aborted with AbortController signal (Node 15+)', async function () {
+      if (!semver.satisfies(process.versions.node, '>=15.0.0')) {
         this.skip();
       }
       const ac = new AbortController();
