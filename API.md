@@ -57,7 +57,7 @@ const { fetch } = require('gofer');
 * `keepAlive`: if set to `true`, enables HTTP keep-alive
   ⚠ Enabling `keepAlive` can lead to `MaxListenersExceededWarning: Possible EventEmitter memory leak detected.` warnings.
 * `captureAsyncStack`: Extends error trace with stack trace before call. (Default: `false`) **Capturing the stack is expensive! Set only for debugging purposes**
-* `signal` - AbortController signal (Node 16+)
+* `signal` - AbortController signal (Node 15+)
 
 [basicauth]: https://en.wikipedia.org/wiki/Basic_access_authentication
 [tls]: https://nodejs.org/api/tls.html#tls_new_tls_tlssocket_socket_options
