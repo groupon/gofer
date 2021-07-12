@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assertive');
+const semver = require('semver');
 
 const fetch = require('../').fetch;
 
@@ -48,7 +49,7 @@ describe('fetch: timeouts', () => {
     });
   });
 
-  it('will time out if body takes too long', function () {
+  it('will time out if body takes too long', async function () {
     if (typeof document !== 'undefined') {
       // This isn't reliable in browser because we can't rely
       // that the response will be exposed in time.
@@ -60,7 +61,7 @@ describe('fetch: timeouts', () => {
     });
   });
 
-  it('connection timed out', function () {
+  it('connection timed out', async function () {
     if (typeof document !== 'undefined') {
       // This isn't reliable in browser because there is no connection timeout.
       this.skip();
@@ -102,6 +103,25 @@ describe('fetch: timeouts', () => {
 
       setTimeout(blockEventLoop, 20);
     });
+
+    it('can be aborted with AbortController signal (Node 16+)', async function () {
+      if (!semver.satisfies(process.versions.node, '>=16.0.0')) {
+        this.skip();
+      }
+      const ac = new AbortController();
+
+      const rejection = assert
+        .rejects(
+          fetch(`http://127.0.0.1:${remoteServer.port}`, {
+            signal: ac.signal,
+          })
+        )
+        .then(err => assert.match(/The operation was aborted/, err.message));
+
+      ac.abort();
+
+      await rejection;
+    });
   });
 
   describe('completionTimeout', () => {
@@ -118,8 +138,8 @@ describe('fetch: timeouts', () => {
       }).text();
     });
 
-    it('passes an error when timeout is exceeded', () => {
-      return assert
+    it('passes an error when timeout is exceeded', async () => {
+      await assert
         .rejects(
           fetch('/', {
             baseUrl: options.baseUrl,
@@ -135,10 +155,10 @@ describe('fetch: timeouts', () => {
         });
     });
 
-    it('is triggered by a constant trickle of packages', function () {
+    it('is triggered by a constant trickle of packages', async function () {
       this.timeout(600);
 
-      return assert
+      await assert
         .rejects(
           fetch('/', {
             baseUrl: options.baseUrl,
