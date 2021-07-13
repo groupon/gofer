@@ -1,3 +1,10 @@
+### v5.2.0 (2021-07-13)
+<a id="v5.2.0"></a>
+#### 🚀 New Features
+
+* [#125](https://github.com/groupon/gofer/pull/125) feat: support AbortController signal ([@aaarichter](https://github.com/aaarichter))
+
+
 ### v5.1.3 (2021-06-04)
 <a id="v5.1.3"></a>
 #### 🔼 Dependencies
