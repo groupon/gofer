@@ -8,16 +8,14 @@ type BodyMethods = {
   stream(): ReadableStream;
 };
 
-type Callback = (...args: any[]) => void;
-
 type FetchResponse = Promise<IncomingMessage & BodyMethods> & BodyMethods;
 
 type Fetch = (path: string, opts?: Gofer.FetchOpts) => FetchResponse;
 
 type EndpointFnReturn =
-  | ((cb?: Callback) => FetchResponse)
+  | ((...args: any[]) => FetchResponse)
   | {
-      [key: string]: (options: any, cb?: Callback) => FetchResponse;
+      [key: string]: (...args: any[]) => FetchResponse;
     };
 
 type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
