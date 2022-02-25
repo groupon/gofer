@@ -8,7 +8,19 @@ type BodyMethods = {
   stream(): ReadableStream;
 };
 
+type Callback = (...args: any[]) => void;
+
 type FetchResponse = Promise<IncomingMessage & BodyMethods> & BodyMethods;
+
+type Fetch = (path: string, opts?: Gofer.FetchOpts) => FetchResponse;
+
+type EndpointFnReturn =
+  | ((cb?: Callback) => FetchResponse)
+  | {
+      [key: string]: (options: any, cb?: Callback) => FetchResponse;
+    };
+
+type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
 
 declare class Gofer {
   constructor(
@@ -23,12 +35,14 @@ declare class Gofer {
     defaults?: Gofer.FetchOpts,
     options?: Gofer.FetchOpts
   ): Gofer.FetchOpts;
+  registerEndpoint(name: string, endpointFn: EndpointFn): this;
+  registerEndpoints(endpoints: { [name: string]: EndpointFn }): this;
 
   clone(): this;
 
   with(opts: Gofer.Opts): this;
 
-  fetch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+  fetch: Fetch;
   get(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   post(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   put(path: string, opts?: Gofer.FetchOpts): FetchResponse;
