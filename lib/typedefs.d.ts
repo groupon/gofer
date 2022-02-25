@@ -18,7 +18,7 @@ type EndpointFnReturn =
       [key: string]: (...args: any[]) => FetchResponse;
     };
 
-type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
+export type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
 
 declare class Gofer {
   constructor(
