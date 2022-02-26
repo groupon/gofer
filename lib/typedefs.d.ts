@@ -10,7 +10,7 @@ type BodyMethods = {
 
 type FetchResponse = Promise<IncomingMessage & BodyMethods> & BodyMethods;
 
-type Fetch = (path: string, opts?: Gofer.FetchOpts) => FetchResponse;
+type Fetch = (path: string, opts?: Gofer.FetchOpts, cb?: any) => FetchResponse;
 
 type EndpointFnReturn =
   | ((...args: any[]) => FetchResponse)
