@@ -1,3 +1,10 @@
+### v5.2.1 (2022-02-28)
+<a id="v5.2.1"></a>
+#### 🐛 Bug Fixes
+
+* [#128](https://github.com/groupon/gofer/pull/128) fix: export type for registerEndpoints ([@JimLiu](https://github.com/JimLiu))
+
+
 ### v5.2.0 (2021-07-13)
 <a id="v5.2.0"></a>
 #### 🚀 New Features
