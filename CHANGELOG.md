@@ -1,3 +1,10 @@
+### v5.2.2 (2022-02-28)
+<a id="v5.2.2"></a>
+#### 🏡 Internal
+
+* [#131](https://github.com/groupon/gofer/pull/131) audit updates ([@dbushong](https://github.com/dbushong))
+
+
 ### v5.2.1 (2022-02-28)
 <a id="v5.2.1"></a>
 #### 🐛 Bug Fixes
