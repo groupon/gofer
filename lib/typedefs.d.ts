@@ -10,6 +10,16 @@ type BodyMethods = {
 
 type FetchResponse = Promise<IncomingMessage & BodyMethods> & BodyMethods;
 
+type Fetch = (path: string, opts?: Gofer.FetchOpts, cb?: any) => FetchResponse;
+
+type EndpointFnReturn =
+  | ((...args: any[]) => FetchResponse)
+  | {
+      [key: string]: (...args: any[]) => FetchResponse;
+    };
+
+export type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
+
 declare class Gofer {
   constructor(
     config: { [name: string]: Gofer.Opts },
@@ -23,12 +33,14 @@ declare class Gofer {
     defaults?: Gofer.FetchOpts,
     options?: Gofer.FetchOpts
   ): Gofer.FetchOpts;
+  registerEndpoint(name: string, endpointFn: EndpointFn): this;
+  registerEndpoints(endpoints: { [name: string]: EndpointFn }): this;
 
   clone(): this;
 
   with(opts: Gofer.Opts): this;
 
-  fetch(path: string, opts?: Gofer.FetchOpts): FetchResponse;
+  fetch: Fetch;
   get(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   post(path: string, opts?: Gofer.FetchOpts): FetchResponse;
   put(path: string, opts?: Gofer.FetchOpts): FetchResponse;
