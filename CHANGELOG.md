@@ -1,3 +1,10 @@
+### v5.2.3 (2022-04-07)
+<a id="v5.2.3"></a>
+#### 🏡 Internal
+
+* [#132](https://github.com/groupon/gofer/pull/132) type: json: object -> any ([@dbushong](https://github.com/dbushong))
+
+
 ### v5.2.2 (2022-02-28)
 <a id="v5.2.2"></a>
 #### 🏡 Internal
