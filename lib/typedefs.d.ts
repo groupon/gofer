@@ -15,8 +15,8 @@ type Fetch = (path: string, opts?: Gofer.FetchOpts, cb?: any) => FetchResponse;
 type EndpointFnReturn =
   | ((...args: any[]) => FetchResponse)
   | {
-      [key: string]: (...args: any[]) => FetchResponse;
-    };
+    [key: string]: (...args: any[]) => FetchResponse;
+  };
 
 export type EndpointFn = (fetch: Fetch) => EndpointFnReturn;
 
@@ -80,7 +80,7 @@ declare namespace Gofer {
 
   export type FetchOpts = Opts & {
     endpointName?: string;
-    json?: object;
+    json?: any;
     method?: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
     body?: string | Buffer | ReadableStream;
     form?: { [name: string]: any };
