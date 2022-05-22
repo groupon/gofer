@@ -27,7 +27,11 @@ class GoferB extends Gofer {
   }
 
   x() {
-    return this.get('/something');
+    return this.get('/something', { qs: { key2: 'val2' } });
+  }
+
+  y() {
+    return this.get('/else', { qs: new URLSearchParams([['key3', 'val3']]) });
   }
 }
 
@@ -39,41 +43,73 @@ describe('config handling', () => {
     b = new GoferB(CONFIG);
   });
 
-  it('applies service-level config', () => {
-    assert.strictEqual(
-      a.getMergedOptions({}, {}).timeout,
-      1001,
-      'applies service-level default'
-    );
+  it('applies service-level default', () => {
+    assert.strictEqual(a.getMergedOptions({}, {}).timeout, 1001);
+  });
 
-    assert.strictEqual(
-      a.getMergedOptions({}, {}).connectTimeout,
-      55,
-      'falls back to global default'
-    );
+  it('falls back to global default', () => {
+    assert.strictEqual(a.getMergedOptions({}, {}).connectTimeout, 55);
+  });
 
-    assert.strictEqual(
-      b.getMergedOptions({}, {}).connectTimeout,
-      70,
-      'does not apply endpoint default if endpointName is not provided'
-    );
+  it('does not apply endpoint default if endpointName is not provided', () => {
+    assert.strictEqual(b.getMergedOptions({}, {}).connectTimeout, 70);
+  });
 
+  it('does not apply endpoint default for other endpoints', () => {
     assert.strictEqual(
       b.getMergedOptions({ endpointName: 'y' }, {}).connectTimeout,
-      70,
-      'does not apply endpoint default for other endpoints'
+      70
     );
+  });
 
+  it('applies endpoint-level defaults', () => {
     assert.strictEqual(
       b.getMergedOptions({ endpointName: 'x' }, {}).timeout,
-      23,
-      'applies endpoint-level defaults'
+      23
     );
+  });
 
+  it('falls back to service-level defaults', () => {
     assert.strictEqual(
       b.getMergedOptions({ endpointName: 'x' }, {}).connectTimeout,
-      70,
-      'falls back to service-level defaults'
+      70
+    );
+  });
+
+  it('merges fetch-argument qs obj with nothing', () => {
+    assert.deepStrictEqual(
+      a.getMergedOptions({ endpointName: 'z' }, { qs: { key1: 'val1' } }).qs,
+      { key1: 'val1' }
+    );
+  });
+
+  it('merges fetch-argument qs URLSearchParams with nothing', () => {
+    assert.deepStrictEqual(
+      a.getMergedOptions(
+        { endpointName: 'z' },
+        { qs: new URLSearchParams([['key1', 'val1']]) }
+      ).qs,
+      new URLSearchParams([['key1', 'val1']])
+    );
+  });
+
+  it('merges fetch-argument qs obj with config obj', () => {
+    assert.deepStrictEqual(
+      b.getMergedOptions({ endpointName: 'x' }, { qs: { key2: 'val2' } }).qs,
+      { key: 'val', key2: 'val2' }
+    );
+  });
+
+  it('merges fetch-argument qs URLSearchParams with config obj', () => {
+    assert.deepStrictEqual(
+      b.getMergedOptions(
+        { endpointName: 'x' },
+        { qs: new URLSearchParams([['key3', 'val3']]) }
+      ).qs,
+      new URLSearchParams([
+        ['key', 'val'],
+        ['key3', 'val3'],
+      ])
     );
   });
 });
