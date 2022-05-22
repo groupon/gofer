@@ -1,8 +1,6 @@
-/* eslint-disable no-underscore-dangle */
-
 'use strict';
 
-const assert = require('assertive');
+const assert = require('assert');
 
 const Gofer = require('../');
 
@@ -12,69 +10,70 @@ const CONFIG = {
   b: {
     timeout: 99,
     connectTimeout: 70,
+    qs: { key: 'val' },
     endpointDefaults: { x: { timeout: 23 } },
   },
 };
 
-function GoferA(config) {
-  Gofer.call(this, config, 'a');
+class GoferA extends Gofer {
+  constructor(config) {
+    super(config, 'a');
+  }
 }
-GoferA.prototype = Object.create(Gofer.prototype);
 
-function GoferB(config) {
-  Gofer.call(this, config, 'b');
+class GoferB extends Gofer {
+  constructor(config) {
+    super(config, 'b');
+  }
+
+  x() {
+    return this.get('/something');
+  }
 }
-GoferB.prototype = Object.create(Gofer.prototype);
 
 describe('config handling', () => {
   let a;
   let b;
-
   before(() => {
-    GoferB.prototype.registerEndpoints({
-      x(fetch) {
-        return function (cb) {
-          return fetch('/something', cb);
-        };
-      },
-    });
-
     a = new GoferA(CONFIG);
     b = new GoferB(CONFIG);
   });
 
   it('applies service-level config', () => {
-    assert.equal(
-      'applies service-level default',
+    assert.strictEqual(
+      a.getMergedOptions({}, {}).timeout,
       1001,
-      a._prepareOptions({}, {}).timeout
+      'applies service-level default'
     );
-    assert.equal(
-      'falls back to global default',
+
+    assert.strictEqual(
+      a.getMergedOptions({}, {}).connectTimeout,
       55,
-      a._prepareOptions({}, {}).connectTimeout
+      'falls back to global default'
     );
 
-    assert.equal(
-      'does not apply endpoint default if endpointName is not provided',
+    assert.strictEqual(
+      b.getMergedOptions({}, {}).connectTimeout,
       70,
-      b._prepareOptions({}, {}).connectTimeout
-    );
-    assert.equal(
-      'does not apply endpoint default for other endpoints',
-      70,
-      b._prepareOptions({ endpointName: 'y' }, {}).connectTimeout
+      'does not apply endpoint default if endpointName is not provided'
     );
 
-    assert.equal(
-      'applies endpoint-level defaults',
+    assert.strictEqual(
+      b.getMergedOptions({ endpointName: 'y' }, {}).connectTimeout,
+      70,
+      'does not apply endpoint default for other endpoints'
+    );
+
+    assert.strictEqual(
+      b.getMergedOptions({ endpointName: 'x' }, {}).timeout,
       23,
-      b._prepareOptions({ endpointName: 'x' }, {}).timeout
+      'applies endpoint-level defaults'
     );
-    assert.equal(
-      'falls back to service-level defaults',
+
+    assert.strictEqual(
+      b.getMergedOptions({ endpointName: 'x' }, {}).connectTimeout,
       70,
-      b._prepareOptions({ endpointName: 'x' }, {}).connectTimeout
+      'falls back to service-level defaults'
     );
   });
 });
