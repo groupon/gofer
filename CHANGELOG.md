@@ -1,3 +1,10 @@
+### v5.2.4 (2022-05-23)
+<a id="v5.2.4"></a>
+#### 🐛 Bug Fixes
+
+* [#134](https://github.com/groupon/gofer/pull/134) fix: merge URLSearchParams qs arguments ([@dbushong](https://github.com/dbushong))
+
+
 ### v5.2.3 (2022-04-07)
 <a id="v5.2.3"></a>
 #### 🏡 Internal
