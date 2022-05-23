@@ -112,4 +112,53 @@ describe('config handling', () => {
       ])
     );
   });
+
+  it('merges fetch-argument & config URLSearchParams', () => {
+    assert.deepStrictEqual(
+      a.getMergedOptions(
+        {
+          endpointName: 'x',
+          qs: new URLSearchParams([
+            ['key2', 'val2'],
+            ['key4', 'val4a'],
+            ['key4', 'val4b'],
+          ]),
+        },
+        {
+          qs: new URLSearchParams([
+            ['key3', 'val3'],
+            ['key4', 'val4'],
+          ]),
+        }
+      ).qs,
+      new URLSearchParams([
+        ['key2', 'val2'],
+        ['key4', 'val4'],
+        ['key3', 'val3'],
+      ])
+    );
+  });
+
+  it('merges fetch-argument qs obj with config URLSearchParams', () => {
+    assert.deepStrictEqual(
+      a.getMergedOptions(
+        {
+          endpointName: 'x',
+          qs: new URLSearchParams([
+            ['key2', 'val2'],
+            ['key4', 'val4a'],
+            ['key4', 'val4b'],
+          ]),
+        },
+        {
+          qs: { key2: 'val2b' },
+        }
+      ).qs,
+      new URLSearchParams([
+        ['key2', 'val2b'],
+        ['key4', 'val4a'],
+        ['key4', 'val4b'],
+      ])
+    );
+  });
 });
