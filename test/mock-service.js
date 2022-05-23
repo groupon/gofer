@@ -6,7 +6,7 @@
 const http = require('http');
 const https = require('https');
 
-const selfSigned = require('self-signed');
+const selfsigned = require('selfsigned');
 
 const options = require('./mock-service.browser');
 
@@ -17,18 +17,9 @@ let server;
 let serverTls;
 
 function generateCertOptions() {
-  const keypair = selfSigned(
-    {
-      name: 'localhost',
-      city: 'Chicago',
-      state: 'Illinois',
-      organization: 'Test',
-      unit: 'Test',
-    },
-    {
-      alt: ['127.0.0.1', 'http://localhost'],
-      expire: 60 * 60 * 1000, // one hour
-    }
+  const keypair = selfsigned.generate(
+    [{ name: 'commonName', value: 'localhost' }],
+    { expire: 60 * 60 * 1000 } // one hour
   );
   return {
     cert: keypair.cert,
