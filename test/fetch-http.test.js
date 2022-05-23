@@ -99,7 +99,7 @@ describe('fetch: the basics', () => {
       .json()
       .then(echo => {
         assert.equal(
-          '/echo?y=url&z=bar&y=other&a=1&a=2',
+          '/echo?y=other&z=bar&a=1&a=2',
           decodeURIComponent(echo.url)
         );
       });
