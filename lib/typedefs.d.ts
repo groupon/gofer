@@ -75,6 +75,7 @@ declare namespace Gofer {
     rejectUnauthorized?: boolean;
     secureContext?: SecureContext;
     captureAsyncStack?: boolean;
+    userAgent?: string;
     [opt: string]: any;
   };
 

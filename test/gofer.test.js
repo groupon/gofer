@@ -82,6 +82,27 @@ describe('gofer', () => {
     });
   });
 
+  describe('user agent', () => {
+    let gofer;
+    const userAgent = 'some-user-agent (like Firefox/42.0)';
+    before('create Gofer instance', () => {
+      gofer = new Gofer({ globalDefaults: { userAgent } }).with(options);
+    });
+
+    it('passes forward the user agent', function () {
+      if (typeof document !== 'undefined') {
+        return this.skip();
+      }
+
+      return gofer
+        .get('/echo')
+        .json()
+        .then(echo => {
+          assert.include(userAgent, echo.headers['user-agent']);
+        });
+    });
+  });
+
   describe('sub-class', () => {
     function SubGofer(config) {
       Gofer.call(this, config, 'sub', '1.2.3', 'my-sub-client');
