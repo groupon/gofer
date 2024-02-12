@@ -13,7 +13,7 @@ describe('fetch: https', () => {
     // This is a remote call which isn't great but it means we get a valid
     // https certificate without having to pull any tricks.
     this.timeout(10000);
-    return fetch('https://api.reddit.com/user/ageitgey/about.json').json();
+    return fetch('https://jsonplaceholder.org/posts').json();
   });
 
   it('fails with self-signed https', function () {
