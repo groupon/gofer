@@ -1,3 +1,14 @@
+### v5.3.0 (2024-02-12)
+<a id="v5.3.0"></a>
+#### 🚀 New Features
+
+* [#139](https://github.com/groupon/gofer/pull/139) feat: add userAgent forwarding and tests ([@fkalny-groupon](https://github.com/fkalny-groupon))
+
+#### 🐛 Bug Fixes
+
+* [#140](https://github.com/groupon/gofer/pull/140) fix: old tests failing on defunct endpoints ([@fkalny-groupon](https://github.com/fkalny-groupon))
+
+
 ### v5.2.4 (2022-05-23)
 <a id="v5.2.4"></a>
 #### 🐛 Bug Fixes
